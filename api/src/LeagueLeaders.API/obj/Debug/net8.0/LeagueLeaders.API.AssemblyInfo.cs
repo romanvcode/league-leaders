@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LeagueLeaders.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+94f96a84bdf1fa4884c7acb94d85650b3e18363c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1234c5f47ae01907e54b7bdb0fba230306ca373b")]
 [assembly: System.Reflection.AssemblyProductAttribute("LeagueLeaders.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LeagueLeaders.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
