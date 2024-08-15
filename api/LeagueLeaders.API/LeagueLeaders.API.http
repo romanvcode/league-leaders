@@ -1,6 +1,0 @@
-@LeagueLeaders.API_HostAddress = http://localhost:5123
-
-GET {{LeagueLeaders.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
