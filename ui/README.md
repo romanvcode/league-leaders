@@ -1,5 +1,5 @@
 <div align="center" text-align="center" width="100%">
-    <img src="https://gitlab.com/leobit/internal-projects/leobit-learning/internship/roman-vorobel/league-leaders/-/blob/master/api/.artifacts/icon.png" alt="League Leaders" align="center" width="20%">
+    <img src="/ui/.artifacts/icon.png" alt="League Leaders" align="center" width="20%">
 </div>
 <div align="center">
   <h1>League Leaders</h1>
