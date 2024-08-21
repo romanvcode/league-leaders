@@ -482,3 +482,12 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Docker
+docker-compose.yaml
+data/
+secrets/
+
+# Draw.io backup files
+.$erd-league-leaders.drawio.bkp
+*.drawio.bkp
