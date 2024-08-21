@@ -487,3 +487,7 @@ $RECYCLE.BIN/
 docker-compose.yaml
 data/
 secrets/
+
+# Draw.io backup files
+.$erd-league-leaders.drawio.bkp
+*.drawio.bkp
