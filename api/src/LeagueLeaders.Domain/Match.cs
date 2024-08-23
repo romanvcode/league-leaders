@@ -6,7 +6,7 @@
         public int StageId { get; set; }
         public int HomeTeamId { get; set; }
         public int AwayTeamId { get; set; }
-        public DateOnly Date { get; set; }
+        public DateTime Date { get; set; }
         public int VenueId { get; set; }
         public int RefereeId { get; set; }
         public int HomeTeamScore { get; set; }
