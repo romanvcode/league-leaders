@@ -1,3 +1,4 @@
+using LeagueLeaders.Application;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,8 @@ builder.Services.AddDbContext<LeagueLeadersDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddScoped<IScheduleSerivce, ScheduleSerivce>();
 
 var app = builder.Build();
 
