@@ -18,6 +18,7 @@ builder.Services.AddDbContext<LeagueLeadersDbContext>(options =>
 });
 
 builder.Services.AddScoped<IScheduleSerivce, ScheduleSerivce>();
+builder.Services.AddScoped<ITeamService, TeamService>();
 
 var app = builder.Build();
 
