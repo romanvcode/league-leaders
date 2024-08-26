@@ -1,5 +1,7 @@
 ﻿using LeagueLeaders.Application;
+using LeagueLeaders.Domain;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LeagueLeaders.API.Controllers
 {
@@ -14,12 +16,24 @@ namespace LeagueLeaders.API.Controllers
             _scheduleSerivce = scheduleSerivce;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetClosestMatchesAsync()
+        [HttpGet("Matches")]
+        public async Task<ActionResult<List<Match>>> GetClosestMatchesAsync()
         {
-            var matches = await _scheduleSerivce.GetClosestMatchesAsync();
+            try
+            {
+                var matches = await _scheduleSerivce.GetClosestMatchesAsync();
 
-            return Ok(matches);
+                if (matches.IsNullOrEmpty())
+                {
+                    return NotFound("No matches found.");
+                }
+
+                return Ok(matches);
+            }
+            catch (Exception ex)
+            {
+                return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }
