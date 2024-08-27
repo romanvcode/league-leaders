@@ -493,3 +493,6 @@ secrets/
 # Draw.io backup files
 .$erd-league-leaders.drawio.bkp
 *.drawio.bkp
+
+# Files for testing
+src/LeagueLeaders.API/Controllers/TestController.cs

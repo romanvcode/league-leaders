@@ -134,7 +134,7 @@ VALUES
 
 INSERT INTO Seasons (Name, CompetitionId, StartAt, EndAt)
 VALUES 
-('2023/2024', 1, '2023-09-01', '2024-06-01');
+('2024/2025', 1, '2024-07-09', '2025-05-31');
 
 INSERT INTO Stages (Name, SeasonId, Type)
 VALUES 
@@ -174,10 +174,14 @@ VALUES
 
 INSERT INTO Matches (StageId, HomeTeamId, AwayTeamId, Date, VenueId, RefereeId, HomeTeamScore, AwayTeamScore)
 VALUES 
-(1, 1, 2, '2023-09-10 20:00:00', 1, 1, 3, 2),
-(1, 3, 4, '2023-09-11 20:00:00', 3, 2, 2, 2),
-(2, 2, 3, '2024-03-05 20:00:00', 2, 3, 1, 2),
-(2, 4, 1, '2024-03-06 20:00:00', 4, 4, 2, 1);
+(1, 1, 2, '2024-08-10 20:00:00', 1, 1, 3, 2),
+(1, 3, 4, '2024-08-11 20:00:00', 3, 2, 2, 2),
+(1, 2, 3, '2024-08-12 20:00:00', 2, 3, 1, 2),
+(1, 4, 1, '2024-08-13 20:00:00', 4, 4, 2, 1),
+(1, 2, 1, '2024-10-10 20:00:00', 2, 1, 3, 3),
+(1, 4, 3, '2024-10-11 20:00:00', 4, 2, 1, 0),
+(1, 3, 2, '2024-10-12 20:00:00', 3, 3, 2, 0),
+(1, 1, 4, '2024-10-13 20:00:00', 1, 4, 0, 1);
 
 INSERT INTO PlayerStats (MatchId, PlayerId, TeamId, Goals, Assists, RedCards, YellowCards, Shots, ShotsOnTarget)
 VALUES 

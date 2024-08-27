@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LeagueLeaders.Application\LeagueLeaders.Application.csproj" />
     <ProjectReference Include="..\LeagueLeaders.Domain\LeagueLeaders.Domain.csproj" />
     <ProjectReference Include="..\LeagueLeaders.Infrastructure\LeagueLeaders.Infrastructure.csproj" />
   </ItemGroup>
