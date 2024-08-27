@@ -44,21 +44,20 @@ namespace LeagueLeaders.Application
                 throw new ArgumentNullException(nameof(teamId));
             }
 
-            var currentStageId = await _context.Matches
-                .Include(m => m.Stage)
-                .GroupBy(m => m.StageId)
-                .OrderByDescending(g => g.Key)
-                .Select(g => g.Key)
+            var currentSeason = await _context.Seasons
+                .Where(s => s.StartAt < DateTime.UtcNow && s.EndAt > DateTime.UtcNow)
                 .FirstOrDefaultAsync();
 
-            if (currentStageId == default)
+            if (currentSeason == null)
             {
-                return new List<Match>();
+                throw new Exception("No current season found.");
             }
 
             var matches = await _context.Matches
+                .Include(m => m.HomeTeam)
+                .Include(m => m.AwayTeam)
                 .Where(m => m.HomeTeamId == teamId || m.AwayTeamId == teamId)
-                .Where(m => m.StageId == currentStageId)
+                .Where(m => m.Stage.SeasonId == currentSeason.Id)
                 .Where(m => m.Date < DateTime.UtcNow)
                 .OrderByDescending(m => m.Date)
                 .Take(5)

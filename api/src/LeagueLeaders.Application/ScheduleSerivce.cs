@@ -15,20 +15,30 @@ namespace LeagueLeaders.Application
 
         public async Task<List<Match>> GetClosestMatchesAsync()
         {
-            var currentStageId = await _context.Matches
+            var currentSeason = await _context.Seasons
+                .Where(s => s.StartAt < DateTime.UtcNow && s.EndAt > DateTime.UtcNow)
+                .FirstOrDefaultAsync();
+
+            if (currentSeason == null)
+            {
+                return new List<Match>();
+            }
+
+            var currentStage = await _context.Matches
+                .Where(m => m.Stage.SeasonId == currentSeason.Id)
                 .Include(m => m.Stage)
-                .GroupBy(m => m.StageId)
+                .GroupBy(m => m.Stage)
                 .OrderByDescending(g => g.Key)
                 .Select(g => g.Key)
                 .FirstOrDefaultAsync();
 
-            if (currentStageId == default)
+            if (currentStage == null)
             {
                 return new List<Match>();
             }
 
             var matches = await _context.Matches
-                .Where(m => m.StageId == currentStageId)
+                .Where(m => m.StageId == currentStage.Id)
                 .OrderBy(m => m.Date)
                 .Take(5)
                 .ToListAsync();
