@@ -21,7 +21,7 @@ namespace LeagueLeaders.Application
 
             if (currentSeason == null)
             {
-                return new List<Standing>();
+                throw new Exception($"There is no season which will run during {DateTime.UtcNow}");
             }
 
             var standings = await _context.Standings

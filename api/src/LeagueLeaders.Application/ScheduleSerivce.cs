@@ -21,7 +21,7 @@ namespace LeagueLeaders.Application
 
             if (currentSeason == null)
             {
-                return new List<Match>();
+                throw new Exception($"There is no season which will run during {DateTime.UtcNow}");
             }
 
             var currentStage = await _context.Matches
@@ -34,7 +34,7 @@ namespace LeagueLeaders.Application
 
             if (currentStage == null)
             {
-                return new List<Match>();
+                throw new Exception($"There is no stage which will run during current season: {currentSeason.Name}");
             }
 
             var matches = await _context.Matches

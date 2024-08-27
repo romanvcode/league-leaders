@@ -15,45 +15,38 @@ namespace LeagueLeaders.Application
 
         public async Task<Team?> GetTeamAsync(int teamId)
         {
-            if (teamId == default)
-            {
-                throw new ArgumentNullException(nameof(teamId));
-            }
-
-            var team = await _context.Teams.FirstOrDefaultAsync(t => t.Id == teamId);
+            var team = await _context.Teams
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.Id == teamId) 
+                ?? throw new Exception($"Team with Id {teamId} not found.");
 
             return team;
         }
 
         public async Task<List<Player>> GetTeamPlayersAsync(int teamId)
         {
-            if (teamId == default)
-            {
-                throw new ArgumentNullException(nameof(teamId));
-            }
-
-            var players = await _context.Players.Where(p => p.TeamId == teamId).ToListAsync();
+            var players = await _context.Players
+                .AsNoTracking()
+                .Where(p => p.TeamId == teamId)
+                .ToListAsync();
 
             return players;
         }
 
-        public async Task<List<Match>> GetLastFiveTeamMatches(int teamId)
+        public async Task<List<Match>> GetMatchHistoryForTeamAsync(int teamId, int lastMatches = 5)
         {
-            if (teamId == default)
-            {
-                throw new ArgumentNullException(nameof(teamId));
-            }
-
             var currentSeason = await _context.Seasons
+                .AsNoTracking()
                 .Where(s => s.StartAt < DateTime.UtcNow && s.EndAt > DateTime.UtcNow)
                 .FirstOrDefaultAsync();
 
             if (currentSeason == null)
             {
-                throw new Exception("No current season found.");
+                throw new Exception($"There is no season which will run during {DateTime.UtcNow}");
             }
 
             var matches = await _context.Matches
+                .AsNoTracking()
                 .Include(m => m.HomeTeam)
                 .Include(m => m.AwayTeam)
                 .Where(m => m.HomeTeamId == teamId || m.AwayTeamId == teamId)
@@ -70,7 +63,7 @@ namespace LeagueLeaders.Application
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
-                throw new ArgumentNullException(nameof(searchTerm));
+                throw new ArgumentNullException(message: "Search term cannot be null or empty.", paramName: nameof(searchTerm));
             }
 
             var teams = await _context.Teams

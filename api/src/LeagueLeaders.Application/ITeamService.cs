@@ -8,7 +8,7 @@ namespace LeagueLeaders.Application
 
         Task<List<Player>> GetTeamPlayersAsync(int teamId);
 
-        Task<List<Match>> GetLastFiveTeamMatches(int teamId);
+        Task<List<Match>> GetMatchHistoryForTeamAsync(int teamId, int lastMatches = 5);
 
         Task<List<Team>> GetTeamsBySearchTerm(string searchTerm);
     }
