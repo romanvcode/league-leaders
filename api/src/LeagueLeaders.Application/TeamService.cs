@@ -53,7 +53,7 @@ namespace LeagueLeaders.Application
                 .Where(m => m.Stage.SeasonId == currentSeason.Id)
                 .Where(m => m.Date < DateTime.UtcNow)
                 .OrderByDescending(m => m.Date)
-                .Take(5)
+                .Take(lastMatches)
                 .ToListAsync();
 
             return matches;
