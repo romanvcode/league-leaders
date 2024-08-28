@@ -6,7 +6,7 @@ using System;
 
 namespace LeagueLeaders.Tests
 {
-    public class ScheduleServiceTests
+    public class ScheduleServiceTests : IDisposable
     {
         private readonly LeagueLeadersDbContext _context;
         private readonly ScheduleSerivce _scheduleService;
@@ -21,6 +21,11 @@ namespace LeagueLeaders.Tests
             _scheduleService = new ScheduleSerivce(_context);
         }
 
+        public async void Dispose()
+        {
+            await _context.Database.EnsureDeletedAsync();
+        }
+
         [Fact]
         public async Task GetClosestMatches_CurrentSeasonIsNull_ThrowsException()
         {
@@ -31,8 +36,6 @@ namespace LeagueLeaders.Tests
 
             // Assert
             Assert.Equal($"There is no season which will run during {DateTime.UtcNow}", exception.Message);
-
-            await _context.Database.EnsureDeletedAsync();
         }
 
         [Fact]
@@ -55,8 +58,6 @@ namespace LeagueLeaders.Tests
 
             // Assert
             Assert.Equal($"There is no stage which will run during current season: {season.Name}", exception.Message);
-            
-            await _context.Database.EnsureDeletedAsync();
         }
 
         [Fact]
@@ -116,8 +117,6 @@ namespace LeagueLeaders.Tests
             Assert.Equal(2, result.Count);
             Assert.Equal(match1.Id, result[0].Id);
             Assert.Equal(match2.Id, result[1].Id);
-            
-            await _context.Database.EnsureDeletedAsync();
         }
     }
 }
