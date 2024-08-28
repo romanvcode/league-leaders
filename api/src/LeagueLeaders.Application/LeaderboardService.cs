@@ -16,6 +16,7 @@ namespace LeagueLeaders.Application
         public async Task<List<Standing>> GetStandingsForEachTeamAsync()
         {
             var currentSeason = await _context.Seasons
+                .AsNoTracking()
                 .Where(s => s.StartAt < DateTime.UtcNow && s.EndAt > DateTime.UtcNow)
                 .FirstOrDefaultAsync();
 
@@ -25,9 +26,10 @@ namespace LeagueLeaders.Application
             }
 
             var standings = await _context.Standings
+                .AsNoTracking()
                 .Include(s => s.Team)
                 .Where(s => s.Stage.SeasonId == currentSeason.Id)
-                .OrderByDescending(s => s.Points)
+                .OrderBy(s => s.Place)
                 .ToListAsync();
 
             return standings;

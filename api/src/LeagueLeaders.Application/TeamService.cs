@@ -67,6 +67,7 @@ namespace LeagueLeaders.Application
             }
 
             var teams = await _context.Teams
+                .AsNoTracking()
                 .Where(t => t.Name.Contains(searchTerm))
                 .ToListAsync();
 
