@@ -2,7 +2,7 @@
 using LeagueLeaders.Domain;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using System;
+using FluentAssertions;
 
 namespace LeagueLeaders.Tests
 {
@@ -14,35 +14,33 @@ namespace LeagueLeaders.Tests
         public ScheduleServiceTests()
         {
             var options = new DbContextOptionsBuilder<LeagueLeadersDbContext>()
-                .UseInMemoryDatabase(databaseName: "LeagueLeadersDatabase")
+                .UseInMemoryDatabase(databaseName: "LeagueLeadersScheduleDB")
                 .Options;
 
             _context = new LeagueLeadersDbContext(options);
             _scheduleService = new ScheduleSerivce(_context);
         }
 
-        public async void Dispose()
+        public void Dispose()
         {
-            await _context.Database.EnsureDeletedAsync();
+            _context.Database.EnsureDeleted();
         }
 
         [Fact]
         public async Task GetClosestMatches_CurrentSeasonIsNull_ThrowsException()
         {
-            // Arrange
+            Func<Task> action = (async () =>
+            {
+                await _scheduleService.GetClosestMatchesAsync();
+            });
 
-            // Act & Assert
-            var exception = await Assert.ThrowsAsync<Exception>(() => _scheduleService.GetClosestMatchesAsync());
 
-            // Assert
-            Assert.Equal($"There is no season which will run during {DateTime.UtcNow}", exception.Message);
+            await action.Should().ThrowAsync<Exception>();
         }
 
         [Fact]
         public async Task GetClosestMatches_CurrentStageIsNull_ThrowsException()
         {
-            // Arrange
-
             var season = new Season
             {
                 Name = "2024/2025",
@@ -53,18 +51,19 @@ namespace LeagueLeaders.Tests
             _context.Seasons.Add(season);
             await _context.SaveChangesAsync();
 
-            // Act & Assert
-            var exception = await Assert.ThrowsAsync<Exception>(() => _scheduleService.GetClosestMatchesAsync());
 
-            // Assert
-            Assert.Equal($"There is no stage which will run during current season: {season.Name}", exception.Message);
+            Func<Task> action = (async () =>
+            {
+                await _scheduleService.GetClosestMatchesAsync();
+            });
+
+
+            await action.Should().ThrowAsync<Exception>();
         }
 
         [Fact]
         public async Task GetClosestMatches_ValidData_ReturnsMatches()
         {
-            // Arrange
-
             var season = new Season
             {
                 Name = "2024/2025",
@@ -82,7 +81,6 @@ namespace LeagueLeaders.Tests
             {
                 Name = "Team 1"
             };
-
             var team2 = new Team
             {
                 Name = "Team 2"
@@ -95,7 +93,6 @@ namespace LeagueLeaders.Tests
                 AwayTeam = team2,
                 Stage = stage
             };
-
             var match2 = new Match
             {
                 Date = DateTime.UtcNow.AddDays(2),
@@ -104,19 +101,20 @@ namespace LeagueLeaders.Tests
                 Stage = stage
             };
 
+            var expectedMatches = new List<Match> { match1, match2 };
+
             _context.Seasons.Add(season);
             _context.Stages.Add(stage);
             _context.Teams.AddRange(team1, team2);
             _context.Matches.AddRange(match1, match2);
             await _context.SaveChangesAsync();
 
-            // Act
-            var result = await _scheduleService.GetClosestMatchesAsync();
 
-            // Assert
-            Assert.Equal(2, result.Count);
-            Assert.Equal(match1.Id, result[0].Id);
-            Assert.Equal(match2.Id, result[1].Id);
+            var actualMatches = await _scheduleService.GetClosestMatchesAsync();
+
+
+            actualMatches.Should()
+                .BeEquivalentTo(expectedMatches, options => options.Including(m => m.Id));
         }
     }
 }

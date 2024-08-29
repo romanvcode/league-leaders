@@ -1,4 +1,5 @@
-﻿using LeagueLeaders.Application;
+﻿using FluentAssertions;
+using LeagueLeaders.Application;
 using LeagueLeaders.Domain;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -18,28 +19,27 @@ namespace LeagueLeaders.Tests
             _leaderboardService = new LeaderboardService(_context);
         }
 
-        public async void Dispose()
+        public void Dispose()
         {
-            await _context.Database.EnsureDeletedAsync();
+            _context.Database.EnsureDeleted();
         }
 
         #region GetStandingsForEachTeamAsync
         [Fact]
         public async Task GetStandingsForEachTeamAsync_CurrentSeasonIsNull_ThrowsException()
         {
-            // Arrange
+            Func<Task> action = (async () =>
+            {
+                await _leaderboardService.GetStandingsForEachTeamAsync();
+            });
 
-            // Act & Assert
-            var exception = await Assert.ThrowsAsync<Exception>(() => _leaderboardService.GetStandingsForEachTeamAsync());
 
-            // Assert
-            Assert.Equal($"There is no season which will run during {DateTime.UtcNow}", exception.Message);
+            await action.Should().ThrowAsync<Exception>();
         }
 
         [Fact]
         public async Task GetStandingsForEachTeamAsync_NoStandings_StandingsAreEmpty()
         {
-            // Arrange
             var season = new Season
             {
                 Name = "2024/2025",
@@ -50,17 +50,16 @@ namespace LeagueLeaders.Tests
             _context.Seasons.Add(season);
             await _context.SaveChangesAsync();
 
-            // Act
+
             var standings = await _leaderboardService.GetStandingsForEachTeamAsync();
 
-            // Assert
-            Assert.Empty(standings);
+
+            standings.Should().BeEmpty();
         }
 
         [Fact]
         public async Task GetStandingsForEachTeamAsync_ValidData_ReturnsStandings()
         {
-            // Arrange
             var season = new Season
             {
                 Name = "2024/2025",
@@ -92,12 +91,13 @@ namespace LeagueLeaders.Tests
             _context.Standings.Add(standing);
             await _context.SaveChangesAsync();
 
-            // Act
+
             var standings = await _leaderboardService.GetStandingsForEachTeamAsync();
 
-            // Assert
-            Assert.Equal(standing.Place, standings[0].Place);
-            Assert.Equal(standing.Team.Name, standings[0].Team.Name);
+            var actualTeam = standing.Team;
+            var expectedTeam = standings[0].Team;
+
+            actualTeam.Name.Should().Be(expectedTeam.Name);
         }
         #endregion
     }

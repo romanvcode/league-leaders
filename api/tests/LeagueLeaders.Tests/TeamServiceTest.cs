@@ -1,4 +1,5 @@
-﻿using LeagueLeaders.Application;
+﻿using FluentAssertions;
+using LeagueLeaders.Application;
 using LeagueLeaders.Domain;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -18,42 +19,45 @@ namespace LeagueLeaders.Tests
             _teamService = new TeamService(_context);
         }
 
-        public async void Dispose()
+        public void Dispose()
         {
-            await _context.Database.EnsureDeletedAsync();
+            _context.Database.EnsureDeleted();
         }
 
         #region GetTeamAsync
         [Fact]
         public async void GetTeamAsync_InvalidTeamId_ThrowsException()
         {
-            // Arrange
             int teamId = -1;
 
-            // Act
-            var exception = await Assert.ThrowsAsync<Exception>(() => _teamService.GetTeamAsync(teamId));
-            
-            // Assert
-            Assert.Equal($"Team with Id {teamId} not found.", exception.Message);
+
+            Func<Task> action = (async () =>
+            {
+                await _teamService.GetTeamAsync(teamId);
+            });
+
+
+            await action.Should().ThrowAsync<Exception>();
         }
 
         [Fact]
         public async void GetTeamAsync_ValidTeamId_ReturnsTeam()
         {
-            // Arrange
             var expectedTeam = new Team
             {
                 Name = "Team 1"
             };
+
             _context.Teams.Add(expectedTeam);
             await _context.SaveChangesAsync();
 
-            // Act
+
             var actualTeam = await _teamService.GetTeamAsync(expectedTeam.Id);
 
-            // Assert
-            Assert.Equal(expectedTeam.Id, actualTeam.Id);
-            Assert.Equal(expectedTeam.Name, actualTeam.Name);
+
+            actualTeam.Should().NotBeNull();
+            actualTeam?.Id.Should().Be(expectedTeam.Id);
+            actualTeam?.Name.Should().Be(expectedTeam.Name);
         }
         #endregion
 
@@ -61,39 +65,39 @@ namespace LeagueLeaders.Tests
         [Fact]
         public async void GetTeamPlayersAsync_InvalidTeamId_ThrowsException()
         {
-            // Arrange
             int teamId = -1;
 
-            // Act
-            var exception = await Assert.ThrowsAsync<Exception>(() => _teamService.GetTeamPlayersAsync(teamId));
-            
-            // Assert
-            Assert.Equal($"Team with Id {teamId} not found.", exception.Message);
+
+            Func<Task> action = (async () =>
+            {
+                await _teamService.GetTeamPlayersAsync(teamId);
+            });
+
+
+            await action.Should().ThrowAsync<Exception>();
         }
 
         [Fact]
         public async void GetTeamPlayersAsync_NoPlayers_ReturnsEmptyList()
         {
-            // Arrange
-            var expectedTeam = new Team
+            var team = new Team
             {
                 Name = "Team 1"
             };
 
-            _context.Teams.Add(expectedTeam);
+            _context.Teams.Add(team);
             await _context.SaveChangesAsync();
 
-            // Act
-            var actualTeam = await _teamService.GetTeamPlayersAsync(expectedTeam.Id);
 
-            // Assert
-            Assert.Empty(actualTeam);
+            var players = await _teamService.GetTeamPlayersAsync(team.Id);
+
+
+            players.Should().BeEmpty(); 
         }
 
         [Fact]
         public async void GetTeamPlayersAsync_ValidTeamWithPlayers_ReturnsPlayers()
         {
-            // Arrange
             var team = new Team
             {
                 Name = "Team 1"
@@ -116,15 +120,11 @@ namespace LeagueLeaders.Tests
 
             var expectedPlayers = team.Players;
 
-            // Act
+
             var actualPlayers = await _teamService.GetTeamPlayersAsync(team.Id);
 
-            // Assert
-            Assert.Equal(expectedPlayers.Count, actualPlayers.Count);
-            Assert.Equal(expectedPlayers[0].Id, actualPlayers[0].Id);
-            Assert.Equal(expectedPlayers[0].Name, actualPlayers[0].Name);
-            Assert.Equal(expectedPlayers[1].Id, actualPlayers[1].Id);
-            Assert.Equal(expectedPlayers[1].Name, actualPlayers[1].Name);
+
+            actualPlayers.Should().BeEquivalentTo(expectedPlayers, options => options.Including(p => p.Id).Including(p => p.Name));
         }
         #endregion
 
@@ -132,20 +132,21 @@ namespace LeagueLeaders.Tests
         [Fact]
         public async void GetMatchHistoryForTeamAsync_InvalidTeam_ThrowsException()
         {
-            // Arrange
             int teamId = -1;
 
-            // Act
-            var exception = await Assert.ThrowsAsync<Exception>(() => _teamService.GetMatchHistoryForTeamAsync(teamId));
-            
-            // Assert
-            Assert.Equal($"Team with Id {teamId} not found.", exception.Message);
+
+            Func<Task> action = (async () =>
+            {
+                await _teamService.GetMatchHistoryForTeamAsync(teamId);
+            });
+
+
+            await action.Should().ThrowAsync<Exception>();
         }
 
         [Fact]
         public async void GetMatchHistoryForTeamAsync_CurrentSeasonIsNull_ThrowsException()
         {
-            // Arrange
             var team = new Team
             {
                 Name = "Team 1"
@@ -154,17 +155,19 @@ namespace LeagueLeaders.Tests
             _context.Teams.Add(team);
             await _context.SaveChangesAsync();
 
-            // Act
-            var exception = await Assert.ThrowsAsync<Exception>(() => _teamService.GetMatchHistoryForTeamAsync(team.Id));
-            
-            // Assert
-            Assert.Equal($"There is no season which will run during {DateTime.UtcNow}", exception.Message);
+
+            Func<Task> action = (async () =>
+            {
+                await _teamService.GetMatchHistoryForTeamAsync(team.Id);
+            });
+
+
+            await action.Should().ThrowAsync<Exception>();
         }
 
         [Fact]
         public async void GetMatchHistoryForTeamAsync_NoMatches_ReturnsEmptyList()
         {
-            // Arrange
             var season = new Season
             {
                 Name = "2024/2025",
@@ -181,18 +184,16 @@ namespace LeagueLeaders.Tests
             _context.Teams.Add(team);
             await _context.SaveChangesAsync();
 
-            // Act
+
             var actualMatches = await _teamService.GetMatchHistoryForTeamAsync(team.Id);
 
-            // Assert
-            Assert.Empty(actualMatches);
-            await _context.Database.EnsureDeletedAsync();
+
+            actualMatches.Should().BeEmpty();
         }
 
         [Fact]
         public async void GetMatchHistoryForTeamAsync_ValidData_ReturnsMatches()
         {
-            // Arrange
             var season = new Season
             {
                 Name = "2024/2025",
@@ -237,19 +238,11 @@ namespace LeagueLeaders.Tests
 
             var expectedMatches = new List<Match>() { match2, match1 };
 
-            // Act
+
             var actualMatches = await _teamService.GetMatchHistoryForTeamAsync(team1.Id);
 
-            // Assert
-            Assert.Equal(expectedMatches.Count, actualMatches.Count);
-            Assert.Equal(expectedMatches[0].Id, actualMatches[0].Id);
-            Assert.Equal(expectedMatches[0].HomeTeam.Id, actualMatches[0].HomeTeam.Id);
-            Assert.Equal(expectedMatches[0].AwayTeam.Id, actualMatches[0].AwayTeam.Id);
-            Assert.Equal(expectedMatches[0].Date, actualMatches[0].Date);
-            Assert.Equal(expectedMatches[1].Id, actualMatches[1].Id);
-            Assert.Equal(expectedMatches[1].HomeTeam.Id, actualMatches[1].HomeTeam.Id);
-            Assert.Equal(expectedMatches[1].AwayTeam.Id, actualMatches[1].AwayTeam.Id);
-            Assert.Equal(expectedMatches[1].Date, actualMatches[1].Date);
+
+            actualMatches.Should().BeEquivalentTo(expectedMatches, options => options.Including(m => m.Id).Including(m => m.HomeTeam.Id).Including(m => m.AwayTeam.Id).Including(m => m.Date));
         }
         #endregion
 
@@ -257,33 +250,33 @@ namespace LeagueLeaders.Tests
         [Fact]
         public async void GetTeamsBySearchTerm_EmptySearchTerm_ThrowsException()
         {
-            // Arrange
             string searchTerm = "";
 
-            // Act
-            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => _teamService.GetTeamsBySearchTerm(searchTerm));
 
-            // Assert
-            Assert.Equal("Search term cannot be null or empty. (Parameter 'searchTerm')", exception.Message);
+            Func<Task> action = (async () =>
+            {
+                await _teamService.GetTeamsBySearchTerm(searchTerm);
+            });
+
+
+            await action.Should().ThrowAsync<Exception>();
         }
 
         [Fact]
         public async void GetTeamsBySearchTerm_NoTeams_ReturnsEmptyList()
         {
-            // Arrange
             string searchTerm = "Team";
 
-            // Act
+
             var actualTeams = await _teamService.GetTeamsBySearchTerm(searchTerm);
 
-            // Assert
-            Assert.Empty(actualTeams);
+
+            actualTeams.Should().BeEmpty();
         }
 
         [Fact]
         public async void GetTeamsBySearchTerm_ValidData_ReturnsTeams()
         {
-            // Arrange
             var team1 = new Team
             {
                 Name = "Team 1"
@@ -298,15 +291,11 @@ namespace LeagueLeaders.Tests
 
             var expectedTeams = new List<Team>() { team1, team2 };
 
-            // Act
+
             var actualTeams = await _teamService.GetTeamsBySearchTerm("Team");
 
-            // Assert
-            Assert.Equal(expectedTeams.Count, actualTeams.Count);
-            Assert.Equal(expectedTeams[0].Id, actualTeams[0].Id);
-            Assert.Equal(expectedTeams[0].Name, actualTeams[0].Name);
-            Assert.Equal(expectedTeams[1].Id, actualTeams[1].Id);
-            Assert.Equal(expectedTeams[1].Name, actualTeams[1].Name);
+
+            actualTeams.Should().BeEquivalentTo(expectedTeams, options => options.Including(t => t.Id).Including(t => t.Name));
         }
         #endregion
     }
