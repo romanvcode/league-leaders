@@ -38,7 +38,7 @@ namespace LeagueLeaders.Application
 
         public async Task<List<Match>> GetMatchHistoryForTeamAsync(int teamId, int lastMatches = 5)
         {
-            bool teamExists = await _context.Teams
+            var teamExists = await _context.Teams
                 .AsNoTracking()
                 .AnyAsync(t => t.Id == teamId);
 
@@ -71,7 +71,7 @@ namespace LeagueLeaders.Application
             return matches;
         }
 
-        public async Task<List<Team>> GetTeamsBySearchTerm(string searchTerm)
+        public async Task<List<Team>> GetTeamsBySearchTermAsync(string searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
