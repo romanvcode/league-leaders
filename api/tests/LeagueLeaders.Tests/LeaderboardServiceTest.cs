@@ -10,14 +10,13 @@ namespace LeagueLeaders.Tests
     public class LeaderboardServiceTest : IDisposable
     {
         private readonly LeagueLeadersDbContext _context;
-        private readonly LeaderboardService _leaderboardService;
         public LeaderboardServiceTest()
         {
             var options = new DbContextOptionsBuilder<LeagueLeadersDbContext>()
                 .UseInMemoryDatabase(databaseName: "LeagueLeadersLeaderboardDB")
                 .Options;
+
             _context = new LeagueLeadersDbContext(options);
-            _leaderboardService = new LeaderboardService(_context);
         }
 
         public void Dispose()
@@ -29,18 +28,20 @@ namespace LeagueLeaders.Tests
         [Fact]
         public async Task GetStandingsForEachTeamAsync_CurrentSeasonIsNull_ThrowsException()
         {
-            Func<Task> action = (async () =>
-            {
-                await _leaderboardService.GetStandingsForEachTeamAsync();
-            });
+            var _leaderboardService = new LeaderboardService(_context);
 
 
-            await action.Should().ThrowAsync<SeasonNotFoundException>();
+            var getStandings = () => _leaderboardService.GetStandingsForEachTeamAsync();
+
+
+            await getStandings.Should().ThrowAsync<SeasonNotFoundException>();
         }
 
         [Fact]
         public async Task GetStandingsForEachTeamAsync_NoStandings_StandingsAreEmpty()
         {
+            var _leaderboardService = new LeaderboardService(_context);
+
             var season = new Season
             {
                 Name = "2024/2025",
@@ -61,6 +62,8 @@ namespace LeagueLeaders.Tests
         [Fact]
         public async Task GetStandingsForEachTeamAsync_ValidData_ReturnsStandings()
         {
+            var _leaderboardService = new LeaderboardService(_context);
+
             var season = new Season
             {
                 Name = "2024/2025",

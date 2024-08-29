@@ -10,7 +10,6 @@ namespace LeagueLeaders.Tests
     public class ScheduleServiceTests : IDisposable
     {
         private readonly LeagueLeadersDbContext _context;
-        private readonly ScheduleSerivce _scheduleService;
 
         public ScheduleServiceTests()
         {
@@ -19,7 +18,6 @@ namespace LeagueLeaders.Tests
                 .Options;
 
             _context = new LeagueLeadersDbContext(options);
-            _scheduleService = new ScheduleSerivce(_context);
         }
 
         public void Dispose()
@@ -30,18 +28,20 @@ namespace LeagueLeaders.Tests
         [Fact]
         public async Task GetClosestMatches_CurrentSeasonIsNull_ThrowsException()
         {
-            Func<Task> action = (async () =>
-            {
-                await _scheduleService.GetClosestMatchesAsync();
-            });
+            var _scheduleService = new ScheduleSerivce(_context);
 
 
-            await action.Should().ThrowAsync<SeasonNotFoundException>();
+            var getMatches = () => _scheduleService.GetClosestMatchesAsync();
+
+
+            await getMatches.Should().ThrowAsync<SeasonNotFoundException>();
         }
 
         [Fact]
         public async Task GetClosestMatches_CurrentStageIsNull_ThrowsException()
         {
+            var _scheduleService = new ScheduleSerivce(_context);
+
             var season = new Season
             {
                 Name = "2024/2025",
@@ -53,18 +53,17 @@ namespace LeagueLeaders.Tests
             await _context.SaveChangesAsync();
 
 
-            Func<Task> action = (async () =>
-            {
-                await _scheduleService.GetClosestMatchesAsync();
-            });
+            var getMatches = () => _scheduleService.GetClosestMatchesAsync();
 
 
-            await action.Should().ThrowAsync<StageNotFoundException>();
+            await getMatches.Should().ThrowAsync<StageNotFoundException>();
         }
 
         [Fact]
         public async Task GetClosestMatches_ValidData_ReturnsMatches()
         {
+            var _scheduleService = new ScheduleSerivce(_context);
+
             var season = new Season
             {
                 Name = "2024/2025",

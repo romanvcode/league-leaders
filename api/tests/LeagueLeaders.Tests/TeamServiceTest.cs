@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FluentAssertions.Execution;
 using LeagueLeaders.Application;
 using LeagueLeaders.Application.Exceptions;
 using LeagueLeaders.Domain;
@@ -9,7 +10,7 @@ namespace LeagueLeaders.Tests
     public class TeamServiceTest : IDisposable
     {
         private readonly LeagueLeadersDbContext _context;
-        private readonly TeamService _teamService;
+
         public TeamServiceTest()
         {
             var options = new DbContextOptionsBuilder<LeagueLeadersDbContext>()
@@ -17,7 +18,6 @@ namespace LeagueLeaders.Tests
                 .Options;
 
             _context = new LeagueLeadersDbContext(options);
-            _teamService = new TeamService(_context);
         }
 
         public void Dispose()
@@ -29,21 +29,22 @@ namespace LeagueLeaders.Tests
         [Fact]
         public async void GetTeamAsync_InvalidTeamId_ThrowsException()
         {
+            var _teamService = new TeamService(_context);
+
             int teamId = -1;
 
 
-            Func<Task> action = (async () =>
-            {
-                await _teamService.GetTeamAsync(teamId);
-            });
+            var getTeam = () => _teamService.GetTeamAsync(teamId);
 
 
-            await action.Should().ThrowAsync<TeamNotFoundException>();
+            await getTeam.Should().ThrowAsync<TeamNotFoundException>();
         }
 
         [Fact]
         public async void GetTeamAsync_ValidTeamId_ReturnsTeam()
         {
+            var _teamService = new TeamService(_context);
+
             var expectedTeam = new Team
             {
                 Name = "Team 1"
@@ -56,9 +57,12 @@ namespace LeagueLeaders.Tests
             var actualTeam = await _teamService.GetTeamAsync(expectedTeam.Id);
 
 
-            actualTeam.Should().NotBeNull();
-            actualTeam?.Id.Should().Be(expectedTeam.Id);
-            actualTeam?.Name.Should().Be(expectedTeam.Name);
+            using (new AssertionScope())
+            {
+                actualTeam.Should().NotBeNull();
+                actualTeam?.Id.Should().Be(expectedTeam.Id);
+                actualTeam?.Name.Should().Be(expectedTeam.Name);
+            }
         }
         #endregion
 
@@ -66,21 +70,22 @@ namespace LeagueLeaders.Tests
         [Fact]
         public async void GetTeamPlayersAsync_InvalidTeamId_ThrowsException()
         {
+            var _teamService = new TeamService(_context);
+
             int teamId = -1;
 
 
-            Func<Task> action = (async () =>
-            {
-                await _teamService.GetTeamPlayersAsync(teamId);
-            });
+            var getTeam = () => _teamService.GetTeamPlayersAsync(teamId);
 
 
-            await action.Should().ThrowAsync<TeamNotFoundException>();
+            await getTeam.Should().ThrowAsync<TeamNotFoundException>();
         }
 
         [Fact]
         public async void GetTeamPlayersAsync_NoPlayers_ReturnsEmptyList()
         {
+            var _teamService = new TeamService(_context);
+
             var team = new Team
             {
                 Name = "Team 1"
@@ -99,6 +104,8 @@ namespace LeagueLeaders.Tests
         [Fact]
         public async void GetTeamPlayersAsync_ValidTeamWithPlayers_ReturnsPlayers()
         {
+            var _teamService = new TeamService(_context);
+
             var team = new Team
             {
                 Name = "Team 1"
@@ -133,21 +140,22 @@ namespace LeagueLeaders.Tests
         [Fact]
         public async void GetMatchHistoryForTeamAsync_InvalidTeam_ThrowsException()
         {
+            var _teamService = new TeamService(_context);   
+
             int teamId = -1;
 
 
-            Func<Task> action = (async () =>
-            {
-                await _teamService.GetMatchHistoryForTeamAsync(teamId);
-            });
+            var getMatchHistory = () => _teamService.GetMatchHistoryForTeamAsync(teamId);
 
 
-            await action.Should().ThrowAsync<TeamNotFoundException>();
+            await getMatchHistory.Should().ThrowAsync<TeamNotFoundException>();
         }
 
         [Fact]
         public async void GetMatchHistoryForTeamAsync_CurrentSeasonIsNull_ThrowsException()
         {
+            var _teamService = new TeamService(_context);
+
             var team = new Team
             {
                 Name = "Team 1"
@@ -157,18 +165,17 @@ namespace LeagueLeaders.Tests
             await _context.SaveChangesAsync();
 
 
-            Func<Task> action = (async () =>
-            {
-                await _teamService.GetMatchHistoryForTeamAsync(team.Id);
-            });
+            var getMatchHistory = () => _teamService.GetMatchHistoryForTeamAsync(team.Id);
 
 
-            await action.Should().ThrowAsync<SeasonNotFoundException>();
+            await getMatchHistory.Should().ThrowAsync<SeasonNotFoundException>();
         }
 
         [Fact]
         public async void GetMatchHistoryForTeamAsync_NoMatches_ReturnsEmptyList()
         {
+            var _teamService = new TeamService(_context);
+
             var season = new Season
             {
                 Name = "2024/2025",
@@ -195,6 +202,8 @@ namespace LeagueLeaders.Tests
         [Fact]
         public async void GetMatchHistoryForTeamAsync_ValidData_ReturnsMatches()
         {
+            var _teamService = new TeamService(_context);
+
             var season = new Season
             {
                 Name = "2024/2025",
@@ -251,21 +260,22 @@ namespace LeagueLeaders.Tests
         [Fact]
         public async void GetTeamsBySearchTermAsync_EmptySearchTerm_ThrowsException()
         {
+            var _teamService = new TeamService(_context);
+
             string searchTerm = "";
 
 
-            Func<Task> action = (async () =>
-            {
-                await _teamService.GetTeamsBySearchTermAsync(searchTerm);
-            });
+            var getTeams = () => _teamService.GetTeamsBySearchTermAsync(searchTerm);
 
 
-            await action.Should().ThrowAsync<ArgumentNullException>();
+            await getTeams.Should().ThrowAsync<ArgumentNullException>();
         }
 
         [Fact]
         public async void GetTeamsBySearchTermAsync_NoTeams_ReturnsEmptyList()
         {
+            var _teamService = new TeamService(_context);
+
             string searchTerm = "Team";
 
 
@@ -278,6 +288,8 @@ namespace LeagueLeaders.Tests
         [Fact]
         public async void GetTeamsBySearchTermAsync_ValidData_ReturnsTeams()
         {
+            var _teamService = new TeamService(_context);
+
             var team1 = new Team
             {
                 Name = "Team 1"
