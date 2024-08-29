@@ -171,8 +171,8 @@ namespace LeagueLeaders.Tests
             var season = new Season
             {
                 Name = "2024/2025",
-                StartAt = DateTime.Parse("2024-01-01"),
-                EndAt = DateTime.Parse("2025-01-01")
+                StartAt = new DateTime(2024, 1, 1),
+                EndAt = new DateTime(2025, 1, 1)
             };
 
             var team = new Team
@@ -197,8 +197,8 @@ namespace LeagueLeaders.Tests
             var season = new Season
             {
                 Name = "2024/2025",
-                StartAt = DateTime.Parse("2024-01-01"),
-                EndAt = DateTime.Parse("2025-01-01")
+                StartAt = new DateTime(2024, 1, 1),
+                EndAt = new DateTime(2025, 1, 1)
             };
 
             var stage = new Stage
@@ -220,14 +220,14 @@ namespace LeagueLeaders.Tests
             {
                 HomeTeam = team1,
                 AwayTeam = team2,
-                Date = DateTime.Parse("2024-01-01"),
+                Date = new DateTime(2024, 1, 1),
                 Stage = stage
             };
             var match2 = new Match
             {
                 HomeTeam = team2,
                 AwayTeam = team1,
-                Date = DateTime.Parse("2024-01-02"),
+                Date = new DateTime(2024, 1, 2),
                 Stage = stage
             };
 
@@ -246,16 +246,16 @@ namespace LeagueLeaders.Tests
         }
         #endregion
 
-        #region GetTeamsBySearchTerm
+        #region GetTeamsBySearchTermAsync
         [Fact]
-        public async void GetTeamsBySearchTerm_EmptySearchTerm_ThrowsException()
+        public async void GetTeamsBySearchTermAsync_EmptySearchTerm_ThrowsException()
         {
             string searchTerm = "";
 
 
             Func<Task> action = (async () =>
             {
-                await _teamService.GetTeamsBySearchTerm(searchTerm);
+                await _teamService.GetTeamsBySearchTermAsync(searchTerm);
             });
 
 
@@ -263,19 +263,19 @@ namespace LeagueLeaders.Tests
         }
 
         [Fact]
-        public async void GetTeamsBySearchTerm_NoTeams_ReturnsEmptyList()
+        public async void GetTeamsBySearchTermAsync_NoTeams_ReturnsEmptyList()
         {
             string searchTerm = "Team";
 
 
-            var actualTeams = await _teamService.GetTeamsBySearchTerm(searchTerm);
+            var actualTeams = await _teamService.GetTeamsBySearchTermAsync(searchTerm);
 
 
             actualTeams.Should().BeEmpty();
         }
 
         [Fact]
-        public async void GetTeamsBySearchTerm_ValidData_ReturnsTeams()
+        public async void GetTeamsBySearchTermAsync_ValidData_ReturnsTeams()
         {
             var team1 = new Team
             {
@@ -292,7 +292,7 @@ namespace LeagueLeaders.Tests
             var expectedTeams = new List<Team>() { team1, team2 };
 
 
-            var actualTeams = await _teamService.GetTeamsBySearchTerm("Team");
+            var actualTeams = await _teamService.GetTeamsBySearchTermAsync("Team");
 
 
             actualTeams.Should().BeEquivalentTo(expectedTeams, options => options.Including(t => t.Id).Including(t => t.Name));
