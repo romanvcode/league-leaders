@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using LeagueLeaders.Application;
+using LeagueLeaders.Application.Exceptions;
 using LeagueLeaders.Domain;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +38,7 @@ namespace LeagueLeaders.Tests
             });
 
 
-            await action.Should().ThrowAsync<Exception>();
+            await action.Should().ThrowAsync<TeamNotFoundException>();
         }
 
         [Fact]
@@ -74,7 +75,7 @@ namespace LeagueLeaders.Tests
             });
 
 
-            await action.Should().ThrowAsync<Exception>();
+            await action.Should().ThrowAsync<TeamNotFoundException>();
         }
 
         [Fact]
@@ -141,7 +142,7 @@ namespace LeagueLeaders.Tests
             });
 
 
-            await action.Should().ThrowAsync<Exception>();
+            await action.Should().ThrowAsync<TeamNotFoundException>();
         }
 
         [Fact]
@@ -162,7 +163,7 @@ namespace LeagueLeaders.Tests
             });
 
 
-            await action.Should().ThrowAsync<Exception>();
+            await action.Should().ThrowAsync<SeasonNotFoundException>();
         }
 
         [Fact]
@@ -259,7 +260,7 @@ namespace LeagueLeaders.Tests
             });
 
 
-            await action.Should().ThrowAsync<Exception>();
+            await action.Should().ThrowAsync<ArgumentNullException>();
         }
 
         [Fact]

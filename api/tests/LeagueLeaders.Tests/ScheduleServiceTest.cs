@@ -3,6 +3,7 @@ using LeagueLeaders.Domain;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using FluentAssertions;
+using LeagueLeaders.Application.Exceptions;
 
 namespace LeagueLeaders.Tests
 {
@@ -35,7 +36,7 @@ namespace LeagueLeaders.Tests
             });
 
 
-            await action.Should().ThrowAsync<Exception>();
+            await action.Should().ThrowAsync<SeasonNotFoundException>();
         }
 
         [Fact]
@@ -58,7 +59,7 @@ namespace LeagueLeaders.Tests
             });
 
 
-            await action.Should().ThrowAsync<Exception>();
+            await action.Should().ThrowAsync<StageNotFoundException>();
         }
 
         [Fact]
