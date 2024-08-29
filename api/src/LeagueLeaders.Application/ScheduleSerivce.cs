@@ -1,6 +1,7 @@
 ﻿using LeagueLeaders.Domain;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using LeagueLeaders.Application.Exceptions;
 
 namespace LeagueLeaders.Application
 {
@@ -22,7 +23,7 @@ namespace LeagueLeaders.Application
 
             if (currentSeason == null)
             {
-                throw new Exception($"There is no season which will run during {DateTime.UtcNow}");
+                throw new SeasonNotFoundException($"There is no season which will run during {DateTime.UtcNow}");
             }
 
             var matches = await _context.Matches
@@ -39,7 +40,7 @@ namespace LeagueLeaders.Application
 
             if (currentStage == null)
             {
-                throw new Exception($"There is no stage which will run during current season: {currentSeason.Name}");
+                throw new StageNotFoundException($"There is no stage which will run during current season: {currentSeason.Name}");
             }
 
             var closestMatches = matches

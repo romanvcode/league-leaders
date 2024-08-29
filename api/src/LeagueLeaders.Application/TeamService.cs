@@ -1,6 +1,7 @@
 ﻿using LeagueLeaders.Domain;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using LeagueLeaders.Application.Exceptions;
 
 namespace LeagueLeaders.Application
 {
@@ -18,7 +19,7 @@ namespace LeagueLeaders.Application
             var team = await _context.Teams
                 .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.Id == teamId)
-                ?? throw new Exception($"Team with Id {teamId} not found.");
+                ?? throw new TeamNotFoundException($"Team with Id {teamId} not found.");
 
             return team;
         }
@@ -29,7 +30,7 @@ namespace LeagueLeaders.Application
                 .AsNoTracking()
                 .Include(t => t.Players)
                 .FirstOrDefaultAsync(t => t.Id == teamId)
-                ?? throw new Exception($"Team with Id {teamId} not found.");
+                ?? throw new TeamNotFoundException($"Team with Id {teamId} not found.");
 
             var players = team.Players.ToList();
 
@@ -44,7 +45,7 @@ namespace LeagueLeaders.Application
 
             if (!teamExists)
             {
-                throw new Exception($"Team with Id {teamId} not found.");
+                throw new TeamNotFoundException($"Team with Id {teamId} not found.");
             }
 
             var currentSeason = await _context.Seasons
@@ -54,7 +55,7 @@ namespace LeagueLeaders.Application
 
             if (currentSeason == null)
             {
-                throw new Exception($"There is no season which will run during {DateTime.UtcNow}");
+                throw new SeasonNotFoundException($"There is no season which will run during {DateTime.UtcNow}");
             }
 
             var matches = await _context.Matches

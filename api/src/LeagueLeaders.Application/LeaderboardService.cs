@@ -1,4 +1,5 @@
-﻿using LeagueLeaders.Domain;
+﻿using LeagueLeaders.Application.Exceptions;
+using LeagueLeaders.Domain;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +23,7 @@ namespace LeagueLeaders.Application
 
             if (currentSeason == null)
             {
-                throw new Exception($"There is no season which will run during {DateTime.UtcNow}");
+                throw new SeasonNotFoundException($"There is no season which will run during {DateTime.UtcNow}");
             }
 
             var standings = await _context.Standings
