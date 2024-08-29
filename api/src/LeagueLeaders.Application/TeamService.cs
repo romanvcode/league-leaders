@@ -1,6 +1,7 @@
 ﻿using LeagueLeaders.Domain;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using LeagueLeaders.Application.Exceptions;
 
 namespace LeagueLeaders.Application
 {
@@ -17,24 +18,36 @@ namespace LeagueLeaders.Application
         {
             var team = await _context.Teams
                 .AsNoTracking()
-                .FirstOrDefaultAsync(t => t.Id == teamId) 
-                ?? throw new Exception($"Team with Id {teamId} not found.");
+                .FirstOrDefaultAsync(t => t.Id == teamId)
+                ?? throw new TeamNotFoundException($"Team with Id {teamId} not found.");
 
             return team;
         }
 
         public async Task<List<Player>> GetTeamPlayersAsync(int teamId)
         {
-            var players = await _context.Players
+            var team = await _context.Teams
                 .AsNoTracking()
-                .Where(p => p.TeamId == teamId)
-                .ToListAsync();
+                .Include(t => t.Players)
+                .FirstOrDefaultAsync(t => t.Id == teamId)
+                ?? throw new TeamNotFoundException($"Team with Id {teamId} not found.");
+
+            var players = team.Players.ToList();
 
             return players;
         }
 
         public async Task<List<Match>> GetMatchHistoryForTeamAsync(int teamId, int lastMatches = 5)
         {
+            var teamExists = await _context.Teams
+                .AsNoTracking()
+                .AnyAsync(t => t.Id == teamId);
+
+            if (!teamExists)
+            {
+                throw new TeamNotFoundException($"Team with Id {teamId} not found.");
+            }
+
             var currentSeason = await _context.Seasons
                 .AsNoTracking()
                 .Where(s => s.StartAt < DateTime.UtcNow && s.EndAt > DateTime.UtcNow)
@@ -42,7 +55,7 @@ namespace LeagueLeaders.Application
 
             if (currentSeason == null)
             {
-                throw new Exception($"There is no season which will run during {DateTime.UtcNow}");
+                throw new SeasonNotFoundException($"There is no season which will run during {DateTime.UtcNow}");
             }
 
             var matches = await _context.Matches
@@ -59,7 +72,7 @@ namespace LeagueLeaders.Application
             return matches;
         }
 
-        public async Task<List<Team>> GetTeamsBySearchTerm(string searchTerm)
+        public async Task<List<Team>> GetTeamsBySearchTermAsync(string searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
             {

@@ -1,6 +1,7 @@
 ﻿using LeagueLeaders.Domain;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using LeagueLeaders.Application.Exceptions;
 
 namespace LeagueLeaders.Application
 {
@@ -16,34 +17,40 @@ namespace LeagueLeaders.Application
         public async Task<List<Match>> GetClosestMatchesAsync()
         {
             var currentSeason = await _context.Seasons
+                .AsNoTracking()
                 .Where(s => s.StartAt < DateTime.UtcNow && s.EndAt > DateTime.UtcNow)
                 .FirstOrDefaultAsync();
 
             if (currentSeason == null)
             {
-                throw new Exception($"There is no season which will run during {DateTime.UtcNow}");
-            }
-
-            var currentStage = await _context.Matches
-                .Where(m => m.Stage.SeasonId == currentSeason.Id)
-                .Include(m => m.Stage)
-                .GroupBy(m => m.Stage)
-                .OrderByDescending(g => g.Key)
-                .Select(g => g.Key)
-                .FirstOrDefaultAsync();
-
-            if (currentStage == null)
-            {
-                throw new Exception($"There is no stage which will run during current season: {currentSeason.Name}");
+                throw new SeasonNotFoundException($"There is no season which will run during {DateTime.UtcNow}");
             }
 
             var matches = await _context.Matches
-                .Where(m => m.StageId == currentStage.Id)
-                .OrderBy(m => m.Date)
-                .Take(5)
+                .AsNoTracking()
+                .Where(m => m.Stage.SeasonId == currentSeason.Id)
+                .Include(m => m.Stage)
                 .ToListAsync();
 
-            return matches;
+            var currentStage = matches
+                .GroupBy(m => m.Stage)
+                .OrderByDescending(g => g.Key.Id)
+                .Select(g => g.Key)
+                .FirstOrDefault();
+
+            if (currentStage == null)
+            {
+                throw new StageNotFoundException($"There is no stage which will run during current season: {currentSeason.Name}");
+            }
+
+            var closestMatches = matches
+                .Where(m => m.StageId == currentStage.Id)
+                .Where(m => m.Date > DateTime.UtcNow)
+                .OrderBy(m => m.Date)
+                .Take(5)
+                .ToList();
+
+            return closestMatches;
         }
     }
 }
