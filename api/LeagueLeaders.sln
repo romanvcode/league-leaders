@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeagueLeaders.Domain", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeagueLeaders.Infrastructure", "src\LeagueLeaders.Infrastructure\LeagueLeaders.Infrastructure.csproj", "{F130BD13-09D5-482C-A94F-31342E03888F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeagueLeaders.Application", "src\LeagueLeaders.Application\LeagueLeaders.Application.csproj", "{89E9B104-1FA3-419E-A770-810DAFEFAC75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeagueLeaders.Application", "src\LeagueLeaders.Application\LeagueLeaders.Application.csproj", "{89E9B104-1FA3-419E-A770-810DAFEFAC75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeagueLeaders.Tests", "tests\LeagueLeaders.Tests\LeagueLeaders.Tests.csproj", "{CE83F3CA-4405-4AAC-B63E-35852DE1F2AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{89E9B104-1FA3-419E-A770-810DAFEFAC75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89E9B104-1FA3-419E-A770-810DAFEFAC75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89E9B104-1FA3-419E-A770-810DAFEFAC75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE83F3CA-4405-4AAC-B63E-35852DE1F2AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE83F3CA-4405-4AAC-B63E-35852DE1F2AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE83F3CA-4405-4AAC-B63E-35852DE1F2AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE83F3CA-4405-4AAC-B63E-35852DE1F2AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
