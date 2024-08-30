@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LeagueLeaders.API</name>
+    </assembly>
+    <members>
+        <member name="M:LeagueLeaders.API.Controllers.LeaderboardController.GetStandingsAsync">
+            <summary>
+            Get Standings for each Team.
+            </summary>
+            <returns>List of <see cref="T:LeagueLeaders.Domain.Standing"/>s.</returns>
+        </member>
+        <member name="M:LeagueLeaders.API.Controllers.ScheduleController.GetClosestMatchesAsync">
+            <summary>
+            Get five closest Matches of the current Stage.
+            </summary>
+            <returns>List of <see cref="T:LeagueLeaders.Domain.Match"/>es.</returns>
+        </member>
+        <member name="M:LeagueLeaders.API.Controllers.TeamController.GetTeamAsync(System.Int32)">
+            <summary>
+            Get single Team by Team ID.
+            </summary>
+            <param name="teamId">The ID of the Team.</param>
+            <returns>The found <see cref="T:LeagueLeaders.Domain.Team"/>.</returns>
+        </member>
+        <member name="M:LeagueLeaders.API.Controllers.TeamController.GetTeamPlayersAsync(System.Int32)">
+            <summary>
+            Get List of Players of the Team by Team ID.
+            </summary>
+            <param name="teamId">The ID of the Team.</param>
+            <returns>The list of found <see cref="T:LeagueLeaders.Domain.Player"/>s.</returns>
+        </member>
+        <member name="M:LeagueLeaders.API.Controllers.TeamController.GetLastFiveTeamMatches(System.Int32)">
+            <summary>
+            Get the last 5 Matches of the Team by Team ID.
+            </summary>
+            <param name="teamId">The ID of the Team.</param>
+            <returns>The list of found <see cref="T:LeagueLeaders.Domain.Match"/>es.</returns>
+        </member>
+        <member name="M:LeagueLeaders.API.Controllers.TeamController.GetTeamsBySerchTerm(System.String)">
+            <summary>
+            Get List of Teams by Search Term.
+            </summary>
+            <param name="searchTerm">The search term to search for.</param>
+            <returns>The list of found <see cref="T:LeagueLeaders.Domain.Team"/>s.</returns>
+        </member>
+    </members>
+</doc>
