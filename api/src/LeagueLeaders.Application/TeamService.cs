@@ -32,7 +32,9 @@ namespace LeagueLeaders.Application
                 .FirstOrDefaultAsync(t => t.Id == teamId)
                 ?? throw new TeamNotFoundException($"Team with Id {teamId} not found.");
 
-            var players = team.Players.ToList();
+            var players = team.Players
+                .ToList()
+                ?? throw new PlayersNotFoundException($"No players found for the team with ID {teamId}.");
 
             return players;
         }
@@ -63,7 +65,8 @@ namespace LeagueLeaders.Application
                 .Where(m => m.Date < DateTime.UtcNow)
                 .OrderByDescending(m => m.Date)
                 .Take(lastMatches)
-                .ToListAsync();
+                .ToListAsync()
+                ?? throw new MatchesNotFoundException($"No matches found for the team with ID {teamId}.");
 
             return matches;
         }
@@ -77,7 +80,8 @@ namespace LeagueLeaders.Application
 
             var teams = await _context.Teams
                 .Where(t => t.Name.Contains(searchTerm))
-                .ToListAsync();
+                .ToListAsync()
+                ?? throw new TeamNotFoundException($"No teams found for the search term {searchTerm}.");
 
             return teams;
         }

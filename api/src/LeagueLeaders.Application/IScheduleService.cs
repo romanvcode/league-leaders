@@ -2,7 +2,7 @@
 
 namespace LeagueLeaders.Application
 {
-    public interface IScheduleSerivce
+    public interface IScheduleService
     {
         Task<List<Match>> GetClosestMatchesAsync();
     }
