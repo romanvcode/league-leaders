@@ -1,4 +1,4 @@
-﻿namespace LeagueLeaders.Application
+﻿namespace LeagueLeaders.Application.Exceptions
 {
     public class StandingsNotFoundException : Exception
     {

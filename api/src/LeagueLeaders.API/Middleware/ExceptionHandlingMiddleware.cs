@@ -1,5 +1,4 @@
-﻿
-using LeagueLeaders.Application;
+﻿using LeagueLeaders.Application.Exceptions;
 
 namespace LeagueLeaders.API.Middleware;
 

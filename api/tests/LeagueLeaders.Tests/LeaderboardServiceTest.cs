@@ -1,10 +1,6 @@
 ﻿using FluentAssertions;
-using LeagueLeaders.Application;
-<<<<<<< Updated upstream
 using LeagueLeaders.Application.Exceptions;
-=======
 using LeagueLeaders.Application.Leaderboard;
->>>>>>> Stashed changes
 using LeagueLeaders.Domain;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +10,7 @@ namespace LeagueLeaders.Tests
     public class LeaderboardServiceTest : IDisposable
     {
         private readonly LeagueLeadersDbContext _context;
+
         public LeaderboardServiceTest()
         {
             var options = new DbContextOptionsBuilder<LeagueLeadersDbContext>()
