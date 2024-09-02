@@ -16,12 +16,10 @@ builder.Services.AddSwaggerGen(options =>
         Title = "LeagueLeaders API",
         Version = "v1",
         Description = "This API provides access to information about leagues, teams, schedules, and leaderboards. Use this API to retrieve and manage data related to Champions League.",
-        TermsOfService = new Uri("https://example.com/terms"),
         Contact = new OpenApiContact
         {
             Name = "Roman Vorobel",
             Email = "rvorobel@leobit.com",
-            Url = new Uri("https://example.com/contact"),
         },
     });
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "api.xml"));
