@@ -28,7 +28,7 @@ namespace LeagueLeaders.Tests
         [Fact]
         public async Task GetClosestMatches_CurrentSeasonIsNull_ThrowsException()
         {
-            var _scheduleService = new ScheduleSerivce(_context);
+            var _scheduleService = new ScheduleService(_context);
 
 
             var getMatches = () => _scheduleService.GetClosestMatchesAsync();
@@ -40,7 +40,7 @@ namespace LeagueLeaders.Tests
         [Fact]
         public async Task GetClosestMatches_CurrentStageIsNull_ThrowsException()
         {
-            var _scheduleService = new ScheduleSerivce(_context);
+            var _scheduleService = new ScheduleService(_context);
 
             var season = new Season
             {
@@ -67,7 +67,7 @@ namespace LeagueLeaders.Tests
         [Fact]
         public async Task GetClosestMatches_ValidData_ReturnsMatches()
         {
-            var _scheduleService = new ScheduleSerivce(_context);
+            var _scheduleService = new ScheduleService(_context);
 
             var season = new Season
             {
