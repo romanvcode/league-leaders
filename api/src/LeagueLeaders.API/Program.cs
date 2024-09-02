@@ -2,6 +2,7 @@ using LeagueLeaders.API.Middleware;
 using LeagueLeaders.Application;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "LeagueLeaders API",
+        Version = "v1",
+        Description = "This API provides access to information about leagues, teams, schedules, and leaderboards. Use this API to retrieve and manage data related to Champions League.",
+        TermsOfService = new Uri("https://example.com/terms"),
+        Contact = new OpenApiContact
+        {
+            Name = "Roman Vorobel",
+            Email = "rvorobel@leobit.com",
+            Url = new Uri("https://example.com/contact"),
+        },
+    });
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "api.xml"));
 });
 
