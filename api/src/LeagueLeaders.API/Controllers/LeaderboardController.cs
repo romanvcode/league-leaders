@@ -1,8 +1,11 @@
+<<<<<<< Updated upstream
 ﻿using LeagueLeaders.Application;
 using LeagueLeaders.Application.Exceptions;
+=======
+﻿using LeagueLeaders.Application.Leaderboard;
+>>>>>>> Stashed changes
 using LeagueLeaders.Domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace LeagueLeaders.API.Controllers
 {
@@ -12,6 +15,7 @@ namespace LeagueLeaders.API.Controllers
     {
         private readonly ILeaderboardService _leaderboardService;
 
+<<<<<<< Updated upstream
         public LeaderboardController(ILeaderboardService leaderboardService)
         {
             _leaderboardService = leaderboardService;
@@ -47,5 +51,20 @@ namespace LeagueLeaders.API.Controllers
                 return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
             }
         }
+=======
+    /// <summary>
+    /// Get Standings for each Team.
+    /// </summary>
+    /// <returns>List of <see cref="Standing"/>s.</returns>
+    [HttpGet("standings")]
+    [ProducesResponseType(typeof(List<Standing>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<List<Standing>> GetStandingsAsync()
+    {
+        var standings = await _leaderboardService.GetStandingsForEachTeamAsync();
+
+        return standings;
+>>>>>>> Stashed changes
     }
 }

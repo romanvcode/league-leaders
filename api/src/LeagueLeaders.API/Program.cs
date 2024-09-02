@@ -1,6 +1,14 @@
+<<<<<<< Updated upstream
 using LeagueLeaders.Application;
+=======
+using LeagueLeaders.API.Middleware;
+using LeagueLeaders.Application.Leaderboard;
+using LeagueLeaders.Application.Schedule;
+using LeagueLeaders.Application.Teams;
+>>>>>>> Stashed changes
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +21,7 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
-    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 });
 
 builder.Services.AddDbContext<LeagueLeadersDbContext>(options =>
@@ -25,9 +33,13 @@ builder.Services.AddScoped<IScheduleSerivce, ScheduleSerivce>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
 
+builder.Services.AddScoped<ExceptionHandlingMiddleware>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

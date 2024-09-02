@@ -1,6 +1,10 @@
 ﻿using FluentAssertions;
 using LeagueLeaders.Application;
+<<<<<<< Updated upstream
 using LeagueLeaders.Application.Exceptions;
+=======
+using LeagueLeaders.Application.Leaderboard;
+>>>>>>> Stashed changes
 using LeagueLeaders.Domain;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -53,10 +57,10 @@ namespace LeagueLeaders.Tests
             await _context.SaveChangesAsync();
 
 
-            var standings = await _leaderboardService.GetStandingsForEachTeamAsync();
+            var getStandings = () => _leaderboardService.GetStandingsForEachTeamAsync();
 
 
-            standings.Should().BeEmpty();
+            await getStandings.Should().ThrowAsync<StandingsNotFoundException>();
         }
 
         [Fact]
