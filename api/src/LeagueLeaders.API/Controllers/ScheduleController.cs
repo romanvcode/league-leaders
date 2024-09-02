@@ -8,9 +8,9 @@ namespace LeagueLeaders.API.Controllers
     [ApiController]
     public class ScheduleController : ControllerBase
     {
-        private readonly IScheduleSerivce _scheduleSerivce;
+        private readonly IScheduleService _scheduleSerivce;
 
-        public ScheduleController(IScheduleSerivce scheduleSerivce)
+        public ScheduleController(IScheduleService scheduleSerivce)
         {
             _scheduleSerivce = scheduleSerivce;
         }

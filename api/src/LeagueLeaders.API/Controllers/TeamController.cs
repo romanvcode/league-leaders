@@ -1,8 +1,6 @@
 ﻿using LeagueLeaders.Application;
-using LeagueLeaders.Application.Exceptions;
 using LeagueLeaders.Domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using FluentValidation;
 using LeagueLeaders.API.Validators;
 
@@ -66,11 +64,6 @@ namespace LeagueLeaders.API.Controllers
 
             var players = await _teamService.GetTeamPlayersAsync(teamId);
 
-            if (players.IsNullOrEmpty())
-            {
-                throw new PlayersNotFoundException($"No players found for the team with ID {teamId}.");
-            }
-
             return players;
         }
 
@@ -96,11 +89,6 @@ namespace LeagueLeaders.API.Controllers
 
             var matches = await _teamService.GetMatchHistoryForTeamAsync(teamId);
 
-            if (matches.IsNullOrEmpty())
-            {
-                throw new MatchesNotFoundException($"No matches found for the team with ID {teamId}.");
-            }
-
             return matches;
         }
 
@@ -117,11 +105,6 @@ namespace LeagueLeaders.API.Controllers
         public async Task<List<Team>> GetTeamsBySerchTerm(string searchTerm)
         {
             var teams = await _teamService.GetTeamsBySearchTermAsync(searchTerm);
-
-            if (teams.IsNullOrEmpty())
-            {
-                throw new TeamNotFoundException($"No teams found for the search term {searchTerm}.");
-            }
 
             return teams;
         }
