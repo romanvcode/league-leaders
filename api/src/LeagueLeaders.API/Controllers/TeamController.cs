@@ -3,6 +3,8 @@ using LeagueLeaders.Application.Exceptions;
 using LeagueLeaders.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using FluentValidation;
+using LeagueLeaders.API.Validators;
 
 namespace LeagueLeaders.API.Controllers
 {
@@ -27,33 +29,19 @@ namespace LeagueLeaders.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<Team>> GetTeamAsync(int teamId)
+        public async Task<Team> GetTeamAsync(int teamId)
         {
-            if (teamId <= 0)
+            var validator = new TeamIdValidator();
+            var validationResult = validator.Validate(teamId);
+
+            if (!validationResult.IsValid)
             {
-                return BadRequest("Invalid team ID.");
+                throw new ValidationException(validationResult.Errors);
             }
 
-            try
-            {
-                var team = await _teamService.GetTeamAsync(teamId);
+            var team = await _teamService.GetTeamAsync(teamId);
 
-                if (team == null)
-                {
-                    return NotFound("Team not found.");
-                }
-
-                return Ok(team);
-            }
-            catch (TeamNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Problem(detail: ex.Message, 
-                    statusCode: StatusCodes.Status500InternalServerError);
-            }
+            return team;
         }
 
         /// <summary>
@@ -66,32 +54,24 @@ namespace LeagueLeaders.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<Player>>> GetTeamPlayersAsync(int teamId)
+        public async Task<List<Player>> GetTeamPlayersAsync(int teamId)
         {
-            if (teamId <= 0) 
+            var validator = new TeamIdValidator();
+            var validationResult = validator.Validate(teamId);
+
+            if (!validationResult.IsValid)
             {
-                return BadRequest("Invalid team ID.");
+                throw new ValidationException(validationResult.Errors);
             }
 
-            try
-            {
-                var players = await _teamService.GetTeamPlayersAsync(teamId);
+            var players = await _teamService.GetTeamPlayersAsync(teamId);
 
-                if (players.IsNullOrEmpty())
-                {
-                    return NotFound("Invalid team ID or no players found for the team.");
-                }
+            if (players.IsNullOrEmpty())
+            {
+                throw new PlayersNotFoundException($"No players found for the team with ID {teamId}.");
+            }
 
-                return Ok(players);
-            }
-            catch (TeamNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
-            }
+            return players;
         }
 
         /// <summary>
@@ -104,36 +84,24 @@ namespace LeagueLeaders.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<Match>>> GetLastFiveTeamMatches(int teamId)
+        public async Task<List<Match>> GetLastFiveTeamMatches(int teamId)
         {
-            if (teamId <= 0)
+            var validator = new TeamIdValidator();
+            var validationResult = validator.Validate(teamId);
+
+            if (!validationResult.IsValid)
             {
-                return BadRequest("Invalid team ID.");
+                throw new ValidationException(validationResult.Errors);
             }
 
-            try
-            {
-                var matches = await _teamService.GetMatchHistoryForTeamAsync(teamId);
+            var matches = await _teamService.GetMatchHistoryForTeamAsync(teamId);
 
-                if (matches.IsNullOrEmpty())
-                {
-                    return NotFound("No matches found for the team.");
-                }
+            if (matches.IsNullOrEmpty())
+            {
+                throw new MatchesNotFoundException($"No matches found for the team with ID {teamId}.");
+            }
 
-                return Ok(matches);
-            }
-            catch (TeamNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (SeasonNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
-            }
+            return matches;
         }
 
         /// <summary>
@@ -146,27 +114,16 @@ namespace LeagueLeaders.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<Team>>> GetTeamsBySerchTerm(string searchTerm)
+        public async Task<List<Team>> GetTeamsBySerchTerm(string searchTerm)
         {
-            try
-            {
-                var teams = await _teamService.GetTeamsBySearchTermAsync(searchTerm);
+            var teams = await _teamService.GetTeamsBySearchTermAsync(searchTerm);
 
-                if (teams.IsNullOrEmpty())
-                {
-                    return NotFound("No teams found.");
-                }
+            if (teams.IsNullOrEmpty())
+            {
+                throw new TeamNotFoundException($"No teams found for the search term {searchTerm}.");
+            }
 
-                return Ok(teams);
-            }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
-            }
+            return teams;
         }
     }
 }

@@ -140,7 +140,17 @@ namespace LeagueLeaders.Tests
         [Fact]
         public async void GetMatchHistoryForTeamAsync_InvalidTeam_ThrowsException()
         {
-            var _teamService = new TeamService(_context);   
+            var _teamService = new TeamService(_context);  
+            
+            var season = new Season
+            {
+                Name = "2024/2025",
+                StartAt = new DateTime(2024, 1, 1),
+                EndAt = new DateTime(2025, 1, 1)
+            };
+
+            _context.Seasons.Add(season);
+            await _context.SaveChangesAsync();
 
             int teamId = -1;
 

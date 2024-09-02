@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using LeagueLeaders.Application.Exceptions;
-using LeagueLeaders.Application.Leaderboard;
+using LeagueLeaders.Application;
 using LeagueLeaders.Domain;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;

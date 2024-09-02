@@ -1,4 +1,5 @@
-﻿using LeagueLeaders.Application.Exceptions;
+﻿using FluentValidation;
+using LeagueLeaders.Application.Exceptions;
 
 namespace LeagueLeaders.API.Middleware;
 
@@ -8,7 +9,17 @@ public class ExceptionHandlingMiddleware : IMiddleware
     {
         try
         {
-            await next.Invoke(context);
+            await next(context);
+        }
+        catch (ValidationException ex)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await context.Response.WriteAsync(ex.Message);
+        }
+        catch (ArgumentNullException ex) when (ex.ParamName == "teamId")
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await context.Response.WriteAsync(ex.Message);
         }
         catch (TeamNotFoundException ex)
         {
@@ -30,9 +41,14 @@ public class ExceptionHandlingMiddleware : IMiddleware
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             await context.Response.WriteAsync(ex.Message);
         }
-        catch (ArgumentNullException ex) when (ex.ParamName == "teamId")
+        catch (MatchesNotFoundException ex)
         {
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            await context.Response.WriteAsync(ex.Message);
+        }
+        catch (PlayersNotFoundException ex)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
             await context.Response.WriteAsync(ex.Message);
         }
         catch (Exception ex)

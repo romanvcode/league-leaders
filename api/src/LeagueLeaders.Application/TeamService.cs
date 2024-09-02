@@ -14,7 +14,7 @@ namespace LeagueLeaders.Application
             _context = context;
         }
 
-        public async Task<Team?> GetTeamAsync(int teamId)
+        public async Task<Team> GetTeamAsync(int teamId)
         {
             var team = await _context.Teams
                 .AsNoTracking()
@@ -51,12 +51,8 @@ namespace LeagueLeaders.Application
             var currentSeason = await _context.Seasons
                 .AsNoTracking()
                 .Where(s => s.StartAt < DateTime.UtcNow && s.EndAt > DateTime.UtcNow)
-                .FirstOrDefaultAsync();
-
-            if (currentSeason == null)
-            {
-                throw new SeasonNotFoundException($"There is no season which will run during {DateTime.UtcNow}");
-            }
+                .FirstOrDefaultAsync()
+                ?? throw new SeasonNotFoundException($"There is no season which will run during {DateTime.UtcNow}");
 
             var matches = await _context.Matches
                 .AsNoTracking()
