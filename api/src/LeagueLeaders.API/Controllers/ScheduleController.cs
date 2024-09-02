@@ -1,8 +1,6 @@
 ﻿using LeagueLeaders.Application;
-using LeagueLeaders.Application.Exceptions;
 using LeagueLeaders.Domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace LeagueLeaders.API.Controllers
 {
@@ -25,31 +23,11 @@ namespace LeagueLeaders.API.Controllers
         [ProducesResponseType(typeof(List<Match>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<Match>>> GetClosestMatchesAsync()
+        public async Task<List<Match>> GetClosestMatchesAsync()
         {
-            try
-            {
-                var matches = await _scheduleSerivce.GetClosestMatchesAsync();
+            var matches = await _scheduleSerivce.GetClosestMatchesAsync();
 
-                if (matches.IsNullOrEmpty())
-                {
-                    return NotFound("No matches found.");
-                }
-
-                return Ok(matches);
-            }
-            catch (SeasonNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (StageNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
-            }
+            return matches;
         }
     }
 }

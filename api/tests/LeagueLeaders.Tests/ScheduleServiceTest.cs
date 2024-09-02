@@ -49,6 +49,11 @@ namespace LeagueLeaders.Tests
                 EndAt = new DateTime(2025, 1, 1)
             };
 
+            var match = new Match
+            {
+                Date = DateTime.UtcNow.AddDays(1),
+            };
+
             _context.Seasons.Add(season);
             await _context.SaveChangesAsync();
 
