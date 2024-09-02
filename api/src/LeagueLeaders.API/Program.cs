@@ -1,11 +1,5 @@
-<<<<<<< Updated upstream
-using LeagueLeaders.Application;
-=======
 using LeagueLeaders.API.Middleware;
-using LeagueLeaders.Application.Leaderboard;
-using LeagueLeaders.Application.Schedule;
-using LeagueLeaders.Application.Teams;
->>>>>>> Stashed changes
+using LeagueLeaders.Application;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
