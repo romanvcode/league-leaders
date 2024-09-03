@@ -80,8 +80,7 @@ namespace LeagueLeaders.Application
 
             var teams = await _context.Teams
                 .Where(t => t.Name.Contains(searchTerm))
-                .ToListAsync()
-                ?? throw new TeamNotFoundException($"No teams found for the search term {searchTerm}.");
+                .ToListAsync();
 
             return teams;
         }

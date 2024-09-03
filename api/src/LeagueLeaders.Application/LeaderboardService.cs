@@ -27,8 +27,10 @@ namespace LeagueLeaders.Application
                 .Include(s => s.Team)
                 .Where(s => s.Stage.SeasonId == currentSeason.Id)
                 .OrderBy(s => s.Place)
-                .ToListAsync()
-                ?? throw new StandingsNotFoundException("No standings found.");
+                .ToListAsync();
+
+            if (standings == null || standings.Count == 0)
+                throw new StandingsNotFoundException("No standings found.");
 
             return standings;
         }
