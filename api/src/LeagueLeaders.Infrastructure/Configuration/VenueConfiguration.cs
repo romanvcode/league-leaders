@@ -2,18 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace LeagueLeaders.Infrastructure.Configuration
+namespace LeagueLeaders.Infrastructure.Configuration;
+
+class VenueConfiguration : IEntityTypeConfiguration<Venue>
 {
-    class VenueConfiguration : IEntityTypeConfiguration<Venue>
+    public void Configure(EntityTypeBuilder<Venue> builder)
     {
-        public void Configure(EntityTypeBuilder<Venue> builder)
-        {
-            builder.ToTable("Venues");
-            builder.HasKey(v => v.Id);
-            builder.Property(v => v.Name).HasMaxLength(100).IsRequired();
-            builder.Property(v => v.City).HasMaxLength(100);
-            builder.Property(v => v.Country).HasMaxLength(100);
-            builder.Property(v => v.Capacity);
-        }
+        builder.ToTable("Venues");
+        builder.HasKey(v => v.Id);
+        builder.Property(v => v.Name).HasMaxLength(100).IsRequired();
+        builder.Property(v => v.City).HasMaxLength(100);
+        builder.Property(v => v.Country).HasMaxLength(100);
+        builder.Property(v => v.Capacity);
     }
 }

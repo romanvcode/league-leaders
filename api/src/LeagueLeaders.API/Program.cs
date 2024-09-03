@@ -1,5 +1,7 @@
 using LeagueLeaders.API.Middleware;
-using LeagueLeaders.Application;
+using LeagueLeaders.Application.Leaderboard;
+using LeagueLeaders.Application.Schedule;
+using LeagueLeaders.Application.Teams;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
