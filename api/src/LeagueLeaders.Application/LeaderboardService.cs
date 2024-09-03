@@ -19,12 +19,8 @@ namespace LeagueLeaders.Application
             var currentSeason = await _context.Seasons
                 .AsNoTracking()
                 .Where(s => s.StartAt < DateTime.UtcNow && s.EndAt > DateTime.UtcNow)
-                .FirstOrDefaultAsync();
-
-            if (currentSeason == null)
-            {
-                throw new SeasonNotFoundException($"There is no season which will run during {DateTime.UtcNow}");
-            }
+                .FirstOrDefaultAsync()
+                ?? throw new SeasonNotFoundException($"There is no season which will run during {DateTime.UtcNow}");
 
             var standings = await _context.Standings
                 .AsNoTracking()
@@ -32,6 +28,9 @@ namespace LeagueLeaders.Application
                 .Where(s => s.Stage.SeasonId == currentSeason.Id)
                 .OrderBy(s => s.Place)
                 .ToListAsync();
+
+            if (standings == null || standings.Count == 0)
+                throw new StandingsNotFoundException("No standings found.");
 
             return standings;
         }

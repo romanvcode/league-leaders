@@ -4,7 +4,7 @@ namespace LeagueLeaders.Application
 {
     public interface ITeamService
     {
-        Task<Team?> GetTeamAsync(int teamId);
+        Task<Team> GetTeamAsync(int teamId);
 
         Task<List<Player>> GetTeamPlayersAsync(int teamId);
 

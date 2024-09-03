@@ -1,0 +1,1055 @@
+{
+	"info": {
+		"_postman_id": "7381c491-3a4c-4a26-a30e-56908bb1add2",
+		"name": "LeagueLeaders.API",
+		"description": "# LeagueLeaders API Postman Collection\n\nThis repository contains the Postman collection for the LeagueLeaders API. The collection can be imported into Postman for development and testing purposes.\n\n## Importing the Collection\n\n1. Download the `LeagueLeadersAPI.PostmanCollection.json` file from the `.artifacts` directory.\n2. Open Postman and click on \"Import\".\n3. Select the downloaded `.json` file and import it into Postman.\n4. The collection will be available in your Postman under the name \"LeagueLeaders.API\".\n\n## API Documentation\n\nFor details about each endpoint, please refer to the API documentation or explore the collection in Postman.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37721460"
+	},
+	"item": [
+		{
+			"name": "api",
+			"item": [
+				{
+					"name": "leaderboard",
+					"item": [
+						{
+							"name": "standings",
+							"item": [
+								{
+									"name": "Get Standings for each Team.",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "text/plain"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/leaderboard/standings",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"leaderboard",
+												"standings"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Success",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "text/plain"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/leaderboard/standings",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"leaderboard",
+														"standings"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"stageId\": \"<integer>\",\n    \"teamId\": \"<integer>\",\n    \"points\": \"<integer>\",\n    \"place\": \"<integer>\",\n    \"matchesPlayed\": \"<integer>\",\n    \"wins\": \"<integer>\",\n    \"draws\": \"<integer>\",\n    \"losses\": \"<integer>\",\n    \"goalsFor\": \"<integer>\",\n    \"goalsAgainst\": \"<integer>\",\n    \"stage\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"seasonId\": \"<integer>\",\n      \"type\": \"<string>\",\n      \"matches\": [\n        {\n          \"id\": \"<integer>\",\n          \"stageId\": \"<integer>\",\n          \"homeTeamId\": \"<integer>\",\n          \"awayTeamId\": \"<integer>\",\n          \"date\": \"<dateTime>\",\n          \"venueId\": \"<integer>\",\n          \"refereeId\": \"<integer>\",\n          \"homeTeamScore\": \"<integer>\",\n          \"awayTeamScore\": \"<integer>\",\n          \"stage\": {\n            \"value\": \"<Circular reference to #/components/schemas/Stage detected>\"\n          },\n          \"homeTeam\": {\n            \"id\": \"<integer>\",\n            \"name\": \"<string>\",\n            \"abbreviation\": \"<string>\",\n            \"country\": \"<string>\",\n            \"stadium\": \"<string>\",\n            \"manager\": \"<string>\",\n            \"players\": [\n              {\n                \"id\": \"<integer>\",\n                \"name\": \"<string>\",\n                \"teamId\": \"<integer>\",\n                \"position\": \"<string>\",\n                \"number\": \"<integer>\",\n                \"height\": \"<integer>\",\n                \"nationality\": \"<string>\",\n                \"dateOfBirth\": {\n                  \"year\": \"<integer>\",\n                  \"month\": \"<integer>\",\n                  \"day\": \"<integer>\",\n                  \"dayOfWeek\": 6,\n                  \"dayOfYear\": \"<integer>\",\n                  \"dayNumber\": \"<integer>\"\n                },\n                \"team\": {\n                  \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n                }\n              },\n              {\n                \"id\": \"<integer>\",\n                \"name\": \"<string>\",\n                \"teamId\": \"<integer>\",\n                \"position\": \"<string>\",\n                \"number\": \"<integer>\",\n                \"height\": \"<integer>\",\n                \"nationality\": \"<string>\",\n                \"dateOfBirth\": {\n                  \"year\": \"<integer>\",\n                  \"month\": \"<integer>\",\n                  \"day\": \"<integer>\",\n                  \"dayOfWeek\": 3,\n                  \"dayOfYear\": \"<integer>\",\n                  \"dayNumber\": \"<integer>\"\n                },\n                \"team\": {\n                  \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n                }\n              }\n            ]\n          },\n          \"awayTeam\": {\n            \"id\": \"<integer>\",\n            \"name\": \"<string>\",\n            \"abbreviation\": \"<string>\",\n            \"country\": \"<string>\",\n            \"stadium\": \"<string>\",\n            \"manager\": \"<string>\",\n            \"players\": [\n              {\n                \"id\": \"<integer>\",\n                \"name\": \"<string>\",\n                \"teamId\": \"<integer>\",\n                \"position\": \"<string>\",\n                \"number\": \"<integer>\",\n                \"height\": \"<integer>\",\n                \"nationality\": \"<string>\",\n                \"dateOfBirth\": {\n                  \"year\": \"<integer>\",\n                  \"month\": \"<integer>\",\n                  \"day\": \"<integer>\",\n                  \"dayOfWeek\": 5,\n                  \"dayOfYear\": \"<integer>\",\n                  \"dayNumber\": \"<integer>\"\n                },\n                \"team\": {\n                  \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n                }\n              },\n              {\n                \"id\": \"<integer>\",\n                \"name\": \"<string>\",\n                \"teamId\": \"<integer>\",\n                \"position\": \"<string>\",\n                \"number\": \"<integer>\",\n                \"height\": \"<integer>\",\n                \"nationality\": \"<string>\",\n                \"dateOfBirth\": {\n                  \"year\": \"<integer>\",\n                  \"month\": \"<integer>\",\n                  \"day\": \"<integer>\",\n                  \"dayOfWeek\": 5,\n                  \"dayOfYear\": \"<integer>\",\n                  \"dayNumber\": \"<integer>\"\n                },\n                \"team\": {\n                  \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n                }\n              }\n            ]\n          },\n          \"venue\": {\n            \"id\": \"<integer>\",\n            \"name\": \"<string>\",\n            \"city\": \"<string>\",\n            \"country\": \"<string>\",\n            \"capacity\": \"<integer>\"\n          },\n          \"referee\": {\n            \"id\": \"<integer>\",\n            \"name\": \"<string>\",\n            \"nationality\": \"<string>\"\n          }\n        },\n        {\n          \"id\": \"<integer>\",\n          \"stageId\": \"<integer>\",\n          \"homeTeamId\": \"<integer>\",\n          \"awayTeamId\": \"<integer>\",\n          \"date\": \"<dateTime>\",\n          \"venueId\": \"<integer>\",\n          \"refereeId\": \"<integer>\",\n          \"homeTeamScore\": \"<integer>\",\n          \"awayTeamScore\": \"<integer>\",\n          \"stage\": {\n            \"value\": \"<Circular reference to #/components/schemas/Stage detected>\"\n          },\n          \"homeTeam\": {\n            \"id\": \"<integer>\",\n            \"name\": \"<string>\",\n            \"abbreviation\": \"<string>\",\n            \"country\": \"<string>\",\n            \"stadium\": \"<string>\",\n            \"manager\": \"<string>\",\n            \"players\": [\n              {\n                \"id\": \"<integer>\",\n                \"name\": \"<string>\",\n                \"teamId\": \"<integer>\",\n                \"position\": \"<string>\",\n                \"number\": \"<integer>\",\n                \"height\": \"<integer>\",\n                \"nationality\": \"<string>\",\n                \"dateOfBirth\": {\n                  \"year\": \"<integer>\",\n                  \"month\": \"<integer>\",\n                  \"day\": \"<integer>\",\n                  \"dayOfWeek\": 1,\n                  \"dayOfYear\": \"<integer>\",\n                  \"dayNumber\": \"<integer>\"\n                },\n                \"team\": {\n                  \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n                }\n              },\n              {\n                \"id\": \"<integer>\",\n                \"name\": \"<string>\",\n                \"teamId\": \"<integer>\",\n                \"position\": \"<string>\",\n                \"number\": \"<integer>\",\n                \"height\": \"<integer>\",\n                \"nationality\": \"<string>\",\n                \"dateOfBirth\": {\n                  \"year\": \"<integer>\",\n                  \"month\": \"<integer>\",\n                  \"day\": \"<integer>\",\n                  \"dayOfWeek\": 6,\n                  \"dayOfYear\": \"<integer>\",\n                  \"dayNumber\": \"<integer>\"\n                },\n                \"team\": {\n                  \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n                }\n              }\n            ]\n          },\n          \"awayTeam\": {\n            \"id\": \"<integer>\",\n            \"name\": \"<string>\",\n            \"abbreviation\": \"<string>\",\n            \"country\": \"<string>\",\n            \"stadium\": \"<string>\",\n            \"manager\": \"<string>\",\n            \"players\": [\n              {\n                \"id\": \"<integer>\",\n                \"name\": \"<string>\",\n                \"teamId\": \"<integer>\",\n                \"position\": \"<string>\",\n                \"number\": \"<integer>\",\n                \"height\": \"<integer>\",\n                \"nationality\": \"<string>\",\n                \"dateOfBirth\": {\n                  \"year\": \"<integer>\",\n                  \"month\": \"<integer>\",\n                  \"day\": \"<integer>\",\n                  \"dayOfWeek\": 1,\n                  \"dayOfYear\": \"<integer>\",\n                  \"dayNumber\": \"<integer>\"\n                },\n                \"team\": {\n                  \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n                }\n              },\n              {\n                \"id\": \"<integer>\",\n                \"name\": \"<string>\",\n                \"teamId\": \"<integer>\",\n                \"position\": \"<string>\",\n                \"number\": \"<integer>\",\n                \"height\": \"<integer>\",\n                \"nationality\": \"<string>\",\n                \"dateOfBirth\": {\n                  \"year\": \"<integer>\",\n                  \"month\": \"<integer>\",\n                  \"day\": \"<integer>\",\n                  \"dayOfWeek\": 0,\n                  \"dayOfYear\": \"<integer>\",\n                  \"dayNumber\": \"<integer>\"\n                },\n                \"team\": {\n                  \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n                }\n              }\n            ]\n          },\n          \"venue\": {\n            \"id\": \"<integer>\",\n            \"name\": \"<string>\",\n            \"city\": \"<string>\",\n            \"country\": \"<string>\",\n            \"capacity\": \"<integer>\"\n          },\n          \"referee\": {\n            \"id\": \"<integer>\",\n            \"name\": \"<string>\",\n            \"nationality\": \"<string>\"\n          }\n        }\n      ],\n      \"season\": {\n        \"id\": \"<integer>\",\n        \"name\": \"<string>\",\n        \"competitionId\": \"<integer>\",\n        \"startAt\": \"<dateTime>\",\n        \"endAt\": \"<dateTime>\",\n        \"stages\": [\n          {\n            \"value\": \"<Circular reference to #/components/schemas/Stage detected>\"\n          },\n          {\n            \"value\": \"<Circular reference to #/components/schemas/Stage detected>\"\n          }\n        ],\n        \"competition\": {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"region\": \"<string>\",\n          \"seasons\": [\n            {\n              \"value\": \"<Circular reference to #/components/schemas/Season detected>\"\n            },\n            {\n              \"value\": \"<Circular reference to #/components/schemas/Season detected>\"\n            }\n          ]\n        }\n      }\n    },\n    \"team\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"abbreviation\": \"<string>\",\n      \"country\": \"<string>\",\n      \"stadium\": \"<string>\",\n      \"manager\": \"<string>\",\n      \"players\": [\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 6,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        },\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 6,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        }\n      ]\n    }\n  },\n  {\n    \"id\": \"<integer>\",\n    \"stageId\": \"<integer>\",\n    \"teamId\": \"<integer>\",\n    \"points\": \"<integer>\",\n    \"place\": \"<integer>\",\n    \"matchesPlayed\": \"<integer>\",\n    \"wins\": \"<integer>\",\n    \"draws\": \"<integer>\",\n    \"losses\": \"<integer>\",\n    \"goalsFor\": \"<integer>\",\n    \"goalsAgainst\": \"<integer>\",\n    \"stage\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"seasonId\": \"<integer>\",\n      \"type\": \"<string>\",\n      \"matches\": [\n        {\n          \"id\": \"<integer>\",\n          \"stageId\": \"<integer>\",\n          \"homeTeamId\": \"<integer>\",\n          \"awayTeamId\": \"<integer>\",\n          \"date\": \"<dateTime>\",\n          \"venueId\": \"<integer>\",\n          \"refereeId\": \"<integer>\",\n          \"homeTeamScore\": \"<integer>\",\n          \"awayTeamScore\": \"<integer>\",\n          \"stage\": {\n            \"value\": \"<Circular reference to #/components/schemas/Stage detected>\"\n          },\n          \"homeTeam\": {\n            \"id\": \"<integer>\",\n            \"name\": \"<string>\",\n            \"abbreviation\": \"<string>\",\n            \"country\": \"<string>\",\n            \"stadium\": \"<string>\",\n            \"manager\": \"<string>\",\n            \"players\": [\n              {\n                \"id\": \"<integer>\",\n                \"name\": \"<string>\",\n                \"teamId\": \"<integer>\",\n                \"position\": \"<string>\",\n                \"number\": \"<integer>\",\n                \"height\": \"<integer>\",\n                \"nationality\": \"<string>\",\n                \"dateOfBirth\": {\n                  \"year\": \"<integer>\",\n                  \"month\": \"<integer>\",\n                  \"day\": \"<integer>\",\n                  \"dayOfWeek\": 2,\n                  \"dayOfYear\": \"<integer>\",\n                  \"dayNumber\": \"<integer>\"\n                },\n                \"team\": {\n                  \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n                }\n              },\n              {\n                \"id\": \"<integer>\",\n                \"name\": \"<string>\",\n                \"teamId\": \"<integer>\",\n                \"position\": \"<string>\",\n                \"number\": \"<integer>\",\n                \"height\": \"<integer>\",\n                \"nationality\": \"<string>\",\n                \"dateOfBirth\": {\n                  \"year\": \"<integer>\",\n                  \"month\": \"<integer>\",\n                  \"day\": \"<integer>\",\n                  \"dayOfWeek\": 1,\n                  \"dayOfYear\": \"<integer>\",\n                  \"dayNumber\": \"<integer>\"\n                },\n                \"team\": {\n                  \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n                }\n              }\n            ]\n          },\n          \"awayTeam\": {\n            \"id\": \"<integer>\",\n            \"name\": \"<string>\",\n            \"abbreviation\": \"<string>\",\n            \"country\": \"<string>\",\n            \"stadium\": \"<string>\",\n            \"manager\": \"<string>\",\n            \"players\": [\n              {\n                \"id\": \"<integer>\",\n                \"name\": \"<string>\",\n                \"teamId\": \"<integer>\",\n                \"position\": \"<string>\",\n                \"number\": \"<integer>\",\n                \"height\": \"<integer>\",\n                \"nationality\": \"<string>\",\n                \"dateOfBirth\": {\n                  \"year\": \"<integer>\",\n                  \"month\": \"<integer>\",\n                  \"day\": \"<integer>\",\n                  \"dayOfWeek\": 0,\n                  \"dayOfYear\": \"<integer>\",\n                  \"dayNumber\": \"<integer>\"\n                },\n                \"team\": {\n                  \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n                }\n              },\n              {\n                \"id\": \"<integer>\",\n                \"name\": \"<string>\",\n                \"teamId\": \"<integer>\",\n                \"position\": \"<string>\",\n                \"number\": \"<integer>\",\n                \"height\": \"<integer>\",\n                \"nationality\": \"<string>\",\n                \"dateOfBirth\": {\n                  \"year\": \"<integer>\",\n                  \"month\": \"<integer>\",\n                  \"day\": \"<integer>\",\n                  \"dayOfWeek\": 5,\n                  \"dayOfYear\": \"<integer>\",\n                  \"dayNumber\": \"<integer>\"\n                },\n                \"team\": {\n                  \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n                }\n              }\n            ]\n          },\n          \"venue\": {\n            \"id\": \"<integer>\",\n            \"name\": \"<string>\",\n            \"city\": \"<string>\",\n            \"country\": \"<string>\",\n            \"capacity\": \"<integer>\"\n          },\n          \"referee\": {\n            \"id\": \"<integer>\",\n            \"name\": \"<string>\",\n            \"nationality\": \"<string>\"\n          }\n        },\n        {\n          \"id\": \"<integer>\",\n          \"stageId\": \"<integer>\",\n          \"homeTeamId\": \"<integer>\",\n          \"awayTeamId\": \"<integer>\",\n          \"date\": \"<dateTime>\",\n          \"venueId\": \"<integer>\",\n          \"refereeId\": \"<integer>\",\n          \"homeTeamScore\": \"<integer>\",\n          \"awayTeamScore\": \"<integer>\",\n          \"stage\": {\n            \"value\": \"<Circular reference to #/components/schemas/Stage detected>\"\n          },\n          \"homeTeam\": {\n            \"id\": \"<integer>\",\n            \"name\": \"<string>\",\n            \"abbreviation\": \"<string>\",\n            \"country\": \"<string>\",\n            \"stadium\": \"<string>\",\n            \"manager\": \"<string>\",\n            \"players\": [\n              {\n                \"id\": \"<integer>\",\n                \"name\": \"<string>\",\n                \"teamId\": \"<integer>\",\n                \"position\": \"<string>\",\n                \"number\": \"<integer>\",\n                \"height\": \"<integer>\",\n                \"nationality\": \"<string>\",\n                \"dateOfBirth\": {\n                  \"year\": \"<integer>\",\n                  \"month\": \"<integer>\",\n                  \"day\": \"<integer>\",\n                  \"dayOfWeek\": 5,\n                  \"dayOfYear\": \"<integer>\",\n                  \"dayNumber\": \"<integer>\"\n                },\n                \"team\": {\n                  \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n                }\n              },\n              {\n                \"id\": \"<integer>\",\n                \"name\": \"<string>\",\n                \"teamId\": \"<integer>\",\n                \"position\": \"<string>\",\n                \"number\": \"<integer>\",\n                \"height\": \"<integer>\",\n                \"nationality\": \"<string>\",\n                \"dateOfBirth\": {\n                  \"year\": \"<integer>\",\n                  \"month\": \"<integer>\",\n                  \"day\": \"<integer>\",\n                  \"dayOfWeek\": 3,\n                  \"dayOfYear\": \"<integer>\",\n                  \"dayNumber\": \"<integer>\"\n                },\n                \"team\": {\n                  \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n                }\n              }\n            ]\n          },\n          \"awayTeam\": {\n            \"id\": \"<integer>\",\n            \"name\": \"<string>\",\n            \"abbreviation\": \"<string>\",\n            \"country\": \"<string>\",\n            \"stadium\": \"<string>\",\n            \"manager\": \"<string>\",\n            \"players\": [\n              {\n                \"id\": \"<integer>\",\n                \"name\": \"<string>\",\n                \"teamId\": \"<integer>\",\n                \"position\": \"<string>\",\n                \"number\": \"<integer>\",\n                \"height\": \"<integer>\",\n                \"nationality\": \"<string>\",\n                \"dateOfBirth\": {\n                  \"year\": \"<integer>\",\n                  \"month\": \"<integer>\",\n                  \"day\": \"<integer>\",\n                  \"dayOfWeek\": 4,\n                  \"dayOfYear\": \"<integer>\",\n                  \"dayNumber\": \"<integer>\"\n                },\n                \"team\": {\n                  \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n                }\n              },\n              {\n                \"id\": \"<integer>\",\n                \"name\": \"<string>\",\n                \"teamId\": \"<integer>\",\n                \"position\": \"<string>\",\n                \"number\": \"<integer>\",\n                \"height\": \"<integer>\",\n                \"nationality\": \"<string>\",\n                \"dateOfBirth\": {\n                  \"year\": \"<integer>\",\n                  \"month\": \"<integer>\",\n                  \"day\": \"<integer>\",\n                  \"dayOfWeek\": 2,\n                  \"dayOfYear\": \"<integer>\",\n                  \"dayNumber\": \"<integer>\"\n                },\n                \"team\": {\n                  \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n                }\n              }\n            ]\n          },\n          \"venue\": {\n            \"id\": \"<integer>\",\n            \"name\": \"<string>\",\n            \"city\": \"<string>\",\n            \"country\": \"<string>\",\n            \"capacity\": \"<integer>\"\n          },\n          \"referee\": {\n            \"id\": \"<integer>\",\n            \"name\": \"<string>\",\n            \"nationality\": \"<string>\"\n          }\n        }\n      ],\n      \"season\": {\n        \"id\": \"<integer>\",\n        \"name\": \"<string>\",\n        \"competitionId\": \"<integer>\",\n        \"startAt\": \"<dateTime>\",\n        \"endAt\": \"<dateTime>\",\n        \"stages\": [\n          {\n            \"value\": \"<Circular reference to #/components/schemas/Stage detected>\"\n          },\n          {\n            \"value\": \"<Circular reference to #/components/schemas/Stage detected>\"\n          }\n        ],\n        \"competition\": {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"region\": \"<string>\",\n          \"seasons\": [\n            {\n              \"value\": \"<Circular reference to #/components/schemas/Season detected>\"\n            },\n            {\n              \"value\": \"<Circular reference to #/components/schemas/Season detected>\"\n            }\n          ]\n        }\n      }\n    },\n    \"team\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"abbreviation\": \"<string>\",\n      \"country\": \"<string>\",\n      \"stadium\": \"<string>\",\n      \"manager\": \"<string>\",\n      \"players\": [\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 0,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        },\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 0,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        }\n      ]\n    }\n  }\n]"
+										},
+										{
+											"name": "Not Found",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "text/plain"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/leaderboard/standings",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"leaderboard",
+														"standings"
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}"
+										},
+										{
+											"name": "Server Error",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/api/leaderboard/standings",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"leaderboard",
+														"standings"
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "schedule",
+					"item": [
+						{
+							"name": "matches",
+							"item": [
+								{
+									"name": "Get five closest Matches of the current Stage.",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "text/plain"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/schedule/matches",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"schedule",
+												"matches"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Success",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "text/plain"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/schedule/matches",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"schedule",
+														"matches"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"stageId\": \"<integer>\",\n    \"homeTeamId\": \"<integer>\",\n    \"awayTeamId\": \"<integer>\",\n    \"date\": \"<dateTime>\",\n    \"venueId\": \"<integer>\",\n    \"refereeId\": \"<integer>\",\n    \"homeTeamScore\": \"<integer>\",\n    \"awayTeamScore\": \"<integer>\",\n    \"stage\": {\n      \"value\": \"<Circular reference to #/components/schemas/Stage detected>\"\n    },\n    \"homeTeam\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"abbreviation\": \"<string>\",\n      \"country\": \"<string>\",\n      \"stadium\": \"<string>\",\n      \"manager\": \"<string>\",\n      \"players\": [\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 5,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        },\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 1,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        }\n      ]\n    },\n    \"awayTeam\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"abbreviation\": \"<string>\",\n      \"country\": \"<string>\",\n      \"stadium\": \"<string>\",\n      \"manager\": \"<string>\",\n      \"players\": [\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 4,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        },\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 6,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        }\n      ]\n    },\n    \"venue\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"city\": \"<string>\",\n      \"country\": \"<string>\",\n      \"capacity\": \"<integer>\"\n    },\n    \"referee\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"nationality\": \"<string>\"\n    }\n  },\n  {\n    \"id\": \"<integer>\",\n    \"stageId\": \"<integer>\",\n    \"homeTeamId\": \"<integer>\",\n    \"awayTeamId\": \"<integer>\",\n    \"date\": \"<dateTime>\",\n    \"venueId\": \"<integer>\",\n    \"refereeId\": \"<integer>\",\n    \"homeTeamScore\": \"<integer>\",\n    \"awayTeamScore\": \"<integer>\",\n    \"stage\": {\n      \"value\": \"<Circular reference to #/components/schemas/Stage detected>\"\n    },\n    \"homeTeam\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"abbreviation\": \"<string>\",\n      \"country\": \"<string>\",\n      \"stadium\": \"<string>\",\n      \"manager\": \"<string>\",\n      \"players\": [\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 1,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        },\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 4,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        }\n      ]\n    },\n    \"awayTeam\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"abbreviation\": \"<string>\",\n      \"country\": \"<string>\",\n      \"stadium\": \"<string>\",\n      \"manager\": \"<string>\",\n      \"players\": [\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 2,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        },\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 1,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        }\n      ]\n    },\n    \"venue\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"city\": \"<string>\",\n      \"country\": \"<string>\",\n      \"capacity\": \"<integer>\"\n    },\n    \"referee\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"nationality\": \"<string>\"\n    }\n  }\n]"
+										},
+										{
+											"name": "Not Found",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "text/plain"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/schedule/matches",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"schedule",
+														"matches"
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}"
+										},
+										{
+											"name": "Server Error",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/api/schedule/matches",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"schedule",
+														"matches"
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "teams",
+					"item": [
+						{
+							"name": "{teamId}",
+							"item": [
+								{
+									"name": "players",
+									"item": [
+										{
+											"name": "Get List of Players of the Team by Team ID.",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "text/plain"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/teams/:teamId/players",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"teams",
+														":teamId",
+														"players"
+													],
+													"variable": [
+														{
+															"key": "teamId",
+															"value": "1",
+															"description": "(Required) The ID of the Team."
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "Success",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "text/plain"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/teams/:teamId/players",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"teams",
+																":teamId",
+																"players"
+															],
+															"variable": [
+																{
+																	"key": "teamId"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"name\": \"<string>\",\n    \"teamId\": \"<integer>\",\n    \"position\": \"<string>\",\n    \"number\": \"<integer>\",\n    \"height\": \"<integer>\",\n    \"nationality\": \"<string>\",\n    \"dateOfBirth\": {\n      \"year\": \"<integer>\",\n      \"month\": \"<integer>\",\n      \"day\": \"<integer>\",\n      \"dayOfWeek\": 5,\n      \"dayOfYear\": \"<integer>\",\n      \"dayNumber\": \"<integer>\"\n    },\n    \"team\": {\n      \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n    }\n  },\n  {\n    \"id\": \"<integer>\",\n    \"name\": \"<string>\",\n    \"teamId\": \"<integer>\",\n    \"position\": \"<string>\",\n    \"number\": \"<integer>\",\n    \"height\": \"<integer>\",\n    \"nationality\": \"<string>\",\n    \"dateOfBirth\": {\n      \"year\": \"<integer>\",\n      \"month\": \"<integer>\",\n      \"day\": \"<integer>\",\n      \"dayOfWeek\": 0,\n      \"dayOfYear\": \"<integer>\",\n      \"dayNumber\": \"<integer>\"\n    },\n    \"team\": {\n      \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n    }\n  }\n]"
+												},
+												{
+													"name": "Bad Request",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "text/plain"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/teams/:teamId/players",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"teams",
+																":teamId",
+																"players"
+															],
+															"variable": [
+																{
+																	"key": "teamId"
+																}
+															]
+														}
+													},
+													"status": "Bad Request",
+													"code": 400,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}"
+												},
+												{
+													"name": "Not Found",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "text/plain"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/teams/:teamId/players",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"teams",
+																":teamId",
+																"players"
+															],
+															"variable": [
+																{
+																	"key": "teamId"
+																}
+															]
+														}
+													},
+													"status": "Not Found",
+													"code": 404,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}"
+												},
+												{
+													"name": "Server Error",
+													"originalRequest": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{baseUrl}}/api/teams/:teamId/players",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"teams",
+																":teamId",
+																"players"
+															],
+															"variable": [
+																{
+																	"key": "teamId"
+																}
+															]
+														}
+													},
+													"status": "Internal Server Error",
+													"code": 500,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "matches",
+									"item": [
+										{
+											"name": "Get the last 5 Matches of the Team by Team ID.",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "text/plain"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/teams/:teamId/matches",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"teams",
+														":teamId",
+														"matches"
+													],
+													"variable": [
+														{
+															"key": "teamId",
+															"value": "1",
+															"description": "(Required) The ID of the Team."
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "Success",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "text/plain"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/teams/:teamId/matches",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"teams",
+																":teamId",
+																"matches"
+															],
+															"variable": [
+																{
+																	"key": "teamId"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"stageId\": \"<integer>\",\n    \"homeTeamId\": \"<integer>\",\n    \"awayTeamId\": \"<integer>\",\n    \"date\": \"<dateTime>\",\n    \"venueId\": \"<integer>\",\n    \"refereeId\": \"<integer>\",\n    \"homeTeamScore\": \"<integer>\",\n    \"awayTeamScore\": \"<integer>\",\n    \"stage\": {\n      \"value\": \"<Circular reference to #/components/schemas/Stage detected>\"\n    },\n    \"homeTeam\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"abbreviation\": \"<string>\",\n      \"country\": \"<string>\",\n      \"stadium\": \"<string>\",\n      \"manager\": \"<string>\",\n      \"players\": [\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 5,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        },\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 1,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        }\n      ]\n    },\n    \"awayTeam\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"abbreviation\": \"<string>\",\n      \"country\": \"<string>\",\n      \"stadium\": \"<string>\",\n      \"manager\": \"<string>\",\n      \"players\": [\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 4,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        },\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 6,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        }\n      ]\n    },\n    \"venue\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"city\": \"<string>\",\n      \"country\": \"<string>\",\n      \"capacity\": \"<integer>\"\n    },\n    \"referee\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"nationality\": \"<string>\"\n    }\n  },\n  {\n    \"id\": \"<integer>\",\n    \"stageId\": \"<integer>\",\n    \"homeTeamId\": \"<integer>\",\n    \"awayTeamId\": \"<integer>\",\n    \"date\": \"<dateTime>\",\n    \"venueId\": \"<integer>\",\n    \"refereeId\": \"<integer>\",\n    \"homeTeamScore\": \"<integer>\",\n    \"awayTeamScore\": \"<integer>\",\n    \"stage\": {\n      \"value\": \"<Circular reference to #/components/schemas/Stage detected>\"\n    },\n    \"homeTeam\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"abbreviation\": \"<string>\",\n      \"country\": \"<string>\",\n      \"stadium\": \"<string>\",\n      \"manager\": \"<string>\",\n      \"players\": [\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 1,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        },\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 4,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        }\n      ]\n    },\n    \"awayTeam\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"abbreviation\": \"<string>\",\n      \"country\": \"<string>\",\n      \"stadium\": \"<string>\",\n      \"manager\": \"<string>\",\n      \"players\": [\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 2,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        },\n        {\n          \"id\": \"<integer>\",\n          \"name\": \"<string>\",\n          \"teamId\": \"<integer>\",\n          \"position\": \"<string>\",\n          \"number\": \"<integer>\",\n          \"height\": \"<integer>\",\n          \"nationality\": \"<string>\",\n          \"dateOfBirth\": {\n            \"year\": \"<integer>\",\n            \"month\": \"<integer>\",\n            \"day\": \"<integer>\",\n            \"dayOfWeek\": 1,\n            \"dayOfYear\": \"<integer>\",\n            \"dayNumber\": \"<integer>\"\n          },\n          \"team\": {\n            \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n          }\n        }\n      ]\n    },\n    \"venue\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"city\": \"<string>\",\n      \"country\": \"<string>\",\n      \"capacity\": \"<integer>\"\n    },\n    \"referee\": {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"nationality\": \"<string>\"\n    }\n  }\n]"
+												},
+												{
+													"name": "Bad Request",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "text/plain"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/teams/:teamId/matches",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"teams",
+																":teamId",
+																"matches"
+															],
+															"variable": [
+																{
+																	"key": "teamId"
+																}
+															]
+														}
+													},
+													"status": "Bad Request",
+													"code": 400,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}"
+												},
+												{
+													"name": "Not Found",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "text/plain"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/teams/:teamId/matches",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"teams",
+																":teamId",
+																"matches"
+															],
+															"variable": [
+																{
+																	"key": "teamId"
+																}
+															]
+														}
+													},
+													"status": "Not Found",
+													"code": 404,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}"
+												},
+												{
+													"name": "Server Error",
+													"originalRequest": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{baseUrl}}/api/teams/:teamId/matches",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"teams",
+																":teamId",
+																"matches"
+															],
+															"variable": [
+																{
+																	"key": "teamId"
+																}
+															]
+														}
+													},
+													"status": "Internal Server Error",
+													"code": 500,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "Get single Team by Team ID.",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "text/plain"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/teams/:teamId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"teams",
+												":teamId"
+											],
+											"variable": [
+												{
+													"key": "teamId",
+													"value": "1",
+													"description": "(Required) The ID of the Team."
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Success",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "text/plain"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/teams/:teamId",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"teams",
+														":teamId"
+													],
+													"variable": [
+														{
+															"key": "teamId"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"id\": \"<integer>\",\n  \"name\": \"<string>\",\n  \"abbreviation\": \"<string>\",\n  \"country\": \"<string>\",\n  \"stadium\": \"<string>\",\n  \"manager\": \"<string>\",\n  \"players\": [\n    {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"teamId\": \"<integer>\",\n      \"position\": \"<string>\",\n      \"number\": \"<integer>\",\n      \"height\": \"<integer>\",\n      \"nationality\": \"<string>\",\n      \"dateOfBirth\": {\n        \"year\": \"<integer>\",\n        \"month\": \"<integer>\",\n        \"day\": \"<integer>\",\n        \"dayOfWeek\": 2,\n        \"dayOfYear\": \"<integer>\",\n        \"dayNumber\": \"<integer>\"\n      },\n      \"team\": {\n        \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n      }\n    },\n    {\n      \"id\": \"<integer>\",\n      \"name\": \"<string>\",\n      \"teamId\": \"<integer>\",\n      \"position\": \"<string>\",\n      \"number\": \"<integer>\",\n      \"height\": \"<integer>\",\n      \"nationality\": \"<string>\",\n      \"dateOfBirth\": {\n        \"year\": \"<integer>\",\n        \"month\": \"<integer>\",\n        \"day\": \"<integer>\",\n        \"dayOfWeek\": 2,\n        \"dayOfYear\": \"<integer>\",\n        \"dayNumber\": \"<integer>\"\n      },\n      \"team\": {\n        \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n      }\n    }\n  ]\n}"
+										},
+										{
+											"name": "Bad Request",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "text/plain"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/teams/:teamId",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"teams",
+														":teamId"
+													],
+													"variable": [
+														{
+															"key": "teamId"
+														}
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}"
+										},
+										{
+											"name": "Not Found",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "text/plain"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/teams/:teamId",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"teams",
+														":teamId"
+													],
+													"variable": [
+														{
+															"key": "teamId"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}"
+										},
+										{
+											"name": "Server Error",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/api/teams/:teamId",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"teams",
+														":teamId"
+													],
+													"variable": [
+														{
+															"key": "teamId"
+														}
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "search",
+							"item": [
+								{
+									"name": "{searchTerm}",
+									"item": [
+										{
+											"name": "Get List of Teams by Search Term.",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "text/plain"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/teams/search/:searchTerm",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"teams",
+														"search",
+														":searchTerm"
+													],
+													"variable": [
+														{
+															"key": "searchTerm",
+															"value": "ba",
+															"description": "(Required) The search term to search for."
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "Success",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "text/plain"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/teams/search/:searchTerm",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"teams",
+																"search",
+																":searchTerm"
+															],
+															"variable": [
+																{
+																	"key": "searchTerm"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"name\": \"<string>\",\n    \"abbreviation\": \"<string>\",\n    \"country\": \"<string>\",\n    \"stadium\": \"<string>\",\n    \"manager\": \"<string>\",\n    \"players\": [\n      {\n        \"id\": \"<integer>\",\n        \"name\": \"<string>\",\n        \"teamId\": \"<integer>\",\n        \"position\": \"<string>\",\n        \"number\": \"<integer>\",\n        \"height\": \"<integer>\",\n        \"nationality\": \"<string>\",\n        \"dateOfBirth\": {\n          \"year\": \"<integer>\",\n          \"month\": \"<integer>\",\n          \"day\": \"<integer>\",\n          \"dayOfWeek\": 3,\n          \"dayOfYear\": \"<integer>\",\n          \"dayNumber\": \"<integer>\"\n        },\n        \"team\": {\n          \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n        }\n      },\n      {\n        \"id\": \"<integer>\",\n        \"name\": \"<string>\",\n        \"teamId\": \"<integer>\",\n        \"position\": \"<string>\",\n        \"number\": \"<integer>\",\n        \"height\": \"<integer>\",\n        \"nationality\": \"<string>\",\n        \"dateOfBirth\": {\n          \"year\": \"<integer>\",\n          \"month\": \"<integer>\",\n          \"day\": \"<integer>\",\n          \"dayOfWeek\": 1,\n          \"dayOfYear\": \"<integer>\",\n          \"dayNumber\": \"<integer>\"\n        },\n        \"team\": {\n          \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n        }\n      }\n    ]\n  },\n  {\n    \"id\": \"<integer>\",\n    \"name\": \"<string>\",\n    \"abbreviation\": \"<string>\",\n    \"country\": \"<string>\",\n    \"stadium\": \"<string>\",\n    \"manager\": \"<string>\",\n    \"players\": [\n      {\n        \"id\": \"<integer>\",\n        \"name\": \"<string>\",\n        \"teamId\": \"<integer>\",\n        \"position\": \"<string>\",\n        \"number\": \"<integer>\",\n        \"height\": \"<integer>\",\n        \"nationality\": \"<string>\",\n        \"dateOfBirth\": {\n          \"year\": \"<integer>\",\n          \"month\": \"<integer>\",\n          \"day\": \"<integer>\",\n          \"dayOfWeek\": 6,\n          \"dayOfYear\": \"<integer>\",\n          \"dayNumber\": \"<integer>\"\n        },\n        \"team\": {\n          \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n        }\n      },\n      {\n        \"id\": \"<integer>\",\n        \"name\": \"<string>\",\n        \"teamId\": \"<integer>\",\n        \"position\": \"<string>\",\n        \"number\": \"<integer>\",\n        \"height\": \"<integer>\",\n        \"nationality\": \"<string>\",\n        \"dateOfBirth\": {\n          \"year\": \"<integer>\",\n          \"month\": \"<integer>\",\n          \"day\": \"<integer>\",\n          \"dayOfWeek\": 6,\n          \"dayOfYear\": \"<integer>\",\n          \"dayNumber\": \"<integer>\"\n        },\n        \"team\": {\n          \"value\": \"<Circular reference to #/components/schemas/Team detected>\"\n        }\n      }\n    ]\n  }\n]"
+												},
+												{
+													"name": "Bad Request",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "text/plain"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/teams/search/:searchTerm",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"teams",
+																"search",
+																":searchTerm"
+															],
+															"variable": [
+																{
+																	"key": "searchTerm"
+																}
+															]
+														}
+													},
+													"status": "Bad Request",
+													"code": 400,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}"
+												},
+												{
+													"name": "Not Found",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "text/plain"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/teams/search/:searchTerm",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"teams",
+																"search",
+																":searchTerm"
+															],
+															"variable": [
+																{
+																	"key": "searchTerm"
+																}
+															]
+														}
+													},
+													"status": "Not Found",
+													"code": 404,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}"
+												},
+												{
+													"name": "Server Error",
+													"originalRequest": {
+														"method": "GET",
+														"header": [],
+														"url": {
+															"raw": "{{baseUrl}}/api/teams/search/:searchTerm",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"teams",
+																"search",
+																":searchTerm"
+															],
+															"variable": [
+																{
+																	"key": "searchTerm"
+																}
+															]
+														}
+													},
+													"status": "Internal Server Error",
+													"code": 500,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": " https://localhost:7250"
+		}
+	]
+}

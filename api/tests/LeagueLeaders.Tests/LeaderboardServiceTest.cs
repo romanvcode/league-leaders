@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using LeagueLeaders.Application;
 using LeagueLeaders.Application.Exceptions;
+using LeagueLeaders.Application;
 using LeagueLeaders.Domain;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +10,7 @@ namespace LeagueLeaders.Tests
     public class LeaderboardServiceTest : IDisposable
     {
         private readonly LeagueLeadersDbContext _context;
+
         public LeaderboardServiceTest()
         {
             var options = new DbContextOptionsBuilder<LeagueLeadersDbContext>()
@@ -53,10 +54,10 @@ namespace LeagueLeaders.Tests
             await _context.SaveChangesAsync();
 
 
-            var standings = await _leaderboardService.GetStandingsForEachTeamAsync();
+            var getStandings = () => _leaderboardService.GetStandingsForEachTeamAsync();
 
 
-            standings.Should().BeEmpty();
+            await getStandings.Should().ThrowAsync<StandingsNotFoundException>();
         }
 
         [Fact]
