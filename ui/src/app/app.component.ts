@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { LandingComponent } from "./features/landing/landing.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [MatSlideToggleModule],
+  imports: [LandingComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
