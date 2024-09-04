@@ -1,5 +1,8 @@
 ﻿using FluentValidation;
-using LeagueLeaders.Application.Exceptions;
+using LeagueLeaders.Application;
+using LeagueLeaders.Application.Leaderboard;
+using LeagueLeaders.Application.Schedule;
+using LeagueLeaders.Application.Teams;
 
 namespace LeagueLeaders.API.Middleware;
 
