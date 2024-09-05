@@ -1,34 +1,24 @@
 import { HttpClient } from '@angular/common/http';
-import { DestroyRef, inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { inject, Injectable, signal } from '@angular/core';
+import { Standing } from '../models/standing.model';
+import { environment } from 'environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private http = inject(HttpClient);
+  private apiUrl = environment.apiUrl;
+  private httpClient = inject(HttpClient);
 
-  getStandings(): Observable<any> {
-    return this.http.get(`https://localhost:7250/api/leaderboard/standings`);
+  private userStandings = signal<Standing[]>([]);
+
+  loadedStandings = this.userStandings.asReadonly();
+
+  getStandings() {
+    return this.fetchStandings(`${this.apiUrl}/leaderboard/standings`);
   }
 
-  // private httpClient = inject(HttpClient);
-  // private destroyRef = inject(DestroyRef);
-
-  // ngOnInit() {
-  //   const subscription = this.httpClient
-  //     .get('https://localhost:7250/api/leaderboard/standings')
-  //     .subscribe({
-  //       next: (resData) => {
-  //         console.log(resData);
-  //       },
-  //       error: (error) => {
-  //         console.error(error);
-  //       },
-  //     });
-
-  //   this.destroyRef.onDestroy(() => {
-  //     subscription.unsubscribe();
-  //   });
-  // }
+  private fetchStandings(url: string) {
+    return this.httpClient.get<Standing[]>(url);
+  }
 }

@@ -2,6 +2,16 @@
   <mat-card-header>
     <mat-card-title>Leaderboard</mat-card-title>
   </mat-card-header>
+
+  @if (isFething() && !error()){
+  <mat-card-content>
+    <mat-spinner></mat-spinner>
+  </mat-card-content>
+  } @if (error()){
+  <mat-card-content>
+    <p>{{ error() }}</p>
+  </mat-card-content>
+  } @else {
   <table mat-table [dataSource]="standings" class="mat-elevation-z8">
     <ng-container matColumnDef="place">
       <th mat-header-cell *matHeaderCellDef>Position</th>
@@ -51,4 +61,5 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+  }
 </mat-card>
