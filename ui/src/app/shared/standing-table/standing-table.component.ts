@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { ApiService } from '../../core/services/api.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-standing-table',
@@ -13,13 +13,28 @@ import { ApiService } from '../../core/services/api.service';
 })
 export class StandingTableComponent {
   standings: any[] = [];
-  displayedColumns: string[] = ['team', 'points', 'matchesPlayed'];
+  displayedColumns: string[] = [
+    'place',
+    'team',
+    'matchesPlayed',
+    'wins',
+    'draws',
+    'losses',
+    'goalsFor',
+    'goalsAgainst',
+    'points',
+  ];
 
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
-    this.apiService.getStandings().subscribe((data) => {
-      this.standings = data;
+    this.apiService.getStandings().subscribe({
+      next: (standings) => {
+        this.standings = standings;
+      },
+      error: (error) => {
+        console.error(error);
+      },
     });
   }
 }
