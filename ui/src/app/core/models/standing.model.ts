@@ -1,4 +1,5 @@
 export interface Standing {
+  id: number;
   place: number;
   name: string;
   matchesPlayed: number;

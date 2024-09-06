@@ -1,9 +1,17 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ApiService } from '@core/services/api.service';
 import { Standing } from '@core/models/standing.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-standing-table',
@@ -12,13 +20,13 @@ import { Standing } from '@core/models/standing.model';
   templateUrl: './standing-table.component.html',
   styleUrl: './standing-table.component.css',
 })
-export class StandingTableComponent {
+export class StandingTableComponent implements OnInit, OnDestroy {
   standings: Standing[] = [];
   isFething = signal(false);
   error = signal('');
+  subscription = signal<Subscription | undefined>(undefined);
 
-  private apiService = inject(ApiService);
-  private destroyRef = inject(DestroyRef);
+  constructor(private apiService: ApiService) {}
 
   displayedColumns: string[] = [
     'place',
@@ -35,19 +43,24 @@ export class StandingTableComponent {
   ngOnInit(): void {
     this.isFething.set(true);
 
-    const subscription = this.apiService.getStandings().subscribe({
-      next: (standings) => {
-        this.standings = standings;
-      },
-      error: (error) => {
-        console.error(error);
-        this.error.set('An error occurred while fetching standings');
-      },
-      complete: () => {
-        this.isFething.set(false);
-      },
-    });
+    this.subscription.set(
+      this.apiService.getStandings().subscribe({
+        next: (standings) => {
+          this.standings = standings;
+          console.log(standings);
+        },
+        error: (error) => {
+          console.error(error);
+          this.error.set('An error occurred while fetching standings');
+        },
+        complete: () => {
+          this.isFething.set(false);
+        },
+      })
+    );
+  }
 
-    this.destroyRef.onDestroy(() => subscription.unsubscribe());
+  ngOnDestroy(): void {
+    this.subscription()?.unsubscribe();
   }
 }
