@@ -15,10 +15,8 @@ export class ApiService {
   loadedStandings = this.userStandings.asReadonly();
 
   getStandings() {
-    return this.fetchStandings(`${this.apiUrl}/leaderboard/standings`);
-  }
-
-  private fetchStandings(url: string) {
-    return this.httpClient.get<Standing[]>(url);
+    return this.httpClient.get<Standing[]>(
+      `${this.apiUrl}/leaderboard/standings`
+    );
   }
 }
