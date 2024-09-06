@@ -1,0 +1,15 @@
+<div class="landing-container flex h-full">
+  <div class="basis-1/6 bg-green-500 px-8 py-4">
+    <div class="flex flex-col items-center">
+      <p class="text-3xl font-medium">League Leaders</p>
+      <app-next-match />
+    </div>
+  </div>
+  <div class="basis-5/6 bg-green-50 px-8 py-4">
+    <div class="flex justify-between items-end">
+      <p class="text-3xl font-medium">{{ curretFeature }}</p>
+      <app-search-input />
+    </div>
+    <app-standing-table />
+  </div>
+</div>
