@@ -1,5 +1,15 @@
-<mat-toolbar color="primary">League Leaders</mat-toolbar>
-
-<div class="landing-container">
-  <app-standing-table />
+<div class="landing-container flex h-full">
+  <div class="basis-1/6 bg-green-500 px-8 py-4">
+    <div class="flex flex-col">
+      <p class="text-3xl font-medium">Next Match</p>
+      <app-next-match />
+    </div>
+  </div>
+  <div class="basis-5/6 bg-green-50 px-8 py-4">
+    <div class="flex justify-between">
+      <p class="text-3xl font-medium">{{ curretFeature }}</p>
+      <app-search-input />
+    </div>
+    <app-standing-table />
+  </div>
 </div>

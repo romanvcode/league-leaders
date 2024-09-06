@@ -3,6 +3,7 @@ import { StandingTableComponent } from '../../shared/standing-table/standing-tab
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { NextMatchComponent } from '../../shared/next-match/next-match.component';
+import { SearchInputComponent } from "../../shared/search-input/search-input.component";
 
 @Component({
   selector: 'app-landing',
@@ -12,8 +13,11 @@ import { NextMatchComponent } from '../../shared/next-match/next-match.component
     MatGridListModule,
     MatToolbarModule,
     NextMatchComponent,
-  ],
+    SearchInputComponent
+],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.css',
 })
-export class LandingComponent {}
+export class LandingComponent {
+  curretFeature = 'Leaderboard';
+}
