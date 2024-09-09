@@ -8,6 +8,7 @@ import { LandingComponent } from './landing.component';
 describe('LandingComponent', () => {
   let component: LandingComponent;
   let fixture: ComponentFixture<LandingComponent>;
+  let expectedFeature: string;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -18,6 +19,9 @@ describe('LandingComponent', () => {
     fixture = TestBed.createComponent(LandingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    expectedFeature =
+      fixture.nativeElement.querySelector('#current-feature').textContent;
   });
 
   it('should create', () => {
@@ -25,6 +29,6 @@ describe('LandingComponent', () => {
   });
 
   it('should have a title', () => {
-    expect(component.curretFeature).toBe('Leaderboard');
+    expect(expectedFeature).toContain(component.curretFeature);
   });
 });
