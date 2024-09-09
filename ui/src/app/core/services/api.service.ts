@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
-import { Standing } from '../models/standing.model';
-import { environment } from 'environment';
+import { Injectable, signal } from '@angular/core';
 import { Match } from '@core/models/match.model';
+import { environment } from 'environment';
 import { Observable } from 'rxjs';
+import { Standing } from '../models/standing.model';
 
 @Injectable({
   providedIn: 'root',

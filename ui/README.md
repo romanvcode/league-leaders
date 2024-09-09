@@ -10,8 +10,8 @@
   Think of it as your go-to spot for everything in Champions League. From tracking your favorite team's every move to discovering hidden gems, League Leaders has got you covered. So, grab your favorite jersey, kick back, and let the football fiesta begin! 
   </p>
 
-  <a href="">![Angular](https://img.shields.io/badge/Angular-18-red?style=flat)</a>
-  
+<a href="">![Angular](https://img.shields.io/badge/Angular-18-red?style=flat)</a>
+
 </div>
 
 ## How to work
@@ -43,4 +43,5 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
 
 ### Current implementation and limitations
+
 - TBD
