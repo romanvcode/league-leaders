@@ -1,1 +1,5 @@
-<p>next-match works!</p>
+<mat-card>
+  <mat-card-title>Next Match</mat-card-title>
+  <p>{{ match()?.homeTeam?.name }} vs {{ match()?.awayTeam?.name }}</p>
+  <p>Match starts in: {{ countdown() }}</p>
+</mat-card>
