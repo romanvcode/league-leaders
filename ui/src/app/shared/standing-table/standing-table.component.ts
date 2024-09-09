@@ -1,16 +1,9 @@
-import {
-  Component,
-  DestroyRef,
-  inject,
-  OnDestroy,
-  OnInit,
-  signal,
-} from '@angular/core';
-import { MatTableModule } from '@angular/material/table';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { ApiService } from '@core/services/api.service';
+import { MatTableModule } from '@angular/material/table';
 import { Standing } from '@core/models/standing.model';
+import { ApiService } from '@core/services/api.service';
 import { Subscription } from 'rxjs';
 
 @Component({
