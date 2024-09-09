@@ -6,9 +6,46 @@
 html,
 body {
   height: 100%;
-  background-color: cadetblue;
 }
+
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.bg-green-white {
+  background-color: #d6efd8;
+}
+
+.bg-green-light {
+  background-color: #80af81;
+}
+
+.bg-green-medium {
+  background-color: #71bc78;
+}
+
+.bg-green-dark {
+  background-color: #2d8641;
+}
+
+.bg-green-white-important {
+  background-color: #d6efd8 !important;
+}
+
+.bg-green-light-important {
+  background-color: #80af81 !important;
+}
+
+.bg-green-dark-important {
+  background-color: #2d8641 !important;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #80af81;
+  margin: 0 0;
+  padding: 0;
 }
