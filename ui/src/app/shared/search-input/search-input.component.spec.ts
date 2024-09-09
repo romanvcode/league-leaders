@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { SearchInputComponent } from './search-input.component';
 
 describe('SearchInputComponent', () => {
@@ -9,6 +10,7 @@ describe('SearchInputComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SearchInputComponent],
+      providers: [provideAnimations()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SearchInputComponent);

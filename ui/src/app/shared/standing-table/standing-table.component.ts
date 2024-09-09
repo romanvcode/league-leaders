@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
 })
 export class StandingTableComponent implements OnInit, OnDestroy {
   standings: Standing[] = [];
-  isFething = signal(false);
+  isFetching = signal(false);
   error = signal('');
   subscription = signal<Subscription | undefined>(undefined);
 
@@ -34,7 +34,7 @@ export class StandingTableComponent implements OnInit, OnDestroy {
   ];
 
   ngOnInit(): void {
-    this.isFething.set(true);
+    this.isFetching.set(true);
 
     this.subscription.set(
       this.apiService.getStandings().subscribe({
@@ -47,7 +47,7 @@ export class StandingTableComponent implements OnInit, OnDestroy {
           this.error.set('An error occurred while fetching standings');
         },
         complete: () => {
-          this.isFething.set(false);
+          this.isFetching.set(false);
         },
       })
     );
