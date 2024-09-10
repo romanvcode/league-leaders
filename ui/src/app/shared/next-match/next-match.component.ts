@@ -1,59 +1,79 @@
-import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { Match } from '@core/models/match.model';
 import { ApiService } from '@core/services/api.service';
-import { interval, Subscription } from 'rxjs';
+import {
+  interval,
+  map,
+  Observable,
+  shareReplay,
+  Subject,
+  takeUntil,
+} from 'rxjs';
+
+interface NextMatchCountdown {
+  seconds: number;
+  minutes: number;
+  hours: number;
+  days: number;
+}
 
 @Component({
   selector: 'app-next-match',
   standalone: true,
-  imports: [MatCardModule],
+  imports: [MatCardModule, CommonModule],
   templateUrl: './next-match.component.html',
   styleUrl: './next-match.component.css',
 })
 export class NextMatchComponent implements OnInit, OnDestroy {
-  match = signal<Match | undefined>(undefined);
-  error = signal('');
-  subscription = signal<Subscription | undefined>(undefined);
-  interval = signal<Subscription | undefined>(undefined);
-  countdown = signal('');
+  private destroy$ = new Subject<void>();
+
+  public nextMatch$: Subject<Match> = new Subject<Match>();
+  public timeLeft$: Observable<NextMatchCountdown> = new Observable();
 
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
-    this.subscription.set(
-      this.apiService.getMathces().subscribe({
+    this.apiService
+      .getMathces()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
         next: (matches) => {
-          this.match.set(matches.shift());
-          this.startCountdown(new Date(this.match()!.date));
+          const nextMatch = matches[0];
+          this.nextMatch$.next(nextMatch);
+
+          const matchDateEpoch = new Date(nextMatch.date).getTime();
+
+          this.timeLeft$ = interval(1000).pipe(
+            map(() => this.tickTock(matchDateEpoch)),
+            shareReplay(1)
+          );
         },
         error: (error) => {
-          console.error(error);
-          this.error.set('An error occurred while fetching matches');
+          console.error('Failed to load upcoming match', error);
         },
-      })
-    );
+      });
   }
 
-  startCountdown(startTime: Date): void {
-    this.interval.set(
-      interval(1000).subscribe(() => {
-        const now = new Date().getTime();
-        const distance = startTime.getTime() - now;
+  private tickTock(nextMatchInEpoch: number): NextMatchCountdown {
+    const diff = nextMatchInEpoch - Date.now();
 
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor(
-          (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-        );
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        this.countdown.set(`${days}d ${hours}h ${minutes}m ${seconds}s`);
-      })
-    );
+    const daysToDday = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hoursToDday = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutesToDday = Math.floor((diff / (1000 * 60)) % 60);
+    const secondsToDday = Math.floor(diff / 1000) % 60;
+
+    return {
+      seconds: secondsToDday,
+      minutes: minutesToDday,
+      hours: hoursToDday,
+      days: daysToDday,
+    };
   }
 
   ngOnDestroy(): void {
-    this.subscription()?.unsubscribe();
-    this.interval()?.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
