@@ -25,6 +25,8 @@ export class NextMatchComponent implements OnInit, OnDestroy {
   public nextMatch$: Subject<Match> = new Subject<Match>();
   public timeLeft$: Observable<string> = new Observable();
 
+  error: string | null = null;
+
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
@@ -47,6 +49,7 @@ export class NextMatchComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error('Failed to load upcoming match', error);
+          this.error = 'An error occurred while fetching the next match';
         },
       });
   }
