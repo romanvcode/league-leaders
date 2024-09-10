@@ -3,14 +3,20 @@
     <mat-card-title>Next Match</mat-card-title>
   </mat-card-header>
   <hr />
-  <mat-card-content>
-    <p>{{ countdown() }}</p>
+  <mat-card-content *ngIf="nextMatch$ | async as match; else loading">
+    <p>
+      {{ (timeLeft$ | async)?.days }}:{{ (timeLeft$ | async)?.hours }}:{{
+        (timeLeft$ | async)?.minutes
+      }}:{{ (timeLeft$ | async)?.seconds }}
+    </p>
     <mat-card class="bg-green-light-important text-white">
       <mat-card-header>
         <p class="font-medium">
-          {{ match()?.homeTeam?.name }} vs {{ match()?.awayTeam?.name }}
+          {{ match.homeTeam.name }} vs {{ match.awayTeam.name }}
         </p>
       </mat-card-header>
     </mat-card>
   </mat-card-content>
 </mat-card>
+
+<ng-template #loading> Loading... </ng-template>
