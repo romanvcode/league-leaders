@@ -5,9 +5,7 @@
   <hr />
   <mat-card-content *ngIf="nextMatch$ | async as match; else loading">
     <p>
-      {{ (timeLeft$ | async)?.days }}:{{ (timeLeft$ | async)?.hours }}:{{
-        (timeLeft$ | async)?.minutes
-      }}:{{ (timeLeft$ | async)?.seconds }}
+      {{ timeLeft$ | async }}
     </p>
     <mat-card class="bg-green-light-important text-white">
       <mat-card-header>

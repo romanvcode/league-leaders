@@ -3,14 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { Match } from '@core/models/match.model';
 import { ApiService } from '@core/services/api.service';
-import {
-  interval,
-  map,
-  Observable,
-  shareReplay,
-  Subject,
-  takeUntil,
-} from 'rxjs';
+import { interval, map, Observable, Subject, takeUntil } from 'rxjs';
 
 interface NextMatchCountdown {
   seconds: number;
@@ -30,7 +23,7 @@ export class NextMatchComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   public nextMatch$: Subject<Match> = new Subject<Match>();
-  public timeLeft$: Observable<NextMatchCountdown> = new Observable();
+  public timeLeft$: Observable<string> = new Observable();
 
   constructor(private apiService: ApiService) {}
 
@@ -46,8 +39,10 @@ export class NextMatchComponent implements OnInit, OnDestroy {
           const matchDateEpoch = new Date(nextMatch.date).getTime();
 
           this.timeLeft$ = interval(1000).pipe(
-            map(() => this.tickTock(matchDateEpoch)),
-            shareReplay(1)
+            map(() => {
+              const countdown = this.tickTock(matchDateEpoch);
+              return this.formatTimeLeft(countdown);
+            })
           );
         },
         error: (error) => {
@@ -70,6 +65,15 @@ export class NextMatchComponent implements OnInit, OnDestroy {
       hours: hoursToDday,
       days: daysToDday,
     };
+  }
+
+  private formatTimeLeft(countdown: NextMatchCountdown): string {
+    const days = String(countdown.days).padStart(2, '0');
+    const hours = String(countdown.hours).padStart(2, '0');
+    const minutes = String(countdown.minutes).padStart(2, '0');
+    const seconds = String(countdown.seconds).padStart(2, '0');
+
+    return `${days}d:${hours}h:${minutes}m:${seconds}s`;
   }
 
   ngOnDestroy(): void {
