@@ -4,6 +4,9 @@ import tseslint from 'typescript-eslint';
 
 export default [
   {
+    ignores: ['sketches/'],
+  },
+  {
     files: ['**/*.{js,mjs,cjs,ts}'],
   },
   {
