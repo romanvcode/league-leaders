@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NextMatchComponent } from '../../shared/next-match/next-match.component';
 import { SearchInputComponent } from '../../shared/search-input/search-input.component';
 import { TeamInfoComponent } from '../../shared/team-info/team-info.component';
@@ -10,85 +11,16 @@ import { TeamInfoComponent } from '../../shared/team-info/team-info.component';
   templateUrl: './team.component.html',
   styleUrl: './team.component.css',
 })
-export class TeamComponent {
+export class TeamComponent implements OnInit {
   curretFeature = 'Team';
 
-  currentTeamId = 1;
+  teamId!: number;
 
-  team = {
-    id: 1,
-    name: 'Real Madrid',
-    abbreviation: 'RMD',
-    country: 'Spain',
-    stadium: 'Santiago Bernabeu',
-    manager: 'Carlo Ancelotti',
-    players: [
-      {
-        id: 1,
-        name: 'Karim Benzema',
-        position: 'Forward',
-        number: 9,
-      },
-      {
-        id: 2,
-        name: 'Thibaut Courtois',
-        position: 'Goalkeeper',
-        number: 1,
-      },
-      {
-        id: 3,
-        name: 'Luka Modric',
-        position: 'Midfielder',
-        number: 10,
-      },
-      {
-        id: 4,
-        name: 'Sergio Ramos',
-        position: 'Defender',
-        number: 4,
-      },
-      {
-        id: 5,
-        name: 'Eden Hazard',
-        position: 'Forward',
-        number: 7,
-      },
-      {
-        id: 6,
-        name: 'Casemiro',
-        position: 'Midfielder',
-        number: 14,
-      },
-      {
-        id: 7,
-        name: 'Raphael Varane',
-        position: 'Defender',
-        number: 5,
-      },
-      {
-        id: 8,
-        name: 'Vinicius Jr',
-        position: 'Forward',
-        number: 20,
-      },
-      {
-        id: 9,
-        name: 'Toni Kroos',
-        position: 'Midfielder',
-        number: 8,
-      },
-      {
-        id: 10,
-        name: 'Dani Carvajal',
-        position: 'Defender',
-        number: 2,
-      },
-      {
-        id: 11,
-        name: 'Ferland Mendy',
-        position: 'Defender',
-        number: 23,
-      },
-    ],
-  };
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.route.params.subscribe((params) => {
+      this.teamId = params['id'];
+    });
+  }
 }

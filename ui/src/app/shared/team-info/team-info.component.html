@@ -1,17 +1,23 @@
 <mat-card>
-  <mat-card-header>
-    <mat-card-title>
-      {{ team.name }}
-    </mat-card-title>
-    <mat-card-subtitle>{{ team.abbreviation }}</mat-card-subtitle>
-  </mat-card-header>
+  @if (error != null) {
+    <mat-card-content>
+      <p>{{ error }}</p>
+    </mat-card-content>
+  } @else {
+    <mat-card-header>
+      <mat-card-title>
+        {{ team?.name }}
+      </mat-card-title>
+      <mat-card-subtitle>{{ team?.abbreviation }}</mat-card-subtitle>
+    </mat-card-header>
 
-  <mat-card-content>
-    <section class="team-overview">
-      <hr />
-      <p class="mt-0"><strong>Country:</strong> {{ team.country }}</p>
-      <p class="mt-0"><strong>Stadium:</strong> {{ team.stadium }}</p>
-      <p class="mt-0"><strong>Manager:</strong> {{ team.manager }}</p>
-    </section>
-  </mat-card-content>
+    <mat-card-content>
+      <section class="team-overview">
+        <hr />
+        <p class="mt-0"><strong>Country:</strong> {{ team?.country }}</p>
+        <p class="mt-0"><strong>Stadium:</strong> {{ team?.stadium }}</p>
+        <p class="mt-0"><strong>Manager:</strong> {{ team?.manager }}</p>
+      </section>
+    </mat-card-content>
+  }
 </mat-card>
