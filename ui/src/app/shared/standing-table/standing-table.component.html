@@ -1,16 +1,16 @@
 <mat-card class="rounded-md overflow-hidden mat-elevation-z8">
-  @if (isFetching() && !error()) {
+  @if (isFetching && error == null) {
     <mat-card-content>
       <mat-spinner></mat-spinner>
     </mat-card-content>
   }
-  @if (error()) {
+  @if (error != null) {
     <mat-card-content>
-      <p>{{ error() }}</p>
+      <p>{{ error }}</p>
     </mat-card-content>
   } @else {
     <div class="responsive-table mat-elevation-z8">
-      <table mat-table [dataSource]="standings">
+      <table mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="place">
           <th mat-header-cell *matHeaderCellDef>Position</th>
           <td mat-cell *matCellDef="let element">{{ element.place }}</td>

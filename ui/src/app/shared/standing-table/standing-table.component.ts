@@ -1,10 +1,10 @@
-import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Standing } from '@core/models/standing.model';
 import { ApiService } from '@core/services/api.service';
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-standing-table',
@@ -14,10 +14,12 @@ import { Subscription } from 'rxjs';
   styleUrl: './standing-table.component.css',
 })
 export class StandingTableComponent implements OnInit, OnDestroy {
-  standings: Standing[] = [];
-  isFetching = signal(false);
-  error = signal('');
-  subscription = signal<Subscription | undefined>(undefined);
+  private destroy$ = new Subject<void>();
+
+  dataSource = new MatTableDataSource<Standing>();
+
+  isFetching = false;
+  error: string | null = null;
 
   constructor(private apiService: ApiService) {}
 
@@ -34,26 +36,27 @@ export class StandingTableComponent implements OnInit, OnDestroy {
   ];
 
   ngOnInit(): void {
-    this.isFetching.set(true);
+    this.isFetching = true;
 
-    this.subscription.set(
-      this.apiService.getStandings().subscribe({
+    this.apiService
+      .getStandings()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
         next: (standings) => {
-          this.standings = standings;
-          console.log(standings);
+          this.dataSource.data = standings;
         },
         error: (error) => {
-          console.error(error);
-          this.error.set('An error occurred while fetching standings');
+          console.error('Failed to load standings', error);
+          this.error = 'An error occurred while fetching standings';
         },
         complete: () => {
-          this.isFetching.set(false);
+          this.isFetching = false;
         },
-      })
-    );
+      });
   }
 
   ngOnDestroy(): void {
-    this.subscription()?.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
