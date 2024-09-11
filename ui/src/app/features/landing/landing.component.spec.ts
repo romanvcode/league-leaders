@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HttpClient, HttpHandler } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { ApiService } from '@core/services/api.service';
 import { LandingComponent } from './landing.component';
@@ -13,7 +14,12 @@ describe('LandingComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [LandingComponent],
-      providers: [HttpClient, HttpHandler, ApiService, provideAnimations()],
+      providers: [
+        ApiService,
+        provideAnimations(),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LandingComponent);

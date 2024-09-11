@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HttpClient, HttpHandler } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ApiService } from '@core/services/api.service';
 import { NextMatchComponent } from './next-match.component';
 
@@ -11,7 +12,7 @@ describe('NextMatchComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NextMatchComponent],
-      providers: [ApiService, HttpClient, HttpHandler],
+      providers: [ApiService, provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
   });
 
@@ -26,11 +27,10 @@ describe('NextMatchComponent', () => {
   });
 
   it('should have a countdown property', () => {
-    expect(component.countdown).toBeDefined();
+    expect(component.timeLeft$).toBeDefined();
   });
 
-  it('should not call the countdown method if no matches', () => {
-    spyOn(component, 'countdown');
-    expect(component.countdown).not.toHaveBeenCalled();
+  it('should have a nextMatch property', () => {
+    expect(component.nextMatch$).toBeDefined();
   });
 });

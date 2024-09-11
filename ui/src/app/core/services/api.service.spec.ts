@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Match } from '@core/models/match.model';
 import { Standing } from '@core/models/standing.model';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { ApiService } from './api.service';
 
 describe('ApiService', () => {
@@ -13,7 +13,7 @@ describe('ApiService', () => {
     service = new ApiService(httpClientSpy);
   });
 
-  it('should return expected standings (HttpClient called once)', (done: DoneFn) => {
+  it('#getStandings should return expected standings (HttpClient called once)', (done: DoneFn) => {
     const expectedStandings: Standing[] = [
       {
         id: 1,
@@ -51,17 +51,21 @@ describe('ApiService', () => {
     expect(httpClientSpy.get.calls.count()).toBe(1);
   });
 
-  it('should return an error when the server returns a 404', () => {
-    httpClientSpy.get.and.returnValue(of({}));
+  it('#getStandings should return an error when the server returns an error', (done: DoneFn) => {
+    const expectedError = new HttpErrorResponse({});
+
+    httpClientSpy.get.and.returnValue(throwError(() => expectedError));
+
     service.getStandings().subscribe({
-      next: () => {},
-      error: (error: any) => {
-        expect(error).toEqual(error);
+      next: () => done.fail,
+      error: (error) => {
+        expect(error).toEqual(expectedError);
+        done();
       },
     });
   });
 
-  it('should return expected mathches (HttpClient called once)', (done: DoneFn) => {
+  it('#getMatches should return expected mathches (HttpClient called once)', (done: DoneFn) => {
     const expectedMatches: Match[] = [
       {
         id: 1,
@@ -83,12 +87,16 @@ describe('ApiService', () => {
     expect(httpClientSpy.get.calls.count()).toBe(1);
   });
 
-  it('should return an error when the server returns a 404', () => {
-    httpClientSpy.get.and.returnValue(of({}));
+  it('#getMatches should return an error when the server returns an error', (done: DoneFn) => {
+    const expectedError = new HttpErrorResponse({});
+
+    httpClientSpy.get.and.returnValue(throwError(() => expectedError));
+
     service.getMathces().subscribe({
-      next: () => {},
-      error: (error: any) => {
-        expect(error).toEqual(error);
+      next: () => done.fail,
+      error: (error) => {
+        expect(error).toEqual(expectedError);
+        done();
       },
     });
   });
