@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
+import { TeamComponent } from '@features/team/team.component';
 import { LandingComponent } from './features/landing/landing.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [LandingComponent],
+  imports: [LandingComponent, TeamComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
