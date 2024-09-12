@@ -25,7 +25,7 @@ public class LeaderboardService : ILeaderboardService
             .AsNoTracking()
             .Include(s => s.Team)
             .Where(s => s.Stage.SeasonId == currentSeason.Id)
-            .OrderBy(s => s.Place)
+            .OrderByDescending(s => s.Points)
             .ToListAsync();
 
         if (standings == null || standings.Count == 0)

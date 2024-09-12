@@ -24,6 +24,8 @@ public class ScheduleService : IScheduleService
         var matches = await _context.Matches
             .AsNoTracking()
             .Where(m => m.Stage.SeasonId == currentSeason.Id)
+            .Include(m => m.HomeTeam)
+            .Include(m => m.AwayTeam)
             .Include(m => m.Stage)
             .ToListAsync();
 

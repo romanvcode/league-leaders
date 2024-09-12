@@ -17,6 +17,7 @@ public class TeamService : ITeamService
     {
         var team = await _context.Teams
             .AsNoTracking()
+            .Include(t => t.Players)
             .FirstOrDefaultAsync(t => t.Id == teamId)
             ?? throw new TeamNotFoundException($"Team with Id {teamId} not found.");
 
@@ -61,7 +62,7 @@ public class TeamService : ITeamService
             .Include(m => m.AwayTeam)
             .Where(m => m.HomeTeamId == teamId || m.AwayTeamId == teamId)
             .Where(m => m.Stage.SeasonId == currentSeason.Id)
-            .Where(m => m.Date < DateTime.UtcNow)
+            //.Where(m => m.Date < DateTime.UtcNow)
             .OrderByDescending(m => m.Date)
             .Take(lastMatches)
             .ToListAsync()
