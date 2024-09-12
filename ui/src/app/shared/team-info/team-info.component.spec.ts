@@ -24,15 +24,16 @@ describe('TeamInfoComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a teamId property', () => {
-    expect(component.teamId).toBeDefined();
+  it('should render #team-info', () => {
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('.team-overview')).not.toBeNull();
   });
 
-  it('should have a team property', () => {
-    expect(component.team).toBeDefined();
-  });
+  it('should not render #team-info on error', () => {
+    component.error = 'error';
+    fixture.detectChanges();
 
-  it('should have a matches property', () => {
-    expect(component.matches).toBeDefined();
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('.team-overview')).toBeNull();
   });
 });
