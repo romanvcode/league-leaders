@@ -26,11 +26,16 @@ describe('NextMatchComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a countdown property', () => {
-    expect(component.timeLeft$).toBeDefined();
+  it('should render #next-match after fetching data', () => {
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('#next-match')).not.toBeNull();
   });
 
-  it('should have a nextMatch property', () => {
-    expect(component.nextMatch$).toBeDefined();
+  it('should not render #next-match on error', () => {
+    component.error = 'error';
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('#next-match')).toBeNull();
   });
 });
