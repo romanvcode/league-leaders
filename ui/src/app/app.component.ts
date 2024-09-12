@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { LandingComponent } from '@features/landing/landing.component';
 import { TeamComponent } from '@features/team/team.component';
-import { LandingComponent } from './features/landing/landing.component';
 
 @Component({
   selector: 'app-root',

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NextMatchComponent } from '../../shared/next-match/next-match.component';
-import { SearchInputComponent } from '../../shared/search-input/search-input.component';
-import { TeamInfoComponent } from '../../shared/team-info/team-info.component';
+import { NextMatchComponent } from '@shared/next-match/next-match.component';
+import { SearchInputComponent } from '@shared/search-input/search-input.component';
+import { TeamInfoComponent } from '@shared/team-info/team-info.component';
 
 @Component({
   selector: 'app-team',
