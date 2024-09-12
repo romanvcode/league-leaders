@@ -1,6 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { MatListModule } from '@angular/material/list';
+import { Match } from '@core/models/match.model';
 import { Team } from '@core/models/team.model';
 import { ApiService } from '@core/services/api.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -8,16 +11,17 @@ import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-team-info',
   standalone: true,
-  imports: [MatCardModule, MatListModule],
+  imports: [MatCardModule, MatListModule, MatGridListModule, DatePipe],
   templateUrl: './team-info.component.html',
   styleUrl: './team-info.component.css',
 })
-export class TeamInfoComponent {
+export class TeamInfoComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   @Input({ required: true }) teamId!: number;
 
   public team: Team | null = null;
+  public matches: Match[] = [];
   public error: string | null = null;
 
   constructor(private apiService: ApiService) {}
@@ -29,11 +33,26 @@ export class TeamInfoComponent {
       .subscribe({
         next: (team) => {
           this.team = team;
+
+          this.apiService.getTeamMatches(this.team.id).subscribe({
+            next: (matches) => {
+              this.matches = matches;
+            },
+            error: (error) => {
+              console.error('Failed to load team matches', error);
+              this.error = 'An error occurred while fetching the team matches';
+            },
+          });
         },
         error: (error) => {
           console.error('Failed to load team', error);
           this.error = 'An error occurred while fetching the team';
         },
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
