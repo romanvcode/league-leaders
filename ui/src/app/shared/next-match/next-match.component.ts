@@ -31,7 +31,7 @@ export class NextMatchComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.apiService
-      .getMathces()
+      .getMatches()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (matches) => {
