@@ -20,11 +20,17 @@ export class ApiService {
     );
   }
 
-  getMathces(): Observable<Match[]> {
+  getMatches(): Observable<Match[]> {
     return this.httpClient.get<Match[]>(`${this.apiUrl}/schedule/matches`);
   }
 
   getTeam(teamId: number): Observable<Team> {
     return this.httpClient.get<Team>(`${this.apiUrl}/teams/${teamId}`);
+  }
+
+  getTeamMatches(teamId: number): Observable<Match[]> {
+    return this.httpClient.get<Match[]>(
+      `${this.apiUrl}/teams/${teamId}/matches`
+    );
   }
 }
