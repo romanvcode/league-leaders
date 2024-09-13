@@ -25,26 +25,7 @@
 
   <section class="grid grid-cols-2 w-2/3 gap-2">
     @for (match of matches; track match.id) {
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>
-            {{ match.homeTeam.name }}
-            <strong>{{ match.homeTeamScore }} - </strong>
-            <strong>{{ match.awayTeamScore }}</strong> {{ match.awayTeam.name }}
-          </mat-card-title>
-          <mat-card-subtitle>{{
-            match.date | date: 'medium'
-          }}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <section class="match-overview">
-            <hr />
-            <p class="mx-5 my-0">
-              <strong>Location:</strong> {{ match.homeTeam.stadium }}
-            </p>
-          </section>
-        </mat-card-content>
-      </mat-card>
+      <app-match-info [match]="match" />
     }
   </section>
 </div>
