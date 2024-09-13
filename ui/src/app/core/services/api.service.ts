@@ -33,4 +33,10 @@ export class ApiService {
       `${this.apiUrl}/teams/${teamId}/matches`
     );
   }
+
+  getTeamsBySearchTerm(searchTerm: string): Observable<Team[]> {
+    return this.httpClient.get<Team[]>(
+      `${this.apiUrl}/teams/search/${searchTerm}`
+    );
+  }
 }
