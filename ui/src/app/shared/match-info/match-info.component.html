@@ -1,18 +1,16 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title>
+    <mat-card-title id="match-info-title">
       {{ match.homeTeam.name }}
       <strong>{{ match.homeTeamScore }} - </strong>
       <strong>{{ match.awayTeamScore }}</strong> {{ match.awayTeam.name }}
     </mat-card-title>
     <mat-card-subtitle>{{ match.date | date: 'medium' }}</mat-card-subtitle>
   </mat-card-header>
-  <mat-card-content>
-    <section class="match-overview">
+  <mat-card-content class="match-overview">
+    <section>
       <hr />
-      <p class="mx-5 my-0">
-        <strong>Location:</strong> {{ match.homeTeam.stadium }}
-      </p>
+      <p><strong>Location:</strong> {{ match.homeTeam.stadium }}</p>
     </section>
   </mat-card-content>
 </mat-card>
