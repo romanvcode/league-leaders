@@ -62,7 +62,7 @@ public class TeamService : ITeamService
             .Include(m => m.AwayTeam)
             .Where(m => m.HomeTeamId == teamId || m.AwayTeamId == teamId)
             .Where(m => m.Stage.SeasonId == currentSeason.Id)
-            //.Where(m => m.Date < DateTime.UtcNow)
+            .Where(m => m.Date < DateTime.UtcNow)
             .OrderByDescending(m => m.Date)
             .Take(lastMatches)
             .ToListAsync()

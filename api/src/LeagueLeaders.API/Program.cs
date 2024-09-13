@@ -45,9 +45,9 @@ builder.Services.AddScoped<ExceptionHandlingMiddleware>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policyBuilder =>
+    options.AddDefaultPolicy(builder =>
     {
-        policyBuilder.WithOrigins("http://localhost:4200");
+        builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
     });
 });
 
