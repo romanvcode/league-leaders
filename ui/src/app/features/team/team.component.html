@@ -12,7 +12,7 @@
       >
         {{ curretFeature }}
       </p>
-      <app-search-input />
+      <app-search-input (search)="handleSearch($event)" />
     </div>
     <app-team-info [teamId]="teamId" />
   </div>

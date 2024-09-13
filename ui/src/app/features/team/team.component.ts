@@ -23,4 +23,8 @@ export class TeamComponent implements OnInit {
       this.teamId = params['id'];
     });
   }
+
+  handleSearch(teamName: string) {
+    console.log(teamName);
+  }
 }
