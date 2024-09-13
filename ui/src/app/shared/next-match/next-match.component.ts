@@ -71,12 +71,16 @@ export class NextMatchComponent implements OnInit, OnDestroy {
   }
 
   private formatTimeLeft(countdown: NextMatchCountdown): string {
-    const days = String(countdown.days).padStart(2, '0');
+    const days = String(countdown.days);
     const hours = String(countdown.hours).padStart(2, '0');
     const minutes = String(countdown.minutes).padStart(2, '0');
     const seconds = String(countdown.seconds).padStart(2, '0');
 
-    return `${days}d:${hours}h:${minutes}m:${seconds}s`;
+    if (countdown.days > 1) {
+      return `${days} days to go`;
+    }
+
+    return `${hours}h ${minutes}m ${seconds}s`;
   }
 
   ngOnDestroy(): void {

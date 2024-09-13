@@ -7,11 +7,12 @@ import { Match } from '@core/models/match.model';
 import { Team } from '@core/models/team.model';
 import { ApiService } from '@core/services/api.service';
 import { Subject, takeUntil } from 'rxjs';
+import { MatchInfoComponent } from "../match-info/match-info.component";
 
 @Component({
   selector: 'app-team-info',
   standalone: true,
-  imports: [MatCardModule, MatListModule, MatGridListModule, DatePipe],
+  imports: [MatCardModule, MatListModule, MatGridListModule, DatePipe, MatchInfoComponent],
   templateUrl: './team-info.component.html',
   styleUrl: './team-info.component.css',
 })
