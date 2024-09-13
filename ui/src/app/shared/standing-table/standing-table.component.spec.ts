@@ -24,12 +24,21 @@ describe('StandingTableComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a standings property', () => {
-    expect(component.dataSource).toBeDefined();
-  });
-
-  it('should set isFetching to true on ngOnInit', () => {
+  it('should set #isFetching to true on ngOnInit', () => {
     component.ngOnInit();
     expect(component.isFetching).toBe(true);
+  });
+
+  it('should render #table', () => {
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('table')).not.toBeNull();
+  });
+
+  it('should not render #table on error', () => {
+    component.error = 'error';
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('table')).toBeNull();
   });
 });

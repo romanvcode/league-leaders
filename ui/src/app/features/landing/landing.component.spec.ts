@@ -37,4 +37,12 @@ describe('LandingComponent', () => {
   it('should have a title', () => {
     expect(expectedFeature).toContain(component.curretFeature);
   });
+
+  it('should render child components', () => {
+    const compiled = fixture.nativeElement;
+
+    expect(compiled.querySelector('app-next-match')).not.toBeNull();
+    expect(compiled.querySelector('app-search-input')).not.toBeNull();
+    expect(compiled.querySelector('app-standing-table')).not.toBeNull();
+  });
 });
