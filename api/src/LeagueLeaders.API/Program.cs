@@ -43,6 +43,14 @@ builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
 
 builder.Services.AddScoped<ExceptionHandlingMiddleware>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -55,6 +63,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.MapControllers();   
 
