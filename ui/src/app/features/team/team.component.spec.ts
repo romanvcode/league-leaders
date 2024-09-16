@@ -24,13 +24,13 @@ describe('TeamComponent', () => {
         provideHttpClientTesting(),
         provideRouter([
           {
-            path: 'team/:id',
+            path: 'team',
             component: TeamComponent,
           },
         ]),
         {
           provide: ActivatedRoute,
-          useValue: { params: of({ id: 1 }) },
+          useValue: { queryParams: of({ id: 1 }) },
         },
       ],
     }).compileComponents();
@@ -53,7 +53,7 @@ describe('TeamComponent', () => {
   });
 
   it('should set teamId from route parameters when navigating to /team/1', async () => {
-    await router.navigate(['/team', 1]);
+    await router.navigate(['/team'], { queryParams: { id: 1 } });
     fixture.detectChanges();
 
     expect(component.teamId).toBe(1);
