@@ -1,6 +1,7 @@
 ﻿using LeagueLeaders.Domain;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace LeagueLeaders.Application.Teams;
@@ -86,8 +87,12 @@ public class TeamService : ITeamService
         var filteredTeams = teams
             .Where(t => t.Name.Split(' ')
                 .Any(w => w.StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase)))
-            .ToList()
-            ?? throw new TeamNotFoundException($"No teams found for the search term: {searchTerm}");
+            .ToList();
+
+        if (filteredTeams.Count == 0)
+        {
+            return [];
+        }
 
         return filteredTeams;
     }
