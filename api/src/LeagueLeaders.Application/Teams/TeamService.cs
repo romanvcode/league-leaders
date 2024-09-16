@@ -1,6 +1,7 @@
 ﻿using LeagueLeaders.Domain;
 using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace LeagueLeaders.Application.Teams;
 
@@ -79,9 +80,15 @@ public class TeamService : ITeamService
         }
 
         var teams = await _context.Teams
-            .Where(t => t.Name.Contains(searchTerm))
+            .AsNoTracking()
             .ToListAsync();
 
-        return teams;
+        var filteredTeams = teams
+            .Where(t => t.Name.Split(' ')
+                .Any(w => w.StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase)))
+            .ToList()
+            ?? throw new TeamNotFoundException($"No teams found for the search term: {searchTerm}");
+
+        return filteredTeams;
     }
 }
