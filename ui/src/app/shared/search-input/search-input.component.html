@@ -24,6 +24,6 @@
   (optionSelected)="onSelect($event.option.value)"
 >
   <mat-option *ngFor="let result of searchResults" [value]="result">
-    {{ result }}
+    {{ result.name }}
   </mat-option>
 </mat-autocomplete>

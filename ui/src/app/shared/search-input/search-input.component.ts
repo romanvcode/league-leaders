@@ -1,11 +1,13 @@
 import { NgForOf, NgIf } from '@angular/common';
-import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { Router, RouterLink } from '@angular/router';
+import { Team } from '@core/models/team.model';
 import { ApiService } from '@core/services/api.service';
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 
@@ -21,6 +23,7 @@ import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
     MatAutocompleteModule,
     NgIf,
     NgForOf,
+    RouterLink,
   ],
   templateUrl: './search-input.component.html',
   styleUrl: './search-input.component.css',
@@ -28,12 +31,13 @@ import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 export class SearchInputComponent implements OnDestroy {
   private destroy$ = new Subject<void>();
 
-  @Output() search = new EventEmitter<string>();
-
   value: string = '';
-  searchResults: string[] = [];
+  searchResults: Team[] = [];
 
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    private router: Router
+  ) {}
 
   onSearch() {
     if (this.value) {
@@ -42,22 +46,21 @@ export class SearchInputComponent implements OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .pipe(debounceTime(300), distinctUntilChanged())
         .subscribe((teams) => {
-          this.searchResults = teams.map((team) => team.name);
+          this.searchResults = teams;
         });
     } else {
       this.clearSearch();
     }
   }
 
-  onSelect(result: string) {
-    this.search.emit(result);
-    this.value = result;
+  onSelect(result: Team) {
+    this.value = result.name;
+    this.router.navigate(['/team'], { queryParams: { id: result.id } });
   }
 
   clearSearch() {
     this.value = '';
     this.searchResults = [];
-    this.search.emit('');
   }
 
   ngOnDestroy(): void {
