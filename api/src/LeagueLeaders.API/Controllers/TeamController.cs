@@ -97,12 +97,12 @@ public class TeamController : ControllerBase
     /// </summary>
     /// <param name="searchTerm">The search term to search for.</param>
     /// <returns>The list of found <see cref="Team"/>s.</returns>
-    [HttpGet("search/{searchTerm}")]
+    [HttpGet()]
     [ProducesResponseType(typeof(List<Team>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<List<Team>> GetTeamsBySerchTerm(string searchTerm)
+    public async Task<List<Team>> GetTeamsBySerchTerm([FromQuery] string searchTerm)
     {
         var teams = await _teamService.GetTeamsBySearchTermAsync(searchTerm);
 
