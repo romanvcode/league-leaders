@@ -168,4 +168,50 @@ describe('ApiService', () => {
       },
     });
   });
+
+  it('#getTeamsBySearchTerm should return expected teams (HttpClient called once)', (done: DoneFn) => {
+    const expectedTeams = [
+      {
+        id: 1,
+        name: 'Team A',
+        abbreviation: 'A',
+        country: 'Country A',
+        stadium: 'Stadium A',
+        manager: 'Manager A',
+        players: [],
+      },
+      {
+        id: 2,
+        name: 'Team B',
+        abbreviation: 'B',
+        country: 'Country B',
+        stadium: 'Stadium B',
+        manager: 'Manager B',
+        players: [],
+      },
+    ];
+    httpClientSpy.get.and.returnValue(of(expectedTeams));
+    service.getTeamsBySearchTerm('Team').subscribe({
+      next: (teams) => {
+        expect(teams).toEqual(expectedTeams);
+        done();
+      },
+      error: done.fail,
+    });
+    expect(httpClientSpy.get.calls.count()).toBe(1);
+  });
+
+  it('#getTeamsBySearchTerm should return an error when the server returns an error', (done: DoneFn) => {
+    const expectedError = new HttpErrorResponse({});
+
+    httpClientSpy.get.and.returnValue(throwError(() => expectedError));
+
+    service.getTeamsBySearchTerm('Team').subscribe({
+      next: () => done.fail,
+      error: (error) => {
+        expect(error).toEqual(expectedError);
+        done();
+      },
+    });
+  });
 });
