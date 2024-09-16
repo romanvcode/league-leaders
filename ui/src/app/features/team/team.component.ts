@@ -19,12 +19,8 @@ export class TeamComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
+    this.route.queryParams.subscribe((params) => {
       this.teamId = params['id'];
     });
-  }
-
-  handleSearch(teamName: string) {
-    console.log(teamName);
   }
 }
