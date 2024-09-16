@@ -89,11 +89,6 @@ public class TeamService : ITeamService
                 .Any(w => w.StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase)))
             .ToList();
 
-        if (filteredTeams.Count == 0)
-        {
-            return [];
-        }
-
         return filteredTeams;
     }
 }
