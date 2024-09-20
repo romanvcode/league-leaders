@@ -154,7 +154,7 @@ public class ApiControllersTest : IClassFixture<LeagueLeadersWebApplicationFacto
     public async Task GetTeamsBySearchTerm_ToBeSuccess()
     {
         HttpResponseMessage response = await
-            _client.GetAsync("/api/teams/search/Team");
+            _client.GetAsync("/api/teams?searchTerm=Team");
 
         response.EnsureSuccessStatusCode();
 
@@ -176,7 +176,7 @@ public class ApiControllersTest : IClassFixture<LeagueLeadersWebApplicationFacto
     public async Task GetTeamsBySearchTerm_ToBeFailure()
     {
         HttpResponseMessage response = await
-            _client.GetAsync("/api/teams/search/");
+            _client.GetAsync("/api/teams?searchTerm=");
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
