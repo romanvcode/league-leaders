@@ -14,55 +14,9 @@
 
 </div>
 
----
-
 ## How to work
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.4.
-
----
-
-## Running with Docker
-
-### Steps to Build and Run the UI with Docker
-
-1. **Build the Docker image for the UI:**
-
-   Run the following command to build the Docker image for the UI:
-
-   ```bash
-   docker build -t league-leaders-ui:latest .
-
-   ```
-
-2. **Run the Docker container:**
-
-   Run the container, mapping port 4200 inside the container to port 8080 on the host machine:
-
-   ```bash
-   docker run --name league-leaders-ui-container -d -p 8080:4200 league-leaders-ui:latest
-
-   ```
-
-3. **Access the UI:**
-
-   After starting the container, navigate to `http://localhost:8080/` in your browser to view the application.
-
----
-
-## Using Docker Compose (With API and Database)
-
-To run the UI alongside the API and database, use Docker Compose.
-
-1. **Build and run the services using Docker Compose:**
-
-   ```bash
-   docker-compose up --build
-   ```
-
-2. **Access the UI:**
-
-The UI will be available at `http://localhost:8080/`
 
 ### Development server
 

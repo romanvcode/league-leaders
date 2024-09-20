@@ -40,7 +40,6 @@ builder.Services.AddDbContext<LeagueLeadersDbContext>(options =>
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
-
 builder.Services.AddScoped<ExceptionHandlingMiddleware>();
 
 builder.Services.AddCors(options =>
@@ -63,11 +62,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseCors();
+app.MapControllers();
 
-app.MapControllers();   
+app.MapGet("/", () => "Hello from League Leaders API!");
 
 app.Run();
-
-public partial class Program { }

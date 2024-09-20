@@ -2,18 +2,17 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/LeagueLeaders.API/LeagueLeaders.API.csproj", "src/LeagueLeaders.API/"]
-COPY ["src/LeagueLeaders.Application/LeagueLeaders.Application.csproj", "src/LeagueLeaders.Application/"]
-COPY ["src/LeagueLeaders.Domain/LeagueLeaders.Domain.csproj", "src/LeagueLeaders.Domain/"]
-COPY ["src/LeagueLeaders.Infrastructure/LeagueLeaders.Infrastructure.csproj", "src/LeagueLeaders.Infrastructure/"]
-RUN dotnet restore "./src/LeagueLeaders.API/LeagueLeaders.API.csproj"
-COPY . .
-WORKDIR "/src/src/LeagueLeaders.API"
+COPY ["src/LeagueLeaders.API/LeagueLeaders.API.csproj", "LeagueLeaders.API/"]
+COPY ["src/LeagueLeaders.Application/LeagueLeaders.Application.csproj", "LeagueLeaders.Application/"]
+COPY ["src/LeagueLeaders.Domain/LeagueLeaders.Domain.csproj", "LeagueLeaders.Domain/"]
+COPY ["src/LeagueLeaders.Infrastructure/LeagueLeaders.Infrastructure.csproj", "LeagueLeaders.Infrastructure/"]
+RUN dotnet restore "./LeagueLeaders.API/LeagueLeaders.API.csproj"
+COPY ./src ./
+WORKDIR "/src/LeagueLeaders.API"
 RUN dotnet build "./LeagueLeaders.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
