@@ -27,9 +27,10 @@ export class TeamInfoComponent implements OnInit, OnDestroy {
 
   @Input({ required: true }) teamId!: number;
 
-  public team: Team | null = null;
-  public matches: Match[] = [];
-  public error: string | null = null;
+  team: Team | null = null;
+  matches: Match[] = [];
+  error: string | null = null;
+  isError = false;
 
   constructor(private apiService: ApiService) {}
 
@@ -48,12 +49,14 @@ export class TeamInfoComponent implements OnInit, OnDestroy {
             error: (error) => {
               console.error('Failed to load team matches', error);
               this.error = 'An error occurred while fetching the team matches';
+              this.isError = true;
             },
           });
         },
         error: (error) => {
           console.error('Failed to load team', error);
           this.error = 'An error occurred while fetching the team';
+          this.isError = true;
         },
       });
   }

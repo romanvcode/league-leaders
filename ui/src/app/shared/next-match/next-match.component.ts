@@ -4,13 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { Match } from '@core/models/match.model';
 import { ApiService } from '@core/services/api.service';
 import { interval, map, Observable, Subject, takeUntil } from 'rxjs';
-
-interface NextMatchCountdown {
-  seconds: number;
-  minutes: number;
-  hours: number;
-  days: number;
-}
+import { NextMatchCountdown } from './next-match-countdown.model';
 
 @Component({
   selector: 'app-next-match',
@@ -22,10 +16,11 @@ interface NextMatchCountdown {
 export class NextMatchComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
-  public nextMatch$: Subject<Match> = new Subject<Match>();
-  public timeLeft$: Observable<string> = new Observable();
+  nextMatch$: Subject<Match> = new Subject<Match>();
+  timeLeft$: Observable<string> = new Observable<string>();
 
   error: string | null = null;
+  isError = false;
 
   constructor(private apiService: ApiService) {}
 
@@ -50,6 +45,7 @@ export class NextMatchComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error('Failed to load upcoming match', error);
           this.error = 'An error occurred while fetching the next match';
+          this.isError = true;
         },
       });
   }

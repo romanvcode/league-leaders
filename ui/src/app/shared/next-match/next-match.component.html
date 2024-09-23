@@ -1,5 +1,5 @@
 <mat-card class="bg-green-dark-important text-white">
-  @if (error != null) {
+  @if (isError) {
     <mat-card-content>
       <p>{{ error }}</p>
     </mat-card-content>
@@ -8,21 +8,21 @@
       <mat-card-title>Next Match</mat-card-title>
     </mat-card-header>
     <hr />
-    <mat-card-content *ngIf="nextMatch$ | async as match; else loading">
-      <p class="font-medium suppercase">
-        {{ timeLeft$ | async }}
-      </p>
-      <mat-card class="bg-green-light-important text-white">
-        <mat-card-header>
-          <p class="font-medium">
-            {{ match.homeTeam.name }} vs {{ match.awayTeam.name }}
-          </p>
-        </mat-card-header>
-      </mat-card>
-    </mat-card-content>
+    @if (nextMatch$ | async; as match) {
+      <mat-card-content>
+        <p class="font-medium suppercase">
+          {{ timeLeft$ | async }}
+        </p>
+        <mat-card class="bg-green-light-important text-white">
+          <mat-card-header>
+            <p class="font-medium">
+              {{ match.homeTeam.name }} vs {{ match.awayTeam.name }}
+            </p>
+          </mat-card-header>
+        </mat-card>
+      </mat-card-content>
+    } @else {
+      <mat-card-content>Loading...</mat-card-content>
+    }
   }
 </mat-card>
-
-<ng-template #loading>
-  <mat-card-content>Loading...</mat-card-content>
-</ng-template>
