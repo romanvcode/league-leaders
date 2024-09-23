@@ -1,0 +1,53 @@
+services:
+  league-leaders-ui:
+    container_name: league-leaders-ui
+    hostname: league-leaders-ui
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    networks:
+      - league-leaders-network
+    depends_on:
+      - league-leaders-api
+
+  league-leaders-api:
+    container_name: league-leaders-api
+    hostname: league-leaders-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ConnectionStrings__DefaultConnection=Server=league-leaders-db;Database=ChampionsLeagueDB;User Id=sa;Password=Admin@123;TrustServerCertificate=True
+    build:
+      context: ./api
+      dockerfile: ./src/LeagueLeaders.API/Dockerfile
+    ports:
+      - 8080:8080
+    networks:
+      - league-leaders-network
+    depends_on:
+      - league-leaders-db
+
+  league-leaders-db:
+    container_name: league-leaders-db
+    hostname: league-leaders-db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Admin@123"
+      MSSQL_DATA_DIR: /var/opt/mssql/data
+      MSSQL_PID: "Developer"
+      MSSQL_TCP_PORT: 1433
+    ports:
+      - 1433:1433
+    networks:
+      - league-leaders-network
+    volumes:
+      - ./api/data:/var/opt/mssql/data
+      - ./api/log:/var/opt/mssql/log
+      - ./api/secrets:/var/opt/mssql/secrets
+
+networks:
+  league-leaders-network:
+    driver: bridge

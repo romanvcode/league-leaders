@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Match } from '@core/models/match.model';
 import { Team } from '@core/models/team.model';
-import { environment } from 'environment';
+import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { Standing } from '../models/standing.model';
 

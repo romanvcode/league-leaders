@@ -14,9 +14,61 @@
 
 </div>
 
+---
+
 ## How to work
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.4.
+
+---
+
+## Running with Docker
+
+### Steps to Build and Run the UI with Docker
+
+1. **Build the Docker image for the UI:**
+
+   Run the following command to build the Docker image for the UI:
+
+   ```bash
+   docker build -t league-leaders-ui:latest .
+
+   ```
+
+2. **Run the Docker container:**
+
+   Run the container, mapping port 80 inside the container to port 80 on the host machine:
+
+   ```bash
+   docker run --name league-leaders-ui-container -d -p 80:80 league-leaders-ui:latest
+
+   ```
+
+3. **Access the UI:**
+
+   After starting the container, navigate to `http://localhost:80/` or `http://localhost` in your browser to view the application.
+
+---
+
+## Using Docker Compose (With API and Database)
+
+0. **Move to the root of the application - to folder `league-leaders`**
+
+   ```bash
+   cd ..
+   ```
+
+To run the UI alongside the API and database, use Docker Compose.
+
+1. **Build and run the services using Docker Compose:**
+
+   ```bash
+   docker-compose up --build
+   ```
+
+2. **Access the UI:**
+
+The UI will be available at `http://localhost:80/` or `http://localhost`
 
 ### Development server
 
@@ -41,7 +93,3 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ### Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-
-### Current implementation and limitations
-
-- TBD
