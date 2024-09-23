@@ -1,10 +1,10 @@
 <mat-card class="rounded-md overflow-hidden mat-elevation-z8">
-  @if (isFetching && error == null) {
+  @if (isFetching && !isError) {
     <mat-card-content>
       <mat-spinner></mat-spinner>
     </mat-card-content>
   }
-  @if (error != null) {
+  @if (isError) {
     <mat-card-content>
       <p>{{ error }}</p>
     </mat-card-content>

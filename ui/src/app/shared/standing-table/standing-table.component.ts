@@ -19,7 +19,9 @@ export class StandingTableComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource<Standing>();
 
   isFetching = false;
+
   error: string | null = null;
+  isError = false;
 
   constructor(private apiService: ApiService) {}
 
@@ -48,6 +50,7 @@ export class StandingTableComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error('Failed to load standings', error);
           this.error = 'An error occurred while fetching standings';
+          this.isError = true;
         },
         complete: () => {
           this.isFetching = false;
