@@ -52,6 +52,12 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Using Docker Compose (With API and Database)
 
+0. **Move to the root of the application - to folder `league-leaders`**
+
+   ```bash
+   cd ..
+   ```
+
 To run the UI alongside the API and database, use Docker Compose.
 
 1. **Build and run the services using Docker Compose:**

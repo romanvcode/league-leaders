@@ -66,6 +66,12 @@ The API will be available at `https://localhost:7250/`
 
 ## Using Docker Compose (With UI and Database)
 
+0. **Move to the root of the application - to folder `league-leaders`**
+
+   ```bash
+   cd ..
+   ```
+
 To run the API alongside the UI and database, use Docker Compose.
 
 1. **Build and run the services using Docker Compose:**
