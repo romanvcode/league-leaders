@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Match } from '@core/models/match.model';
 import { Team } from '@core/models/team.model';
+import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { Standing } from '../models/standing.model';
 
@@ -9,7 +10,7 @@ import { Standing } from '../models/standing.model';
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(private httpClient: HttpClient) {}
 

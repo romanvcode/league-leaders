@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build -- --configuration development
+RUN npm run build -- --configuration production
 
 FROM nginx:alpine3.20
 COPY --from=build /app/dist/ui/browser /usr/share/nginx/html

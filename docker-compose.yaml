@@ -2,8 +2,6 @@ services:
   league-leaders-ui:
     container_name: league-leaders-ui
     hostname: league-leaders-ui
-    environment:
-      - API_URL=http://league-leaders-api:8080/api
     build:
       context: ./ui
       dockerfile: Dockerfile
