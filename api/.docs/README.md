@@ -10,19 +10,19 @@ Make sure to provide your API key as query parameter: `?api_key=YOUR_API_KEY`.
 
 ## Mapping Overview
 
-| **LeagueLeaders Table** | **API Entity**               |
-| ----------------------- | ---------------------------- |
-| Competitions            | Competition_With_Category    |
-| Seasons                 | Season                       |
-| Stages                  | Season_Stage                 |
-| Matches                 | Sport_Event_Status           |
-| Teams                   | Competitor                   |
-| Players                 | Player                       |
-| Venues                  | Venue                        |
-| Referees                | Referee                      |
-| TeamStats               | Season_Competitor_Statistics |
-| PlayerStats             | Season_Player_Statistics     |
-| Standings               | Standing                     |
+| **LeagueLeaders Table** | **API Entity**                |
+| ----------------------- | ----------------------------- |
+| Competitions            | competition                   |
+| Seasons                 | season                        |
+| Stages                  | season_stage                  |
+| Matches                 | sport_event                   |
+| Teams                   | competitor                    |
+| Players                 | player                        |
+| Venues                  | venue                         |
+| Referees                | referee                       |
+| TeamStats               | sport_event_statistics_totals |
+| PlayerStats             | sport_event_player_statistics |
+| Standings               | standing                      |
 
 ---
 
@@ -157,11 +157,11 @@ Make sure to provide your API key as query parameter: `?api_key=YOUR_API_KEY`.
 
 - Take data from `/sport_events/{urn_sport_event}/summary` for each `statistics` take for each in `totals.competitors`
 
-| **LeagueLeaders Field** | **API Field**          |
-| ----------------------- | ---------------------- |
+| **LeagueLeaders Field** | **API Field**            |
+| ----------------------- | ------------------------ |
 | `Id`                    | `{id}_{urn_sport_event}` |
-| `TeamId`                | `id`                   |
-| `MatchId`               | `{urn_sport_event}`    |
+| `TeamId`                | `id`                     |
+| `MatchId`               | `{urn_sport_event}`      |
 
 - Next, take `statistics`
 
@@ -188,11 +188,11 @@ Make sure to provide your API key as query parameter: `?api_key=YOUR_API_KEY`.
 
 - Next, take for each in `players`
 
-| **LeagueLeaders Field** | **API Field**          |
-| ----------------------- | ---------------------- |
+| **LeagueLeaders Field** | **API Field**            |
+| ----------------------- | ------------------------ |
 | `Id`                    | `{id}_{urn_sport_event}` |
-| `PlayerId`              | `id`                   |
-| `MatchId`               | `{urn_sport_event}`    |
+| `PlayerId`              | `id`                     |
+| `MatchId`               | `{urn_sport_event}`      |
 
 - Next, take `statistics`
 
