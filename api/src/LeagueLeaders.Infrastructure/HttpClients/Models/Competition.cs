@@ -1,4 +1,4 @@
-﻿namespace LeagueLeaders.Infrastructure.HttpClients;
+﻿namespace LeagueLeaders.Infrastructure.HttpClients.Models;
 public class Competition
 {
     public string Id { get; set; }
@@ -8,5 +8,5 @@ public class Competition
 
 public class Category
 {
-    public string CountryCode { get; set; }
+    public string Name { get; set; }
 }
