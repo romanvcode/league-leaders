@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace LeagueLeaders.Infrastructure.Configuration;
+namespace LeagueLeaders.Infrastructure.Database.Configuration;
 
 class VenueConfiguration : IEntityTypeConfiguration<Venue>
 {

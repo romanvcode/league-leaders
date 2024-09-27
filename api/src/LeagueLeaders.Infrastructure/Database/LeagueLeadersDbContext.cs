@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-namespace LeagueLeaders.Infrastructure;
+namespace LeagueLeaders.Infrastructure.Database;
 
 public class LeagueLeadersDbContext : DbContext
 {

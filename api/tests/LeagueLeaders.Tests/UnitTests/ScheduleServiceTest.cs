@@ -1,9 +1,9 @@
 ﻿using LeagueLeaders.Application;
 using LeagueLeaders.Domain;
-using LeagueLeaders.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using FluentAssertions;
 using LeagueLeaders.Application.Schedule;
+using LeagueLeaders.Infrastructure.Database;
 
 namespace LeagueLeaders.Tests.UnitTests;
 

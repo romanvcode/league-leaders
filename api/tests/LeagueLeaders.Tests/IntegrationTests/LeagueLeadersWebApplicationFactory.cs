@@ -1,5 +1,5 @@
 ﻿using LeagueLeaders.Domain;
-using LeagueLeaders.Infrastructure;
+using LeagueLeaders.Infrastructure.Database;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
