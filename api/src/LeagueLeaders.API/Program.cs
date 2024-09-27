@@ -2,7 +2,8 @@ using LeagueLeaders.API.Middleware;
 using LeagueLeaders.Application.Leaderboard;
 using LeagueLeaders.Application.Schedule;
 using LeagueLeaders.Application.Teams;
-using LeagueLeaders.Infrastructure;
+using LeagueLeaders.Infrastructure.Database;
+using LeagueLeaders.Infrastructure.HttpClients;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
@@ -48,6 +49,12 @@ builder.Services.AddCors(options =>
     {
         builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
     });
+});
+
+builder.Services.AddHttpClient<SoccerApiClient>(client =>
+{
+    client.BaseAddress = new Uri("https://api.sportradar.com/soccer/trial/v4/eu/");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
 
 var app = builder.Build();
