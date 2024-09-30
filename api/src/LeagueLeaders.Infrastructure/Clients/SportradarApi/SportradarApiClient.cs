@@ -40,7 +40,7 @@ public class SportradarApiClient
         return competition;
     }
 
-    public async Task<List<Season>> GetSeasonsAsync()
+    public async Task<List<Models.Season>> GetSeasonsAsync()
     {
         var seasonResponse = await GetResponse<SeasonsResponse>($"competitions/{_championsLeague}/seasons?api_key={_apiKey}") 
             ?? throw new DeserializationException($"Failed to deserialize seasons for the {_championsLeague} competition.");
@@ -50,7 +50,7 @@ public class SportradarApiClient
         return seasons;
     }
 
-    public async Task<List<Stage>> GetStagesAsync()
+    public async Task<List<Models.Stage>> GetStagesAsync()
     {
         var stageResponse = await GetResponse<StagesResponse>($"seasons/{_currentSeason}/stages_groups_cup_rounds?api_key={_apiKey}") 
             ?? throw new DeserializationException($"Failed to deserialize stages for the {_currentSeason}.");
@@ -87,6 +87,31 @@ public class SportradarApiClient
         }
 
         return competitors;
+    }
+
+    public async Task<List<Models.SportEvent>> GetSportEventsAsync()
+    {
+        var sportEventsResponse = await GetResponse<SportEventsResponse>($"seasons/{_currentSeason}/summaries?api_key={_apiKey}")
+            ?? throw new DeserializationException($"Failed to deserialize sport events for the {_currentSeason}.");
+
+        var sportEvents = sportEventsResponse.Summaries;
+
+        List<Models.SportEvent> events = [];
+
+        foreach (var sportEvent in sportEvents)
+        {
+            events.Add(new Models.SportEvent
+            {
+                Id = sportEvent.SportEvent.Id,
+                StageId = sportEvent.SportEvent.SportEventContext.Stage.Order,
+                HomeCompetitorId = sportEvent.SportEvent.Competitors.Single(c => c.Qualifier == "home").Id,
+                AwayCompetitorId = sportEvent.SportEvent.Competitors.Single(c => c.Qualifier == "away").Id,
+                Date = sportEvent.SportEvent.StartTime,
+                VenueId = sportEvent.SportEvent.Venue.Id,
+            });
+        }
+
+        return events;
     }
 
     private async Task<T?> GetResponse<T>(string url)
