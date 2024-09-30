@@ -1,4 +1,5 @@
-﻿namespace LeagueLeaders.Infrastructure.HttpClients.Models;
+﻿namespace LeagueLeaders.Infrastructure.Clients.SportradarApi.Models;
+
 public class Stage
 {
     public int Order { get; set; }

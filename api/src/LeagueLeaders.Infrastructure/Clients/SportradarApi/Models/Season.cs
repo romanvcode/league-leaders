@@ -1,4 +1,5 @@
-﻿namespace LeagueLeaders.Infrastructure.HttpClients.Models;
+﻿namespace LeagueLeaders.Infrastructure.Clients.SportradarApi.Models;
+
 public class Season
 {
     public string Id { get; set; }
