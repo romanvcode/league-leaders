@@ -6,4 +6,4 @@ internal record Competitor(string Id, string Country, string Qualifier);
 
 internal record Manager(string Name);
 
-internal record Venue(string Id, string Name);
+internal record Venue(string Id, string Name, string CityName, string CountryName, int Capacity);
