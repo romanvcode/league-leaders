@@ -1,21 +1,22 @@
 ﻿namespace LeagueLeaders.Infrastructure.Clients.SportradarApi.Responses;
 
-internal record SportEventsResponse(List<Summary> Summaries);
+internal record SportEventsResponse(List<SummaryResponse> Summaries);
 
-internal record Summary(SportEvent SportEvent, SportEventStatus SportEventStatus);
+internal record SummaryResponse(SportEventResponse SportEvent, SportEventStatusResponse SportEventStatus);
 
-internal record SportEvent(
+internal record SportEventResponse(
     string Id, 
-    SportEventContext SportEventContext,
-    SportEventConditions SportEventConditions,
-    List<Competitor> Competitors, 
+    SportEventContextResponse SportEventContext,
+    SportEventConditionsResponse SportEventConditions,
+    List<CompetitorResponse> Competitors, 
     string StartTime, 
-    Venue Venue
+    VenueResponse Venue
     );
 
-internal record SportEventContext(Stage Stage);
-internal record Stage(int Order);
+internal record SportEventContextResponse(StageResponse Stage);
+internal record StageResponse(int Order);
 
-internal record SportEventConditions(List<Models.Referee> Referees);
+internal record SportEventConditionsResponse(List<RefereeResponse> Referees);
+internal record RefereeResponse(string Id, string Name, string Nationality, string Type);
 
-internal record SportEventStatus(int HomeScore, int AwayScore);
+internal record SportEventStatusResponse(int HomeScore, int AwayScore);

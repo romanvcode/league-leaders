@@ -1,9 +1,9 @@
 ﻿namespace LeagueLeaders.Infrastructure.Clients.SportradarApi.Responses;
 
-internal record CompetitorProfileResponse(Competitor Competitor, Manager Manager, Venue Venue);
+internal record CompetitorProfileResponse(CompetitorResponse Competitor, ManagerResponse Manager, VenueResponse Venue);
 
-internal record Competitor(string Id, string Country, string Qualifier);
+internal record CompetitorResponse(string Id, string Country, string Qualifier);
 
-internal record Manager(string Name);
+internal record ManagerResponse(string Name);
 
-internal record Venue(string Id, string Name, string CityName, string CountryName, int Capacity);
+internal record VenueResponse(string Id, string Name, string CityName, string CountryName, int Capacity);
