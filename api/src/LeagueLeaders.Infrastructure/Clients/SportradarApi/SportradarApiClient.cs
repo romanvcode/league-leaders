@@ -290,4 +290,41 @@ public class SportradarApiClient
 
         return stats;
     }
+
+    public async Task<List<Standing>> GetStandingsAsync()
+    {
+        var response = await _httpClient.GetAsync($"seasons/{_currentSeason}/standings?api_key={_apiKey}");
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+        var standingsResponse = JsonSerializer.Deserialize<StandingsResponse>(content, _options)
+            ?? throw new SportradarBadResponseException($"Failed to deserialize standings response: {content}.");
+
+        var standings = new List<Standing>();
+        foreach (var standing in standingsResponse.Standings)
+        {
+            foreach (var group in standing.Groups)
+            {
+                var stageId = group.Stage.Order;
+                foreach (var competitorStanding in group.Standings)
+                {
+                    standings.Add(new Standing
+                    {
+                        StageId = stageId,
+                        CompetitorId = competitorStanding.Competitor.Id,
+                        Points = competitorStanding.Points,
+                        Rank = competitorStanding.Rank,
+                        Played = competitorStanding.Played,
+                        Win = competitorStanding.Win,
+                        Draw = competitorStanding.Draw,
+                        Loss = competitorStanding.Loss,
+                        GoalsFor = competitorStanding.GoalsFor,
+                        GoalsAgainst = competitorStanding.GoalsAgainst
+                    });
+                }
+            }
+        }
+
+        return standings;
+    }
 }
