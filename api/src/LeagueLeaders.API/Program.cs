@@ -2,11 +2,12 @@ using LeagueLeaders.API.Middleware;
 using LeagueLeaders.Application.Leaderboard;
 using LeagueLeaders.Application.Schedule;
 using LeagueLeaders.Application.Teams;
+using LeagueLeaders.Infrastructure.Clients.SportradarApi;
 using LeagueLeaders.Infrastructure.Database;
-using LeagueLeaders.Infrastructure.HttpClients;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using AspNetCore.Swagger.Themes;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,11 +52,13 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddHttpClient<SoccerApiClient>(client =>
+builder.Services.AddHttpClient<SportradarApiClient>(client =>
 {
     client.BaseAddress = new Uri("https://api.sportradar.com/soccer/trial/v4/eu/");
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
+
+builder.Services.Configure<SportradarSettings>(builder.Configuration.GetSection("Sportradar"));
 
 var app = builder.Build();
 
@@ -65,7 +68,7 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(ModernStyle.Dark);
 }
 
 app.UseHttpsRedirection();
