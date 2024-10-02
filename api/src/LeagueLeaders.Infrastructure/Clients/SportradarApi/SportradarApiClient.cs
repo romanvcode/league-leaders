@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace LeagueLeaders.Infrastructure.Clients.SportradarApi;
 
-public class SportradarApiClient
+public class SportradarApiClient : ISportradarApiClient
 {
     private readonly HttpClient _httpClient;
     private readonly string _apiKey;

@@ -52,7 +52,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddHttpClient<SportradarApiClient>(client =>
+builder.Services.AddHttpClient<ISportradarApiClient, SportradarApiClient>(client =>
 {
     client.BaseAddress = new Uri("https://api.sportradar.com/soccer/trial/v4/eu/");
     client.DefaultRequestHeaders.Add("Accept", "application/json");
