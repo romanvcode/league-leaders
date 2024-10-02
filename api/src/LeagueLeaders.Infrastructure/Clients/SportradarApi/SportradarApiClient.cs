@@ -1,7 +1,8 @@
 ﻿using LeagueLeaders.Infrastructure.Clients.SportradarApi.Exceptions;
 using LeagueLeaders.Infrastructure.Clients.SportradarApi.Models;
 using LeagueLeaders.Infrastructure.Clients.SportradarApi.Responses;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using System.Net.Http;
 using System.Text.Json;
 
 namespace LeagueLeaders.Infrastructure.Clients.SportradarApi;
@@ -17,46 +18,56 @@ public class SportradarApiClient
         PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
     };
 
-    public SportradarApiClient(HttpClient httpClient, IConfiguration configuration)
+    public SportradarApiClient(HttpClient httpClient, IOptions<SportradarSettings> settings)
     {
         _httpClient = httpClient;
-        _apiKey = configuration["Sportradar:ApiKey"] ?? "";
-        _championsLeague = configuration["Sportradar:Competitions:ChampionsLeague"] ?? "";
-        _currentSeason = configuration["Sportradar:Seasons:Current"] ?? "";
+        _apiKey = settings.Value.ApiKey
+            ?? throw new SportradarSettingsNullException(nameof(settings.Value.ApiKey));
+        _championsLeague = settings.Value.ChampionsLeague
+            ?? throw new SportradarSettingsNullException(nameof(settings.Value.ChampionsLeague));
+        _currentSeason = settings.Value.CurrentSeason
+            ?? throw new SportradarSettingsNullException(nameof(settings.Value.CurrentSeason));
     }
 
-    public async Task<Models.Competition> GetCompetitionAsync()
+    public async Task<Competition> GetCompetitionAsync()
     {
-        var competitionResponse = await GetResponse<CompetitionResponse>($"competitions/{_championsLeague}/info?api_key={_apiKey}")
-            ?? throw new DeserializationException($"Failed to deserialize competition: {_championsLeague}.");
+        var response = await _httpClient.GetAsync($"competitions/{_championsLeague}/info?api_key={_apiKey}");
+        response.EnsureSuccessStatusCode();
 
-        var competition = new Models.Competition
+        var content = await response.Content.ReadAsStringAsync();
+        var competitionResponse = JsonSerializer.Deserialize<CompetitionsResponse>(content, _options)
+            ?? throw new SportradarBadResponseException($"Failed to deserialize competition response: {content}.");
+
+        return new Competition
         {
             Id = competitionResponse.Competition.Id,
             Name = competitionResponse.Competition.Name,
             Region = competitionResponse.Competition.Category.Name
         };
-
-        return competition;
     }
 
-    public async Task<List<Models.Season>> GetSeasonsAsync()
+    public async Task<List<Season>> GetSeasonsAsync()
     {
-        var seasonResponse = await GetResponse<SeasonsResponse>($"competitions/{_championsLeague}/seasons?api_key={_apiKey}")
-            ?? throw new DeserializationException($"Failed to deserialize seasons for the {_championsLeague} competition.");
+        var response = await _httpClient.GetAsync($"competitions/{_championsLeague}/seasons?api_key={_apiKey}");
+        response.EnsureSuccessStatusCode();
 
-        var seasons = seasonResponse.Seasons;
+        var content = await response.Content.ReadAsStringAsync();
+        var seasonResponse = JsonSerializer.Deserialize<SeasonsResponse>(content, _options)
+            ?? throw new SportradarBadResponseException($"Failed to deserialize seasons response: {content}.");
 
-        return seasons;
+        return seasonResponse.Seasons;
     }
 
-    public async Task<List<Models.Stage>> GetStagesAsync()
+    public async Task<List<Stage>> GetStagesAsync()
     {
-        var stageResponse = await GetResponse<StagesResponse>($"seasons/{_currentSeason}/stages_groups_cup_rounds?api_key={_apiKey}")
-            ?? throw new DeserializationException($"Failed to deserialize stages for the {_currentSeason}.");
+        var response = await _httpClient.GetAsync($"seasons/{_currentSeason}/stages_groups_cup_rounds?api_key={_apiKey}");
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+        var stageResponse = JsonSerializer.Deserialize<StagesResponse>(content, _options)
+            ?? throw new SportradarBadResponseException($"Failed to deserialize stages response: {content}.");
 
         var stages = stageResponse.Stages;
-
         foreach (var stage in stages)
         {
             stage.SeasonId = _currentSeason;
@@ -65,38 +76,45 @@ public class SportradarApiClient
         return stages;
     }
 
-    public async Task<List<Models.Competitor>> GetCompetitorsAsync()
+    public async Task<List<Competitor>> GetCompetitorsAsync()
     {
-        var competitorsResponse = await GetResponse<CompetitorsResponse>($"seasons/{_currentSeason}/competitors?api_key={_apiKey}")
-            ?? throw new DeserializationException($"Failed to deserialize competitors for the {_currentSeason}.");
+        var response = await _httpClient.GetAsync($"seasons/{_currentSeason}/competitors?api_key={_apiKey}");
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+        var competitorsResponse = JsonSerializer.Deserialize<CompetitorsResponse>(content, _options)
+            ?? throw new SportradarBadResponseException($"Failed to deserialize competitors response: {content}.");
 
         var competitors = competitorsResponse.SeasonCompetitors;
-
         foreach (var competitor in competitors)
         {
-            var profileResponse = await GetResponse<CompetitorProfileResponse>($"competitors/{competitor.Id}/profile?api_key={_apiKey}");
+            var profileResponse = await _httpClient.GetAsync($"competitors/{competitor.Id}/profile?api_key={_apiKey}");
+            profileResponse.EnsureSuccessStatusCode();
 
-            if (profileResponse == null)
-            {
-                continue;
-            }
+            var profileContent = await profileResponse.Content.ReadAsStringAsync();
+            var profileData = JsonSerializer.Deserialize<CompetitorProfileResponse>(profileContent, _options)
+                ?? throw new SportradarBadResponseException($"Failed to deserialize profile response for competitor {competitor.Id}: {profileContent}.");
 
-            competitor.Country = profileResponse.Competitor.Country;
-            competitor.Stadium = profileResponse.Venue.Name;
-            competitor.Manager = profileResponse.Manager.Name;
+            competitor.Country = profileData.Competitor.Country;
+            competitor.Stadium = profileData.Venue.Name;
+            competitor.Manager = profileData.Manager.Name;
         }
 
         return competitors;
     }
 
-    public async Task<List<Models.SportEvent>> GetSportEventsAsync()
+    public async Task<List<SportEvent>> GetSportEventsAsync()
     {
-        var sportEventsResponse = await GetResponse<SportEventsResponse>($"seasons/{_currentSeason}/summaries?api_key={_apiKey}")
-            ?? throw new DeserializationException($"Failed to deserialize sport events for the {_currentSeason}.");
+        var response = await _httpClient.GetAsync($"seasons/{_currentSeason}/summaries?api_key={_apiKey}");
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+        var sportEventsResponse = JsonSerializer.Deserialize<SportEventsResponse>(content, _options)
+            ?? throw new SportradarBadResponseException($"Failed to deserialize sport events response: {content}.");
 
         var sportEvents = sportEventsResponse.Summaries;
+        var events = new List<SportEvent>();
 
-        var events = new List<Models.SportEvent>();
         foreach (var sportEvent in sportEvents)
         {
             if (sportEvent.SportEvent.SportEventConditions.Referees == null)
@@ -104,7 +122,7 @@ public class SportradarApiClient
                 continue;
             }
 
-            events.Add(new Models.SportEvent
+            events.Add(new SportEvent
             {
                 Id = sportEvent.SportEvent.Id,
                 StageId = sportEvent.SportEvent.SportEventContext.Stage.Order,
@@ -121,14 +139,18 @@ public class SportradarApiClient
         return events;
     }
 
-    public async Task<List<Models.Player>> GetPlayersAsync()
+    public async Task<List<Player>> GetPlayersAsync()
     {
-        var playersResponse = await GetResponse<PlayersResponse>($"seasons/{_currentSeason}/competitor_players?api_key={_apiKey}")
-            ?? throw new DeserializationException($"Failed to deserialize players for the {_currentSeason}.");
+        var response = await _httpClient.GetAsync($"seasons/{_currentSeason}/competitor_players?api_key={_apiKey}");
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+        var playersResponse = JsonSerializer.Deserialize<PlayersResponse>(content, _options)
+            ?? throw new SportradarBadResponseException($"Failed to deserialize players response: {content}.");
 
         var competitorPlayers = playersResponse.SeasonCompetitorPlayers;
+        var players = new List<Player>();
 
-        var players = new List<Models.Player>();
         foreach (var competitorPlayer in competitorPlayers)
         {
             if (competitorPlayer.Players == null)
@@ -136,7 +158,7 @@ public class SportradarApiClient
                 continue;
             }
 
-            players.AddRange(competitorPlayer.Players.Select(p => new Models.Player
+            players.AddRange(competitorPlayer.Players.Select(p => new Player
             {
                 Id = p.Id,
                 CompetitorId = competitorPlayer.Id,
@@ -152,15 +174,19 @@ public class SportradarApiClient
         return players;
     }
 
-    public async Task<List<Models.Venue>> GetVenuesAsync()
+    public async Task<List<Venue>> GetVenuesAsync()
     {
-        var venuesResponse = await GetResponse<VenuesResponse>($"seasons/{_currentSeason}/summaries?api_key={_apiKey}")
-            ?? throw new DeserializationException($"Failed to deserialize venues for the {_currentSeason}.");
+        var response = await _httpClient.GetAsync($"seasons/{_currentSeason}/summaries?api_key={_apiKey}");
+        response.EnsureSuccessStatusCode();
 
-        var venues = new List<Models.Venue>();
+        var content = await response.Content.ReadAsStringAsync();
+        var venuesResponse = JsonSerializer.Deserialize<VenuesResponse>(content, _options)
+            ?? throw new SportradarBadResponseException($"Failed to deserialize venues response: {content}.");
+
+        var venues = new List<Venue>();
         foreach (var venue in venuesResponse.Summaries.Select(s => s.SportEvent.Venue))
         {
-            venues.Add(new Models.Venue
+            venues.Add(new Venue
             {
                 Id = venue.Id,
                 Name = venue.Name,
@@ -175,8 +201,12 @@ public class SportradarApiClient
 
     public async Task<List<Referee>> GetRefereesAsync()
     {
-        var refereesResponse = await GetResponse<RefereesResponse>($"seasons/{_currentSeason}/summaries?api_key={_apiKey}")
-            ?? throw new DeserializationException($"Failed to deserialize referees for the {_currentSeason}.");
+        var response = await _httpClient.GetAsync($"seasons/{_currentSeason}/summaries?api_key={_apiKey}");
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+        var refereesResponse = JsonSerializer.Deserialize<RefereesResponse>(content, _options)
+            ?? throw new SportradarBadResponseException($"Failed to deserialize referees response: {content}.");
 
         var referees = new List<Referee>();
         foreach (var se in refereesResponse.Summaries.Select(s => s.SportEvent))
@@ -186,18 +216,78 @@ public class SportradarApiClient
                 continue;
             }
 
-            referees.Add(se.SportEventConditions.Referees.Single(r => r.Type == "main_referee"));
+            var referee = se.SportEventConditions.Referees.Single(r => r.Type == "main_referee");
+            referees.Add(new Referee
+            {
+                Id = referee.Id,
+                Name = referee.Name,
+                Nationality = referee.Nationality
+            });
         }
 
         return referees;
     }
 
-    private async Task<T?> GetResponse<T>(string url)
+    public async Task<List<CompetitorStats>> GetCompetitorStatsAsync()
     {
-        var response = await _httpClient.GetAsync(url);
+        var sportEventId = "sr:sport_event:50850045";
+        var response = await _httpClient.GetAsync($"sport_events/{sportEventId}/summary?api_key={_apiKey}");
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<T>(content, _options);
+        var statsResponse = JsonSerializer.Deserialize<CompetitorsStatsResponse>(content, _options)
+            ?? throw new SportradarBadResponseException($"Failed to deserialize competitor stats response: {content}.");
+
+        var stats = new List<CompetitorStats>();
+        foreach (var competitor in statsResponse.Statistics.Totals.Competitors)
+        {
+            stats.Add(new CompetitorStats
+            {
+                SportEventId = sportEventId,
+                TeamId = competitor.Id,
+                Possession = competitor.Statistics.BallPossession,
+                RedCards = competitor.Statistics.RedCards,
+                YellowCards = competitor.Statistics.YellowCards,
+                CornerKicks = competitor.Statistics.CornerKicks,
+                Offsides = competitor.Statistics.Offsides,
+                Fouls = competitor.Statistics.Fouls,
+                ShotsTotal = competitor.Statistics.ShotsTotal,
+                ShotsOnTarget = competitor.Statistics.ShotsOnTarget
+            });
+        }
+
+        return stats;
+    }
+
+    public async Task<List<PlayerStats>> GetPlayerStatsAsync()
+    {
+        var sportEventId = "sr:sport_event:50850045";
+        var response = await _httpClient.GetAsync($"sport_events/{sportEventId}/summary?api_key={_apiKey}");
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+        var statsResponse = JsonSerializer.Deserialize<PlayersStatsResponse>(content, _options)
+            ?? throw new SportradarBadResponseException($"Failed to deserialize player stats response: {content}.");
+
+        var stats = new List<PlayerStats>();
+        foreach (var competitor in statsResponse.Statistics.Totals.Competitors)
+        {
+            foreach (var player in competitor.Players)
+            {
+                stats.Add(new PlayerStats
+                {
+                    PlayerId = player.Id,
+                    SportEventId = sportEventId,
+                    GoalsScored = player.Statistics.GoalsScored,
+                    Assists = player.Statistics.Assists,
+                    RedCards = player.Statistics.RedCards,
+                    YellowCards = player.Statistics.YellowCards,
+                    ShotsTotal = player.Statistics.ShotsOffTarget + player.Statistics.ShotsOnTarget,
+                    ShotsOnTarget = player.Statistics.ShotsOnTarget,
+                });
+            }
+        }
+
+        return stats;
     }
 }
