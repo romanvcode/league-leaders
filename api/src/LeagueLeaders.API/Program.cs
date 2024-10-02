@@ -78,3 +78,5 @@ app.MapControllers();
 app.MapGet("/", () => "Hello from League Leaders API!");
 
 app.Run();
+
+public partial class Program { }
