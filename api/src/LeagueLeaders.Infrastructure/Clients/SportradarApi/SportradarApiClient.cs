@@ -272,11 +272,13 @@ public class SportradarApiClient : ISportradarApiClient
         var stats = new List<PlayerStats>();
         foreach (var competitor in statsResponse.Statistics.Totals.Competitors)
         {
+            var competitorId = competitor.Id;
             foreach (var player in competitor.Players)
             {
                 stats.Add(new PlayerStats
                 {
                     PlayerId = player.Id,
+                    CompetitorId = competitorId,
                     SportEventId = sportEventId,
                     GoalsScored = player.Statistics.GoalsScored,
                     Assists = player.Statistics.Assists,
