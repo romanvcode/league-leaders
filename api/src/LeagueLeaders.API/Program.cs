@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using AspNetCore.Swagger.Themes;
+using Polly;
+using Polly.Extensions.Http;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,11 +55,21 @@ builder.Services.AddCors(options =>
     });
 });
 
+static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+{
+    return HttpPolicyExtensions
+        .HandleTransientHttpError()
+        .OrResult(msg => msg.StatusCode == HttpStatusCode.NotFound)
+        .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+}
+
 builder.Services.AddHttpClient<ISportradarApiClient, SportradarApiClient>(client =>
 {
     client.BaseAddress = new Uri("https://api.sportradar.com/soccer/trial/v4/eu/");
     client.DefaultRequestHeaders.Add("Accept", "application/json");
-});
+})
+    .SetHandlerLifetime(TimeSpan.FromMinutes(5))
+    .AddPolicyHandler(GetRetryPolicy());
 
 builder.Services.Configure<SportradarSettings>(builder.Configuration.GetSection("Sportradar"));
 

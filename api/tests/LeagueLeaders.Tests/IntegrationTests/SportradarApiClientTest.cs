@@ -465,7 +465,7 @@ public class SportradarApiClientTest
                 Content = new StringContent(expectedResponse)
             });
 
-        var result = await _sportradarApiClient.GetCompetitorStatsAsync();
+        var result = await _sportradarApiClient.GetCompetitorStatsAsync("sport_event");
 
         using (new AssertionScope())
         {
@@ -526,7 +526,7 @@ public class SportradarApiClientTest
                 Content = new StringContent(expectedResponse)
             });
 
-        var result = await _sportradarApiClient.GetPlayerStatsAsync();
+        var result = await _sportradarApiClient.GetPlayerStatsAsync("sport_event");
 
         using (new AssertionScope())
         {
