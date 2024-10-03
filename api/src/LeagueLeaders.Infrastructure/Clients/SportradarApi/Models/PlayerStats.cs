@@ -3,6 +3,7 @@
 public class PlayerStats
 {
     public string PlayerId { get; set; }
+    public string CompetitorId { get; set; }
     public string SportEventId { get; set; }
     public int GoalsScored { get; set; }
     public int Assists { get; set; }

@@ -16,7 +16,7 @@ internal record SportEventResponse(
 internal record SportEventContextResponse(StageResponse Stage);
 internal record StageResponse(int Order);
 
-internal record SportEventConditionsResponse(List<RefereeResponse> Referees);
-internal record RefereeResponse(string Id, string Name, string Nationality, string Type);
+internal record SportEventConditionsResponse(List<SERefereeResponse> Referees);
+internal record SERefereeResponse(string Id, string Type);
 
 internal record SportEventStatusResponse(int HomeScore, int AwayScore);
