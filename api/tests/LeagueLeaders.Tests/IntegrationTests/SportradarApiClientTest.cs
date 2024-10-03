@@ -1,10 +1,10 @@
-﻿using LeagueLeaders.Infrastructure.Clients.SportradarApi;
+﻿using FluentAssertions;
+using FluentAssertions.Execution;
+using LeagueLeaders.Infrastructure.Clients.SportradarApi;
 using Microsoft.Extensions.Options;
-using FluentAssertions;
 using Moq;
 using Moq.Protected;
 using System.Net;
-using FluentAssertions.Execution;
 
 namespace LeagueLeaders.Tests.IntegrationTests;
 

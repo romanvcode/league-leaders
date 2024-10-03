@@ -11,7 +11,7 @@ public interface ISportradarApiClient
     Task<List<Player>> GetPlayersAsync();
     Task<List<Referee>> GetRefereesAsync();
     Task<List<Venue>> GetVenuesAsync();
-    Task<List<CompetitorStats>> GetCompetitorStatsAsync();
-    Task<List<PlayerStats>> GetPlayerStatsAsync();
+    Task<List<CompetitorStats>> GetCompetitorStatsAsync(string sportEventId);
+    Task<List<PlayerStats>> GetPlayerStatsAsync(string sportEventId);
     Task<List<Standing>> GetStandingsAsync();
 }

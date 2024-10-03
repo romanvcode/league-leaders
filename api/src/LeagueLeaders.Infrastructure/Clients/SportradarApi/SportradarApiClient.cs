@@ -2,7 +2,6 @@
 using LeagueLeaders.Infrastructure.Clients.SportradarApi.Models;
 using LeagueLeaders.Infrastructure.Clients.SportradarApi.Responses;
 using Microsoft.Extensions.Options;
-using System.Net.Http;
 using System.Text.Json;
 
 namespace LeagueLeaders.Infrastructure.Clients.SportradarApi;
@@ -31,7 +30,9 @@ public class SportradarApiClient : ISportradarApiClient
 
     public async Task<Competition> GetCompetitionAsync()
     {
-        var response = await _httpClient.GetAsync($"competitions/{_championsLeague}/info?api_key={_apiKey}");
+        var url = $"competitions/{_championsLeague}/info?api_key={_apiKey}";
+
+        var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
@@ -48,7 +49,9 @@ public class SportradarApiClient : ISportradarApiClient
 
     public async Task<List<Season>> GetSeasonsAsync()
     {
-        var response = await _httpClient.GetAsync($"competitions/{_championsLeague}/seasons?api_key={_apiKey}");
+        var url = $"competitions/{_championsLeague}/seasons?api_key={_apiKey}";
+
+        var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
@@ -60,7 +63,9 @@ public class SportradarApiClient : ISportradarApiClient
 
     public async Task<List<Stage>> GetStagesAsync()
     {
-        var response = await _httpClient.GetAsync($"seasons/{_currentSeason}/stages_groups_cup_rounds?api_key={_apiKey}");
+        var url = $"seasons/{_currentSeason}/stages_groups_cup_rounds?api_key={_apiKey}";
+
+        var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
@@ -78,7 +83,9 @@ public class SportradarApiClient : ISportradarApiClient
 
     public async Task<List<Competitor>> GetCompetitorsAsync()
     {
-        var response = await _httpClient.GetAsync($"seasons/{_currentSeason}/competitors?api_key={_apiKey}");
+        var url = $"seasons/{_currentSeason}/competitors?api_key={_apiKey}";
+
+        var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
@@ -88,7 +95,9 @@ public class SportradarApiClient : ISportradarApiClient
         var competitors = competitorsResponse.SeasonCompetitors;
         foreach (var competitor in competitors)
         {
-            var profileResponse = await _httpClient.GetAsync($"competitors/{competitor.Id}/profile?api_key={_apiKey}");
+            url = $"competitors/{competitor.Id}/profile?api_key={_apiKey}";
+
+            var profileResponse = await _httpClient.GetAsync(url);
             profileResponse.EnsureSuccessStatusCode();
 
             var profileContent = await profileResponse.Content.ReadAsStringAsync();
@@ -105,7 +114,9 @@ public class SportradarApiClient : ISportradarApiClient
 
     public async Task<List<SportEvent>> GetSportEventsAsync()
     {
-        var response = await _httpClient.GetAsync($"seasons/{_currentSeason}/summaries?api_key={_apiKey}");
+        var url = $"seasons/{_currentSeason}/summaries?api_key={_apiKey}";
+
+        var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
@@ -141,7 +152,9 @@ public class SportradarApiClient : ISportradarApiClient
 
     public async Task<List<Player>> GetPlayersAsync()
     {
-        var response = await _httpClient.GetAsync($"seasons/{_currentSeason}/competitor_players?api_key={_apiKey}");
+        var url = $"seasons/{_currentSeason}/competitor_players?api_key={_apiKey}";
+
+        var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
@@ -176,7 +189,9 @@ public class SportradarApiClient : ISportradarApiClient
 
     public async Task<List<Venue>> GetVenuesAsync()
     {
-        var response = await _httpClient.GetAsync($"seasons/{_currentSeason}/summaries?api_key={_apiKey}");
+        var url = $"seasons/{_currentSeason}/summaries?api_key={_apiKey}";
+
+        var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
@@ -201,7 +216,9 @@ public class SportradarApiClient : ISportradarApiClient
 
     public async Task<List<Referee>> GetRefereesAsync()
     {
-        var response = await _httpClient.GetAsync($"seasons/{_currentSeason}/summaries?api_key={_apiKey}");
+        var url = $"seasons/{_currentSeason}/summaries?api_key={_apiKey}";
+
+        var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
@@ -228,9 +245,8 @@ public class SportradarApiClient : ISportradarApiClient
         return referees;
     }
 
-    public async Task<List<CompetitorStats>> GetCompetitorStatsAsync()
+    public async Task<List<CompetitorStats>> GetCompetitorStatsAsync(string sportEventId)
     {
-        var sportEventId = "sr:sport_event:50850045";
         var response = await _httpClient.GetAsync($"sport_events/{sportEventId}/summary?api_key={_apiKey}");
         response.EnsureSuccessStatusCode();
 
@@ -259,10 +275,11 @@ public class SportradarApiClient : ISportradarApiClient
         return stats;
     }
 
-    public async Task<List<PlayerStats>> GetPlayerStatsAsync()
+    public async Task<List<PlayerStats>> GetPlayerStatsAsync(string sportEventId)
     {
-        var sportEventId = "sr:sport_event:50850045";
-        var response = await _httpClient.GetAsync($"sport_events/{sportEventId}/summary?api_key={_apiKey}");
+        var url = $"sport_events/{sportEventId}/summary?api_key={_apiKey}";
+
+        var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
@@ -295,7 +312,9 @@ public class SportradarApiClient : ISportradarApiClient
 
     public async Task<List<Standing>> GetStandingsAsync()
     {
-        var response = await _httpClient.GetAsync($"seasons/{_currentSeason}/standings?api_key={_apiKey}");
+        var url = $"seasons/{_currentSeason}/standings?api_key={_apiKey}";
+
+        var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
