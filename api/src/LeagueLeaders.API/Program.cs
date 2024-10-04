@@ -2,10 +2,15 @@ using LeagueLeaders.API.Middleware;
 using LeagueLeaders.Application.Leaderboard;
 using LeagueLeaders.Application.Schedule;
 using LeagueLeaders.Application.Teams;
-using LeagueLeaders.Infrastructure;
+using LeagueLeaders.Infrastructure.Clients.SportradarApi;
+using LeagueLeaders.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using AspNetCore.Swagger.Themes;
+using Polly;
+using Polly.Extensions.Http;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +55,24 @@ builder.Services.AddCors(options =>
     });
 });
 
+static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+{
+    return HttpPolicyExtensions
+        .HandleTransientHttpError()
+        .OrResult(msg => msg.StatusCode == HttpStatusCode.NotFound)
+        .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+}
+
+builder.Services.AddHttpClient<ISportradarApiClient, SportradarApiClient>(client =>
+{
+    client.BaseAddress = new Uri("https://api.sportradar.com/soccer/trial/v4/eu/");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+})
+    .SetHandlerLifetime(TimeSpan.FromMinutes(5))
+    .AddPolicyHandler(GetRetryPolicy());
+
+builder.Services.Configure<SportradarSettings>(builder.Configuration.GetSection("Sportradar"));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -58,7 +81,7 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(ModernStyle.Dark);
 }
 
 app.UseHttpsRedirection();
@@ -68,3 +91,5 @@ app.MapControllers();
 app.MapGet("/", () => "Hello from League Leaders API!");
 
 app.Run();
+
+public partial class Program { }

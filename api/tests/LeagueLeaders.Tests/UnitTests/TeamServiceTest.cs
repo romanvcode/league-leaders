@@ -3,7 +3,7 @@ using FluentAssertions.Execution;
 using LeagueLeaders.Application;
 using LeagueLeaders.Application.Teams;
 using LeagueLeaders.Domain;
-using LeagueLeaders.Infrastructure;
+using LeagueLeaders.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace LeagueLeaders.Tests.UnitTests;

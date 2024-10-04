@@ -1,5 +1,5 @@
 ﻿using LeagueLeaders.Domain;
-using LeagueLeaders.Infrastructure;
+using LeagueLeaders.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq.Expressions;
