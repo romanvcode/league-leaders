@@ -8,6 +8,7 @@ public class Team
     public string? Country { get; set; }
     public string? Stadium { get; set; }
     public string? Manager { get; set; }
+    public int SportradarId { get; set; }
 
     public List<Player> Players { get; set; } = new List<Player>();
 }

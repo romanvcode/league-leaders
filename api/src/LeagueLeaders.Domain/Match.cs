@@ -11,6 +11,7 @@ public class Match
     public int RefereeId { get; set; }
     public int HomeTeamScore { get; set; }
     public int AwayTeamScore { get; set; }
+    public int SportradarId { get; set; }
 
     public Stage Stage { get; set; } = null!;
     public Team HomeTeam { get; set; } = null!;

@@ -7,4 +7,5 @@ public class Venue
     public string? City { get; set; }
     public string? Country { get; set; }
     public int? Capacity { get; set; }
+    public int SportradarId { get; set; }
 }
