@@ -10,6 +10,7 @@ public class Player
     public int? Height { get; set; }
     public string? Nationality { get; set; }
     public DateOnly? DateOfBirth { get; set; }
+    public int SportradarId { get; set; }
 
     public Team Team { get; set; } = null!;
 }
