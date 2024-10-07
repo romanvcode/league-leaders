@@ -42,10 +42,12 @@ public class ApiDataSyncBackgroundWorker : BackgroundService
         try
         {
             await _syncService.SyncDataAsync();
+            await _syncService.LogApiDataSyncResultAsync(true);
             _logger.LogInformation("API sync completed successfully.");
         }
         catch (Exception ex)
         {
+            await _syncService.LogApiDataSyncResultAsync(false, ex.Message);
             _logger.LogError(ex, "Error occurred while syncing API data.");
         }
     }
