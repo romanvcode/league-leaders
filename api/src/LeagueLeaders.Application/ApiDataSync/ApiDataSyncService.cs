@@ -2,6 +2,7 @@
 using LeagueLeaders.Infrastructure.Clients.SportradarApi;
 using LeagueLeaders.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace LeagueLeaders.Application.ApiDataSync;
 
@@ -9,18 +10,26 @@ public class ApiDataSyncService : IApiDataSyncService
 {
     private readonly LeagueLeadersDbContext _context;
     private readonly ISportradarApiClient _sportradarApiClient;
-    private readonly string _competitionPrefix = "sr:competition:";
-    private readonly string _seasonPrefix = "sr:season:";
-    private readonly string _competitorPrefix = "sr:competitor:";
-    private readonly string _playerPrefix = "sr:player:";
-    private readonly string _venuePrefix = "sr:venue:";
-    private readonly string _refereePrefix = "sr:referee:";
-    private readonly string _sportEventPrefix = "sr:sport_event:";
+    private readonly string _competitionPrefix;
+    private readonly string _seasonPrefix;
+    private readonly string _competitorPrefix;
+    private readonly string _venuePrefix;
+    private readonly string _refereePrefix;
+    private readonly string _sportEventPrefix;
 
-    public ApiDataSyncService(LeagueLeadersDbContext context, ISportradarApiClient sportradarApiClient)
+    public ApiDataSyncService(
+        LeagueLeadersDbContext context, 
+        ISportradarApiClient sportradarApiClient,
+        IOptions<SportradarSettings> options)
     {
         _context = context;
         _sportradarApiClient = sportradarApiClient;
+        _competitionPrefix = options.Value.CompetitionPrefix;
+        _seasonPrefix = options.Value.SeasonPrefix;
+        _competitorPrefix = options.Value.CompetitorPrefix;
+        _venuePrefix = options.Value.VenuePrefix;
+        _refereePrefix = options.Value.RefereePrefix;
+        _sportEventPrefix = options.Value.SportEventPrefix;
     }
 
     public async Task SyncDataAsync()
