@@ -32,6 +32,20 @@ public class ApiDataSyncService : IApiDataSyncService
         _sportEventPrefix = options.Value.SportEventPrefix;
     }
 
+    public async Task LogApiDataSyncResultAsync(bool status, string? errorMessage = null)
+    {
+        var log = new ApiDataSyncLog
+        {
+            Source = "Sportradar API",
+            SyncTime = DateTime.UtcNow,
+            IsSuccess = status,
+            ErrorMessage = errorMessage
+        };
+
+        await _context.ApiDataSyncLogs.AddAsync(log);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task SyncDataAsync()
     {
         var srCompetition = await _sportradarApiClient.GetCompetitionAsync();
