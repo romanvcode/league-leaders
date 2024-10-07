@@ -3,9 +3,9 @@ using LeagueLeaders.Infrastructure.Clients.SportradarApi;
 using LeagueLeaders.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace LeagueLeaders.Application;
+namespace LeagueLeaders.Application.ApiDataSync;
 
-public class ApiDataSyncService
+public class ApiDataSyncService : IApiDataSyncService
 {
     private readonly LeagueLeadersDbContext _context;
     private readonly ISportradarApiClient _sportradarApiClient;
