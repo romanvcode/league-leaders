@@ -10,6 +10,7 @@ public class LeagueLeadersDbContext : DbContext
     {
     }
 
+    public DbSet<ApiDataSyncLog> ApiDataSyncLogs { get; set; }
     public DbSet<Competition> Competitions { get; set; }
     public DbSet<Season> Seasons { get; set; }
     public DbSet<Stage> Stages { get; set; }
