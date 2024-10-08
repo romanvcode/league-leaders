@@ -4,6 +4,14 @@ GO
 USE ChampionsLeagueDB;
 GO
 
+CREATE TABLE SyncLogs (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Client NVARCHAR(100) NOT NULL,
+    SyncTime DATETIME NOT NULL,
+    Status NVARCHAR(50) NOT NULL,
+    Reason NVARCHAR(1000)
+);
+
 CREATE TABLE Competitions (
     Id INT PRIMARY KEY IDENTITY(1,1),
     Name NVARCHAR(100) NOT NULL,
