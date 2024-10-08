@@ -33,11 +33,11 @@ public class ApiDataSyncBackgroundWorker : BackgroundService
         try
         {
             await _syncService.SyncDataAsync();
-            await _syncService.LogApiDataSyncResultAsync(true);
+            await _syncService.ReportSuccessfulSyncronizationAsync();
         }
         catch (Exception ex)
         {
-            await _syncService.LogApiDataSyncResultAsync(false, ex.Message);
+            await _syncService.ReportFailedSyncronizationAsync(ex.Message);
         }
     }
 }

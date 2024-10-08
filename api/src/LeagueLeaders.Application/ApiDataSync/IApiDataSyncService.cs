@@ -2,6 +2,7 @@
 
 public interface IApiDataSyncService
 {
-    Task LogApiDataSyncResultAsync(bool isSuccess, string? errorMessage = null);
+    Task ReportSuccessfulSyncronizationAsync();
+    Task ReportFailedSyncronizationAsync(string reason);
     Task SyncDataAsync();
 }
