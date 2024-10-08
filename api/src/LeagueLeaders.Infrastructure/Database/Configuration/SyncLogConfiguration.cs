@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LeagueLeaders.Infrastructure.Database.Configuration;
 
-public class ApiDataSyncConfiguration : IEntityTypeConfiguration<ApiDataSyncLog>
+public class SyncLogConfiguration : IEntityTypeConfiguration<SyncLog>
 {
-    public void Configure(EntityTypeBuilder<ApiDataSyncLog> builder)
+    public void Configure(EntityTypeBuilder<SyncLog> builder)
     {
         builder.ToTable("ApiDataSyncLogs");
         builder.HasKey(a => a.Id);

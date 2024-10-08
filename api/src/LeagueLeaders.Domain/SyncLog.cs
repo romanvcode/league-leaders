@@ -1,6 +1,6 @@
 ﻿namespace LeagueLeaders.Domain;
 
-public class ApiDataSyncLog
+public class SyncLog
 {
     public int Id { get; set; }
     public string Source { get; set; }

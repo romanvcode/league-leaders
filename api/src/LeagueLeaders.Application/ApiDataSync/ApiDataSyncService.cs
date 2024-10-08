@@ -34,20 +34,20 @@ public class ApiDataSyncService : IApiDataSyncService
 
     public async Task ReportSuccessfulSyncronizationAsync()
     {
-        var log = new ApiDataSyncLog
+        var log = new SyncLog
         {
             Source = "Sportradar API",
             SyncTime = DateTime.UtcNow,
             IsSuccess = true,
         };
 
-        await _context.ApiDataSyncLogs.AddAsync(log);
+        await _context.SyncLogs.AddAsync(log);
         await _context.SaveChangesAsync();
     }
 
     public async Task ReportFailedSyncronizationAsync(string reason)
     {
-        var log = new ApiDataSyncLog
+        var log = new SyncLog
         {
             Source = "Sportradar API",
             SyncTime = DateTime.UtcNow,
@@ -55,7 +55,7 @@ public class ApiDataSyncService : IApiDataSyncService
             ErrorMessage = reason,
         };
 
-        await _context.ApiDataSyncLogs.AddAsync(log);
+        await _context.SyncLogs.AddAsync(log);
         await _context.SaveChangesAsync();
     }
 
