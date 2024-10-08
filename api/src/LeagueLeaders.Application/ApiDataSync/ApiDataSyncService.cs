@@ -32,11 +32,11 @@ public class ApiDataSyncService : IApiDataSyncService
         _sportEventPrefix = options.Value.SportEventPrefix;
     }
 
-    public async Task ReportSuccessfulSyncronizationAsync()
+    public async Task ReportSuccessfulSyncronizationAsync(string client)
     {
         var log = new SyncLog
         {
-            Client = "Sportradar API",
+            Client = client,
             SyncTime = DateTime.UtcNow,
             Status = "Successful",
         };
@@ -45,11 +45,11 @@ public class ApiDataSyncService : IApiDataSyncService
         await _context.SaveChangesAsync();
     }
 
-    public async Task ReportFailedSyncronizationAsync(string reason)
+    public async Task ReportFailedSyncronizationAsync(string client, string reason)
     {
         var log = new SyncLog
         {
-            Client = "Sportradar API",
+            Client = client,
             SyncTime = DateTime.UtcNow,
             Status = "Failed",
             Reason = reason,

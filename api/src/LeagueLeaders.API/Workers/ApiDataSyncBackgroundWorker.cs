@@ -33,11 +33,11 @@ public class ApiDataSyncBackgroundWorker : BackgroundService
         try
         {
             await _syncService.SyncDataAsync();
-            await _syncService.ReportSuccessfulSyncronizationAsync();
+            await _syncService.ReportSuccessfulSyncronizationAsync("Spertradar API");
         }
         catch (Exception ex)
         {
-            await _syncService.ReportFailedSyncronizationAsync(ex.Message);
+            await _syncService.ReportFailedSyncronizationAsync("Spertradar API", ex.Message);
         }
     }
 }
