@@ -36,9 +36,9 @@ public class ApiDataSyncService : IApiDataSyncService
     {
         var log = new SyncLog
         {
-            Source = "Sportradar API",
+            Client = "Sportradar API",
             SyncTime = DateTime.UtcNow,
-            IsSuccess = true,
+            Status = "Successful",
         };
 
         await _context.SyncLogs.AddAsync(log);
@@ -49,10 +49,10 @@ public class ApiDataSyncService : IApiDataSyncService
     {
         var log = new SyncLog
         {
-            Source = "Sportradar API",
+            Client = "Sportradar API",
             SyncTime = DateTime.UtcNow,
-            IsSuccess = false,
-            ErrorMessage = reason,
+            Status = "Failed",
+            Reason = reason,
         };
 
         await _context.SyncLogs.AddAsync(log);

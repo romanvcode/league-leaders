@@ -10,9 +10,9 @@ public class SyncLogConfiguration : IEntityTypeConfiguration<SyncLog>
     {
         builder.ToTable("ApiDataSyncLogs");
         builder.HasKey(a => a.Id);
-        builder.Property(a => a.Source).HasMaxLength(100).IsRequired();
+        builder.Property(a => a.Client).HasMaxLength(100).IsRequired();
         builder.Property(a => a.SyncTime).IsRequired();
-        builder.Property(a => a.IsSuccess).IsRequired();
-        builder.Property(a => a.ErrorMessage).HasMaxLength(1000);
+        builder.Property(a => a.Status).IsRequired();
+        builder.Property(a => a.Reason).HasMaxLength(1000);
     }
 }
