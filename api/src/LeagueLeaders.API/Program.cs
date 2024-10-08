@@ -16,12 +16,6 @@ using LeagueLeaders.API.Workers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var logger = LoggerFactory.Create(config =>
-{
-    config.AddConsole();
-    config.AddConfiguration(builder.Configuration.GetSection("Logging"));
-}).CreateLogger("Program");
-
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -64,7 +58,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy(ILogger logger)
+static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
 {
     return HttpPolicyExtensions
         .HandleTransientHttpError()
@@ -72,7 +66,7 @@ static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy(ILogger logger)
         .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
         onRetry: (outcome, timespan, retryAttempt, context) =>
             {
-                logger.LogWarning($"Retry {retryAttempt} after {timespan.Seconds} seconds.");
+                Console.WriteLine("Retry {RetryAttempt} after {RetryTimer} seconds.", retryAttempt, timespan.Seconds);
             }
         );
 }
@@ -83,7 +77,7 @@ builder.Services.AddHttpClient<ISportradarApiClient, SportradarApiClient>(client
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 })
     .SetHandlerLifetime(TimeSpan.FromMinutes(5))
-    .AddPolicyHandler(GetRetryPolicy(logger));
+    .AddPolicyHandler(GetRetryPolicy());
 
 builder.Services.AddHostedService<ApiDataSyncBackgroundWorker>();
 
