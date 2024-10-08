@@ -11,6 +11,8 @@ using AspNetCore.Swagger.Themes;
 using Polly;
 using Polly.Extensions.Http;
 using System.Net;
+using LeagueLeaders.Application.ApiDataSync;
+using LeagueLeaders.API.Workers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +47,7 @@ builder.Services.AddDbContext<LeagueLeadersDbContext>(options =>
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
+builder.Services.AddScoped<IApiDataSyncService, ApiDataSyncService>();
 builder.Services.AddScoped<ExceptionHandlingMiddleware>();
 
 builder.Services.AddCors(options =>
@@ -60,7 +63,12 @@ static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
     return HttpPolicyExtensions
         .HandleTransientHttpError()
         .OrResult(msg => msg.StatusCode == HttpStatusCode.NotFound)
-        .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+        .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+        onRetry: (outcome, timespan, retryAttempt, context) =>
+            {
+                Console.WriteLine("Retry {RetryAttempt} after {RetryTimer} seconds.", retryAttempt, timespan.Seconds);
+            }
+        );
 }
 
 builder.Services.AddHttpClient<ISportradarApiClient, SportradarApiClient>(client =>
@@ -71,7 +79,10 @@ builder.Services.AddHttpClient<ISportradarApiClient, SportradarApiClient>(client
     .SetHandlerLifetime(TimeSpan.FromMinutes(5))
     .AddPolicyHandler(GetRetryPolicy());
 
+builder.Services.AddHostedService<ApiDataSyncBackgroundWorker>();
+
 builder.Services.Configure<SportradarSettings>(builder.Configuration.GetSection("Sportradar"));
+builder.Services.Configure<SyncSettings>(builder.Configuration.GetSection("Sync"));
 
 var app = builder.Build();
 
