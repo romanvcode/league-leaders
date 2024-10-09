@@ -22,6 +22,16 @@ This Web API provides a platform to manage Champions League results and next mat
 
 - [.NET SDK (version 8)](https://dotnet.microsoft.com/download)
 
+---
+
+## Clients Integration
+
+### Data API
+
+- [Sportradar docs](.docs/Sportradar.md)
+
+---
+
 ## Running the API
 
 ### Development

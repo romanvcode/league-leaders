@@ -8,7 +8,7 @@ public class SyncLogConfiguration : IEntityTypeConfiguration<SyncLog>
 {
     public void Configure(EntityTypeBuilder<SyncLog> builder)
     {
-        builder.ToTable("ApiDataSyncLogs");
+        builder.ToTable("SyncLogs");
         builder.HasKey(a => a.Id);
         builder.Property(a => a.Client).HasMaxLength(100).IsRequired();
         builder.Property(a => a.SyncTime).IsRequired();

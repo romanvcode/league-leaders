@@ -1,4 +1,4 @@
-# The Soccer API Data Mapping
+# The Sportradar API Data Mapping
 
 ## API Base URL
 
@@ -36,7 +36,7 @@ Make sure to provide your API key as query parameter: `?api_key=YOUR_API_KEY`.
 | ----------------------- | ----------------------- |
 | `Id`                    | `id`                    |
 | `Name`                  | `name`                  |
-| `Region`                | `category.country_code` |
+| `Region`                | `category.country_name` |
 
 ---
 
@@ -50,7 +50,7 @@ Make sure to provide your API key as query parameter: `?api_key=YOUR_API_KEY`.
 | `Name`                  | `name`           |
 | `StartAt`               | `start_date`     |
 | `EndAt`                 | `end_date`       |
-| `CompetitionId`         | `competition_Id` |
+| `CompetitionId`         | `competition_id` |
 
 ---
 
@@ -99,7 +99,7 @@ Make sure to provide your API key as query parameter: `?api_key=YOUR_API_KEY`.
 
 | **LeagueLeaders Field** | **API Field**             |
 | ----------------------- | ------------------------- |
-| `Country`               | `competitor.country_code` |
+| `Country`               | `competitor.country_name` |
 | `Stadium`               | `venue.name`              |
 | `Manager`               | `manager.name`            |
 
@@ -136,7 +136,7 @@ Make sure to provide your API key as query parameter: `?api_key=YOUR_API_KEY`.
 | `Id`                    | `id`           |
 | `Name`                  | `name`         |
 | `City`                  | `city_name`    |
-| `Country`               | `country_code` |
+| `Country`               | `country_name` |
 | `Capacity`              | `capacity`     |
 
 ---
@@ -157,11 +157,10 @@ Make sure to provide your API key as query parameter: `?api_key=YOUR_API_KEY`.
 
 - Take data from `/sport_events/{urn_sport_event}/summary` for each `statistics` take for each in `totals.competitors`
 
-| **LeagueLeaders Field** | **API Field**            |
-| ----------------------- | ------------------------ |
-| `Id`                    | `{id}_{urn_sport_event}` |
-| `TeamId`                | `id`                     |
-| `MatchId`               | `{urn_sport_event}`      |
+| **LeagueLeaders Field** | **API Field**       |
+| ----------------------- | ------------------- |
+| `TeamId`                | `id`                |
+| `MatchId`               | `{urn_sport_event}` |
 
 - Next, take `statistics`
 
@@ -188,11 +187,10 @@ Make sure to provide your API key as query parameter: `?api_key=YOUR_API_KEY`.
 
 - Next, take for each in `players`
 
-| **LeagueLeaders Field** | **API Field**            |
-| ----------------------- | ------------------------ |
-| `Id`                    | `{id}_{urn_sport_event}` |
-| `PlayerId`              | `id`                     |
-| `MatchId`               | `{urn_sport_event}`      |
+| **LeagueLeaders Field** | **API Field**       |
+| ----------------------- | ------------------- |
+| `PlayerId`              | `id`                |
+| `MatchId`               | `{urn_sport_event}` |
 
 - Next, take `statistics`
 
@@ -211,22 +209,20 @@ Make sure to provide your API key as query parameter: `?api_key=YOUR_API_KEY`.
 
 - Take data from `seasons/{urn_season}/standings` for each in `groups`
 
-| **LeagueLeaders Field** | **API Field**                  |
-| ----------------------- | ------------------------------ |
-| `Id`                    | `+ {stage.order}_{urn_season}` |
-| `StageId`               | `stage.order`                  |
+| **LeagueLeaders Field** | **API Field** |
+| ----------------------- | ------------- |
+| `StageId`               | `stage.order` |
 
 - Next, for each in `standings`
 
-| **LeagueLeaders Field** | **API Field**        |
-| ----------------------- | -------------------- |
-| `Id`                    | `{competitor_id}_ +` |
-| `TeamId`                | `competitor.id`      |
-| `Points`                | `points`             |
-| `Place`                 | `rank`               |
-| `MatchesPlayed`         | `played`             |
-| `Wins`                  | `win`                |
-| `Draws`                 | `draw`               |
-| `Losses`                | `loss`               |
-| `GoalsFor`              | `goals_for`          |
-| `GoalsAgainst`          | `goals_against`      |
+| **LeagueLeaders Field** | **API Field**   |
+| ----------------------- | --------------- |
+| `TeamId`                | `competitor.id` |
+| `Points`                | `points`        |
+| `Place`                 | `rank`          |
+| `MatchesPlayed`         | `played`        |
+| `Wins`                  | `win`           |
+| `Draws`                 | `draw`          |
+| `Losses`                | `loss`          |
+| `GoalsFor`              | `goals_for`     |
+| `GoalsAgainst`          | `goals_against` |
