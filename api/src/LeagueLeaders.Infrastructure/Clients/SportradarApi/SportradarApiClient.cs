@@ -92,7 +92,7 @@ public class SportradarApiClient : ISportradarApiClient
         var competitorsResponse = JsonSerializer.Deserialize<CompetitorsResponse>(content, _options)
             ?? throw new SportradarBadResponseException($"Failed to deserialize competitors response: {content}.");
 
-        var competitors = competitorsResponse.SeasonCompetitors;
+        var competitors = competitorsResponse.SeasonCompetitors.Take(1).ToList();
         foreach (var competitor in competitors)
         {
             url = $"competitors/{competitor.Id}/profile?api_key={_apiKey}";
