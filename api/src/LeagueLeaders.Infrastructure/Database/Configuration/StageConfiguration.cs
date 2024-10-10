@@ -12,6 +12,7 @@ public class StageConfiguration : IEntityTypeConfiguration<Stage>
         builder.HasKey(s => s.Id);
         builder.Property(s => s.Name).HasMaxLength(100).IsRequired();
         builder.Property(s => s.Type).HasMaxLength(50);
+        builder.Property(s => s.StageOrder);
         builder
             .HasMany(s => s.Matches)
             .WithOne(s => s.Stage)
