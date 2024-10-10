@@ -73,9 +73,9 @@ public class ApiDataSyncService : IApiDataSyncService
 
         var dbReferees = await SyncRefereesAsync();
 
-        var dbMatches = await GetMatchesAsync(dbStages, dbTeams, dbVenues, dbReferees);
-
         var dbPlayers = await SyncPlayersAsync(dbTeams);
+
+        var dbMatches = await SyncMatchesAsync(dbStages, dbTeams, dbVenues, dbReferees);
 
         await SyncStatsAsync(dbPlayers, dbTeams, dbMatches);
 
@@ -87,19 +87,23 @@ public class ApiDataSyncService : IApiDataSyncService
     private async Task<Competition> SyncCompetitionAsync()
     {
         var srCompetition = await _sportradarApiClient.GetCompetitionAsync();
+
         var dbCompetition = await _context.Competitions.FirstOrDefaultAsync
-            (competiton => $"{_competitionPrefix}{competiton.SportradarId}" == srCompetition.Id);
+            (competiton => _competitionPrefix + competiton.SportradarId == srCompetition.Id);
 
         if (dbCompetition == null)
         {
-            await _context.Competitions.AddAsync(new Competition
+            dbCompetition = new Competition
             {
                 Name = srCompetition.Name,
-                SportradarId = int.Parse(srCompetition.Id.ToLower().Replace(_competitionPrefix, ""))
-            });
+                Region = srCompetition.Region,
+                SportradarId = int.Parse(srCompetition.Id.ToLower().Replace(_competitionPrefix, "")),
+            };
+
+            await _context.Competitions.AddAsync(dbCompetition);
         }
 
-        return _context.Competitions.Single();
+        return await _context.Competitions.SingleAsync();
     }
 
     private async Task<List<Season>> SyncSeasonsAsync(Competition dbCompetition)
@@ -107,22 +111,24 @@ public class ApiDataSyncService : IApiDataSyncService
         var srSeasons = await _sportradarApiClient.GetSeasonsAsync();
         var dbSeasons = await _context.Seasons.ToListAsync();
 
+        var seasons = new List<Season>();
         foreach (var srSeason in srSeasons)
         {
-            var dbSeason = dbSeasons.FirstOrDefault(season => $"{_seasonPrefix}{season.SportradarId}" == srSeason.Id);
+            var dbSeason = dbSeasons.FirstOrDefault(season => _seasonPrefix + season.SportradarId == srSeason.Id);
 
             if (dbSeason == null)
             {
-                await _context.Seasons.AddAsync(new Season
+                seasons.Add(new Season
                 {
                     Name = srSeason.Name,
-                    SportradarId = int.Parse(srSeason.Id.ToLower().Replace(_competitionPrefix, "")),
+                    SportradarId = int.Parse(srSeason.Id.ToLower().Replace(_seasonPrefix, "")),
                     CompetitionId = dbCompetition?.Id ?? 0,
                     StartAt = DateTime.Parse(srSeason.StartDate),
                     EndAt = DateTime.Parse(srSeason.EndDate),
                 });
             }
         }
+        await _context.Seasons.AddRangeAsync(seasons);
 
         return await _context.Seasons.ToListAsync();
     }
@@ -131,22 +137,25 @@ public class ApiDataSyncService : IApiDataSyncService
     {
         var srStages = await _sportradarApiClient.GetStagesAsync();
         var dbStages = await _context.Stages.ToListAsync();
+
+        var stages = new List<Stage>();
         foreach (var srStage in srStages)
         {
-            var dbStage = dbStages.FirstOrDefault(stage => stage.Order == srStage.Order);
+            var dbStage = dbStages.FirstOrDefault(stage => stage.StageOrder == srStage.Order);
 
             if (dbStage == null)
             {
-                await _context.Stages.AddAsync(new Stage
+                stages.Add(new Stage
                 {
                     Name = srStage.Phase,
                     Type = srStage.Type,
                     SeasonId = dbSeasons.FirstOrDefault(season =>
-                        $"{_seasonPrefix}{season.SportradarId}" == srStage.SeasonId)?.Id ?? 0,
-                    Order = srStage.Order,
+                        _seasonPrefix + season.SportradarId == srStage.SeasonId)?.Id ?? 0,
+                    StageOrder = srStage.Order,
                 });
             }
         }
+        await _context.Stages.AddRangeAsync(stages);
 
         return await _context.Stages.ToListAsync();
     }
@@ -156,13 +165,15 @@ public class ApiDataSyncService : IApiDataSyncService
         var srCompetitors = await _sportradarApiClient.GetCompetitorsAsync();
         var dbTeams = await _context.Teams.ToListAsync();
 
+        var teams = new List<Team>();
         foreach (var srCompetitor in srCompetitors)
         {
-            var dbTeam = dbTeams.FirstOrDefault(team => $"{_competitorPrefix}{team.SportradarId}" == srCompetitor.Id);
+            var dbTeam = dbTeams.FirstOrDefault(team => 
+                _competitorPrefix + team.SportradarId == srCompetitor.Id);
 
             if (dbTeam == null)
             {
-                await _context.Teams.AddAsync(new Team
+                teams.Add(new Team
                 {
                     Name = srCompetitor.Name,
                     Abbreviation = srCompetitor.Abbreviation,
@@ -173,6 +184,7 @@ public class ApiDataSyncService : IApiDataSyncService
                 });
             }
         }
+        await _context.Teams.AddRangeAsync(teams);
 
         return await _context.Teams.ToListAsync();
     }
@@ -182,13 +194,15 @@ public class ApiDataSyncService : IApiDataSyncService
         var srVenues = await _sportradarApiClient.GetVenuesAsync();
         var dbVenues = await _context.Venues.ToListAsync();
 
+        var venues = new List<Venue>();
         foreach (var srVenue in srVenues)
         {
-            var dbVenue = dbVenues.FirstOrDefault(venue => $"{_venuePrefix}{venue.SportradarId}" == srVenue.Id);
+            var dbVenue = dbVenues.FirstOrDefault(venue => 
+                _venuePrefix + venue.SportradarId == srVenue.Id);
 
             if (dbVenue == null)
             {
-                await _context.Venues.AddAsync(new Venue
+                venues.Add(new Venue
                 {
                     Name = srVenue.Name,
                     City = srVenue.CityName,
@@ -198,6 +212,7 @@ public class ApiDataSyncService : IApiDataSyncService
                 });
             }
         }
+        await _context.Venues.AddRangeAsync(venues);
 
         return await _context.Venues.ToListAsync();
     }
@@ -207,13 +222,15 @@ public class ApiDataSyncService : IApiDataSyncService
         var srReferees = await _sportradarApiClient.GetRefereesAsync();
         var dbReferees = await _context.Referees.ToListAsync();
 
+        var referees = new List<Referee>();
         foreach (var srReferee in srReferees)
         {
-            var dbReferee = dbReferees.FirstOrDefault(referee => $"{_refereePrefix}{referee.SportradarId}" == srReferee.Id);
+            var dbReferee = dbReferees.FirstOrDefault(referee => 
+                _refereePrefix + referee.SportradarId == srReferee.Id);
 
             if (dbReferee == null)
             {
-                await _context.Referees.AddAsync(new Referee
+                referees.Add(new Referee
                 {
                     Name = srReferee.Name,
                     Nationality = srReferee.Nationality,
@@ -221,40 +238,43 @@ public class ApiDataSyncService : IApiDataSyncService
                 });
             }
         }
+        await _context.Referees.AddRangeAsync(referees);
 
         return await _context.Referees.ToListAsync();
     }
 
-    public async Task<List<Match>> GetMatchesAsync(List<Stage> dbStages, List<Team> dbTeams, List<Venue> dbVenues, List<Referee> dbReferees)
+    public async Task<List<Match>> SyncMatchesAsync(List<Stage> dbStages, List<Team> dbTeams, List<Venue> dbVenues, List<Referee> dbReferees)
     {
         var srSportEvents = await _sportradarApiClient.GetSportEventsAsync();
         var dbMatches = await _context.Matches.ToListAsync();
 
+        var matches = new List<Match>();
         foreach (var srSportEvent in srSportEvents)
         {
-            var dbMatch = dbMatches.FirstOrDefault(match => $"{_sportEventPrefix}{match.SportradarId}" == srSportEvent.Id);
+            var dbMatch = dbMatches.FirstOrDefault(match => _sportEventPrefix + match.SportradarId == srSportEvent.Id);
 
             if (dbMatch == null)
             {
-                await _context.Matches.AddAsync(new Match
+                matches.Add(new Match
                 {
                     StageId = dbStages.FirstOrDefault(stage =>
-                        $"{_seasonPrefix}{stage.SeasonId}" == srSportEvent.Id)?.Id ?? 0,
+                        _seasonPrefix + stage.SeasonId == srSportEvent.Id)?.Id ?? 0,
                     HomeTeamId = dbTeams.FirstOrDefault(team =>
-                        $"{_competitorPrefix}{team.SportradarId}" == srSportEvent.HomeCompetitorId)?.Id ?? 0,
+                        _competitorPrefix + team.SportradarId == srSportEvent.HomeCompetitorId)?.Id ?? 0,
                     AwayTeamId = dbTeams.FirstOrDefault(team =>
-                        $"{_competitorPrefix}{team.SportradarId}" == srSportEvent.AwayCompetitorId)?.Id ?? 0,
+                        _competitorPrefix + team.SportradarId == srSportEvent.AwayCompetitorId)?.Id ?? 0,
                     Date = DateTime.Parse(srSportEvent.Date),
                     VenueId = dbVenues.FirstOrDefault(venue =>
-                        $"{_venuePrefix}{venue.SportradarId}" == srSportEvent.VenueId)?.Id ?? 0,
+                        _venuePrefix + venue.SportradarId == srSportEvent.VenueId)?.Id ?? 0,
                     RefereeId = dbReferees.FirstOrDefault(referee =>
-                        $"{_refereePrefix}{referee.SportradarId}" == srSportEvent.RefereeId)?.Id ?? 0,
+                        _refereePrefix + referee.SportradarId == srSportEvent.RefereeId)?.Id ?? 0,
                     HomeTeamScore = srSportEvent.HomeCompetitorScore,
                     AwayTeamScore = srSportEvent.AwayCompetitorScore,
                     SportradarId = int.Parse(srSportEvent.Id.ToLower().Replace(_sportEventPrefix, ""))
                 });
             }
         }
+        await _context.Matches.AddRangeAsync(matches);
 
         return await _context.Matches.ToListAsync();
     }
@@ -264,13 +284,14 @@ public class ApiDataSyncService : IApiDataSyncService
         var srPlayers = await _sportradarApiClient.GetPlayersAsync();
         var dbPlayers = await _context.Players.ToListAsync();
 
+        var players = new List<Player>();
         foreach (var srPlayer in srPlayers)
         {
             var dbPlayer = dbPlayers.FirstOrDefault(player => player.SportradarId == int.Parse(srPlayer.Id));
 
             if (dbPlayer == null)
             {
-                await _context.Players.AddAsync(new Player
+                players.Add(new Player
                 {
                     Name = srPlayer.Name,
                     Number = srPlayer.JerseyNumber,
@@ -279,13 +300,14 @@ public class ApiDataSyncService : IApiDataSyncService
                     Nationality = srPlayer.Nationality,
                     DateOfBirth = DateOnly.Parse(srPlayer.DateOfBirth),
                     TeamId = dbTeams.FirstOrDefault(team =>
-                        $"{_competitorPrefix}{team.SportradarId}" == srPlayer.CompetitorId)?.Id ?? 0,
+                        _competitorPrefix + team.SportradarId == srPlayer.CompetitorId)?.Id ?? 0,
                     SportradarId = int.Parse(srPlayer.Id.ToLower().Replace(_sportEventPrefix, ""))
                 });
             }
         }
+        await _context.Players.AddRangeAsync(players);
 
-        return await _context.Players.ToListAsync(); 
+        return await _context.Players.ToListAsync();
     }
 
     private async Task SyncStatsAsync(List<Player> dbPlayers, List<Team> dbTeams, List<Match> dbMatches)
@@ -298,6 +320,8 @@ public class ApiDataSyncService : IApiDataSyncService
             .Select(se => se.Id)
             .Take(10).ToList();
 
+        var teamStats = new List<TeamStat>();
+        var playerStats = new List<PlayerStat>();
         foreach (var sportEventId in lastTenMatchesSportradarIds)
         {
             var srCompetitorStats = await _sportradarApiClient.GetCompetitorStatsAsync(sportEventId);
@@ -307,18 +331,18 @@ public class ApiDataSyncService : IApiDataSyncService
             {
                 var dbTeamStat = dbTeamStats.FirstOrDefault(ts =>
                     ts.TeamId == dbTeams.FirstOrDefault(team =>
-                        $"{_competitorPrefix}{team.SportradarId}" == srCompetitorStat.TeamId)?.Id
+                        _competitorPrefix + team.SportradarId == srCompetitorStat.TeamId)?.Id
                     && ts.MatchId == dbMatches.FirstOrDefault(match =>
-                        $"{_sportEventPrefix}{match.SportradarId}" == sportEventId)?.Id);
+                        _sportEventPrefix + match.SportradarId == sportEventId)?.Id);
 
                 if (dbTeamStat == null)
                 {
-                    await _context.TeamStats.AddAsync(new TeamStat
+                    teamStats.Add(new TeamStat
                     {
                         MatchId = dbMatches.FirstOrDefault(match =>
-                            $"{_sportEventPrefix}{match.SportradarId}" == sportEventId)?.Id ?? 0,
+                            _sportEventPrefix + match.SportradarId == sportEventId)?.Id ?? 0,
                         TeamId = dbTeams.FirstOrDefault(team =>
-                            $"{_competitorPrefix}{team.SportradarId}" == srCompetitorStat.TeamId)?.Id ?? 0,
+                            _competitorPrefix + team.SportradarId == srCompetitorStat.TeamId)?.Id ?? 0,
                         Possession = srCompetitorStat.Possession,
                         Corners = srCompetitorStat.CornerKicks,
                         Offsides = srCompetitorStat.Offsides,
@@ -339,18 +363,18 @@ public class ApiDataSyncService : IApiDataSyncService
                         ps.PlayerId == dbPlayers.FirstOrDefault(player =>
                             player.SportradarId == int.Parse(srPlayerStat.PlayerId))?.Id
                         && ps.MatchId == dbMatches.FirstOrDefault(match =>
-                            $"{_sportEventPrefix}{match.SportradarId}" == sportEventId)?.Id);
+                            _sportEventPrefix + match.SportradarId == sportEventId)?.Id);
 
                     if (dbPlayerStat == null)
                     {
-                        await _context.PlayerStats.AddAsync(new PlayerStat
+                        playerStats.Add(new PlayerStat
                         {
                             MatchId = dbMatches.FirstOrDefault(match =>
-                                $"{_sportEventPrefix}{match.SportradarId}" == sportEventId)?.Id ?? 0,
+                                _sportEventPrefix + match.SportradarId == sportEventId)?.Id ?? 0,
                             PlayerId = dbPlayers.FirstOrDefault(player =>
                                 player.SportradarId == int.Parse(srPlayerStat.PlayerId))?.Id ?? 0,
                             TeamId = dbTeams.FirstOrDefault(team =>
-                                $"{_competitorPrefix}{team.SportradarId}" == srPlayerStat.CompetitorId)?.Id ?? 0,
+                                _competitorPrefix + team.SportradarId == srPlayerStat.CompetitorId)?.Id ?? 0,
                             Goals = srPlayerStat.GoalsScored,
                             Assists = srPlayerStat.Assists,
                             Shots = srPlayerStat.ShotsTotal,
@@ -362,6 +386,8 @@ public class ApiDataSyncService : IApiDataSyncService
                 }
             }
         }
+        await _context.TeamStats.AddRangeAsync(teamStats);
+        await _context.PlayerStats.AddRangeAsync(playerStats);
     }
 
     private async Task SyncStandingsAsync(List<Team> dbTeams, List<Stage> dbStages)
@@ -369,19 +395,20 @@ public class ApiDataSyncService : IApiDataSyncService
         var srStandings = await _sportradarApiClient.GetStandingsAsync();
         var dbStandings = await _context.Standings.ToListAsync();
 
+        var standings = new List<Standing>();
         foreach (var srStanding in srStandings)
         {
             var dbStanding = dbStandings.FirstOrDefault(standing =>
                 standing.TeamId == dbTeams.FirstOrDefault(team =>
-                    $"{_competitorPrefix}{team.SportradarId}" == srStanding.CompetitorId)?.Id);
+                    _competitorPrefix + team.SportradarId == srStanding.CompetitorId)?.Id);
 
             if (dbStanding == null)
             {
-                await _context.Standings.AddAsync(new Standing
+                standings.Add(new Standing
                 {
                     TeamId = dbTeams.FirstOrDefault(team =>
-                        $"{_competitorPrefix}{team.SportradarId}" == srStanding.CompetitorId)?.Id ?? 0,
-                    StageId = dbStages.FirstOrDefault(stage => srStanding.StageId == stage.Order)?.Id ?? 0,
+                        _competitorPrefix + team.SportradarId == srStanding.CompetitorId)?.Id ?? 0,
+                    StageId = dbStages.FirstOrDefault(stage => srStanding.StageId == stage.StageOrder)?.Id ?? 0,
                     Points = srStanding.Points,
                     Place = srStanding.Rank,
                     MatchesPlayed = srStanding.Played,
@@ -393,5 +420,6 @@ public class ApiDataSyncService : IApiDataSyncService
                 });
             }
         }
+        await _context.Standings.AddRangeAsync(standings);
     }
 }

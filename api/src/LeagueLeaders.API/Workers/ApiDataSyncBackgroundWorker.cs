@@ -5,14 +5,14 @@ namespace LeagueLeaders.API.Workers;
 
 public class ApiDataSyncBackgroundWorker : BackgroundService
 {
-    private readonly IApiDataSyncService _syncService;
+    private readonly IServiceScopeFactory _scopeFactory;
     private readonly SyncSettings _syncSettings;
 
     public ApiDataSyncBackgroundWorker(
-        IApiDataSyncService service, 
+        IServiceScopeFactory scopeFactory,
         IOptions<SyncSettings> options)
     {
-        _syncService = service;
+        _scopeFactory = scopeFactory;
         _syncSettings = options.Value;
     }
 
@@ -30,14 +30,22 @@ public class ApiDataSyncBackgroundWorker : BackgroundService
 
     private async Task PerformSyncDataAsync()
     {
-        try
+        using (var scope = _scopeFactory.CreateScope())
         {
-            await _syncService.SyncDataAsync();
-            await _syncService.ReportSuccessfulSyncronizationAsync("Spertradar API");
-        }
-        catch (Exception ex)
-        {
-            await _syncService.ReportFailedSyncronizationAsync("Spertradar API", ex.Message);
+            var _syncService = scope.ServiceProvider.GetRequiredService<IApiDataSyncService>();
+
+            try
+            {
+                Console.WriteLine("-------------Syncing data from Spertradar API...");
+                await _syncService.SyncDataAsync();
+                await _syncService.ReportSuccessfulSyncronizationAsync("Sportradar API");
+                Console.WriteLine("-------------Data synced successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"-------------Failed to sync data from Sportradar API. Reason: {ex.Message}");
+                await _syncService.ReportFailedSyncronizationAsync("Sportradar API", ex.Message);
+            }
         }
     }
 }
