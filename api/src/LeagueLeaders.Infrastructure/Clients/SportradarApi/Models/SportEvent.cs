@@ -8,7 +8,7 @@ public class SportEvent
     public string AwayCompetitorId { get; set; }
     public string Date { get; set; }
     public string VenueId { get; set; }
-    public string RefereeId { get; set; }
+    public string? RefereeId { get; set; }
     public int HomeCompetitorScore { get; set; }
     public int AwayCompetitorScore { get; set; }
 }

@@ -118,6 +118,39 @@ public class SportradarApiClient : ISportradarApiClient
         return competitors;
     }
 
+    public async Task<List<SportEvent>> GetSchedulesAsync()
+    {
+        var url = $"seasons/{_currentSeason}/schedules?api_key={_apiKey}";
+
+        var response = await _httpClient.GetAsync(url);
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+        var schedulesResponse = JsonSerializer.Deserialize<SchedulesResponse>(content, _options)
+            ?? throw new SportradarBadResponseException($"Failed to deserialize schedules response: {content}.");
+
+        var schedules = schedulesResponse.Schedules;
+        var sportEvents = new List<SportEvent>();
+
+        foreach (var schedule in schedules)
+        {
+            sportEvents.Add(new SportEvent
+            {
+                Id = schedule.SportEvent.Id,
+                StageId = schedule.SportEvent.SportEventContext.Stage.Order,
+                HomeCompetitorId = schedule.SportEvent.Competitors.Single(c => c.Qualifier == "home").Id,
+                AwayCompetitorId = schedule.SportEvent.Competitors.Single(c => c.Qualifier == "away").Id,
+                Date = schedule.SportEvent.StartTime,
+                RefereeId = null,
+                VenueId = schedule.SportEvent.Venue.Id,
+                HomeCompetitorScore = schedule.SportEventStatus.HomeScore ?? 0,
+                AwayCompetitorScore = schedule.SportEventStatus.AwayScore ?? 0
+            });
+        }
+
+        return sportEvents;
+    }
+
     public async Task<List<SportEvent>> GetSportEventsAsync()
     {
         var url = $"seasons/{_currentSeason}/summaries?api_key={_apiKey}";
