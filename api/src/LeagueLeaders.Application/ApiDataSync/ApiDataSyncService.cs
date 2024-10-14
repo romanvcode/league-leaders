@@ -250,8 +250,6 @@ public class ApiDataSyncService : IApiDataSyncService
 
             if (dbMatch == null)
             {
-                Console.WriteLine($"---{srSportEvent.Id}---{srSportEvent.Date}---{srSportEvent.StageId}---{srSportEvent.AwayCompetitorScore}");
-
                 matches.Add(new Match
                 {
                     StageId = dbStages.FirstOrDefault(stage => stage.StageOrder == srSportEvent.StageId)?.Id ?? 0,
@@ -283,7 +281,7 @@ public class ApiDataSyncService : IApiDataSyncService
         foreach (var srPlayer in srPlayers)
         {
             var dbPlayer = dbPlayers.FirstOrDefault(player => _playerPrefix + player.SportradarId == srPlayer.Id);
-            Console.WriteLine($"---{srPlayer.Id}---{srPlayer.Name}---{srPlayer.CompetitorId}---");
+
             if (dbPlayer == null)
             {
                 DateOnly.TryParse(srPlayer.DateOfBirth, out DateOnly dateOfBirth);
