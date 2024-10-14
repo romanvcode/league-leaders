@@ -26,12 +26,10 @@ public class MatchConfiguration : IEntityTypeConfiguration<Match>
         builder
             .HasOne(s => s.Venue)
             .WithMany()
-            .HasForeignKey(s => s.VenueId)
-            .IsRequired();
+            .HasForeignKey(s => s.VenueId);
         builder
             .HasOne(s => s.Referee)
             .WithMany()
-            .HasForeignKey(s => s.RefereeId)
-            .IsRequired();
+            .HasForeignKey(s => s.RefereeId);
     }
 }
