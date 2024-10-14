@@ -29,15 +29,7 @@ public class ScheduleService : IScheduleService
             .Include(m => m.Stage)
             .ToListAsync();
 
-        var currentStage = matches
-            .GroupBy(m => m.Stage)
-            .OrderByDescending(g => g.Key.Id)
-            .Select(g => g.Key)
-            .FirstOrDefault()
-            ?? throw new StageNotFoundException($"There is no stage which will run during current season: {currentSeason.Name}");
-
         var closestMatches = matches
-            .Where(m => m.StageId == currentStage.Id)
             .Where(m => m.Date > DateTime.UtcNow)
             .OrderBy(m => m.Date)
             .Take(5)
