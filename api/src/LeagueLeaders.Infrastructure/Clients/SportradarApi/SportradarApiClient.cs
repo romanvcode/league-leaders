@@ -63,12 +63,13 @@ public class SportradarApiClient : ISportradarApiClient
 
     public async Task<List<Stage>> GetStagesAsync()
     {
-        var url = $"seasons/{_currentSeason}/stages_groups_cup_rounds?api_key={_apiKey}";
+        var url = $"seasons/{_currentSeason}/info?api_key={_apiKey}";
 
         var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(content);
         var stageResponse = JsonSerializer.Deserialize<StagesResponse>(content, _options)
             ?? throw new SportradarBadResponseException($"Failed to deserialize stages response: {content}.");
 
@@ -92,7 +93,7 @@ public class SportradarApiClient : ISportradarApiClient
         var competitorsResponse = JsonSerializer.Deserialize<CompetitorsResponse>(content, _options)
             ?? throw new SportradarBadResponseException($"Failed to deserialize competitors response: {content}.");
 
-        var competitors = competitorsResponse.SeasonCompetitors.Take(1).ToList();
+        var competitors = competitorsResponse.SeasonCompetitors;
         foreach (var competitor in competitors)
         {
             url = $"competitors/{competitor.Id}/profile?api_key={_apiKey}";
@@ -103,6 +104,11 @@ public class SportradarApiClient : ISportradarApiClient
             var profileContent = await profileResponse.Content.ReadAsStringAsync();
             var profileData = JsonSerializer.Deserialize<CompetitorProfileResponse>(profileContent, _options)
                 ?? throw new SportradarBadResponseException($"Failed to deserialize profile response for competitor {competitor.Id}: {profileContent}.");
+
+            if (profileData == null || profileData.Competitor == null || profileData.Venue == null || profileData.Manager == null)
+            {
+                continue;
+            }
 
             competitor.Country = profileData.Competitor.Country;
             competitor.Stadium = profileData.Venue.Name;
@@ -162,26 +168,36 @@ public class SportradarApiClient : ISportradarApiClient
             ?? throw new SportradarBadResponseException($"Failed to deserialize players response: {content}.");
 
         var competitorPlayers = playersResponse.SeasonCompetitorPlayers;
-        var players = new List<Player>();
 
+        var players = new List<Player>();
         foreach (var competitorPlayer in competitorPlayers)
         {
-            if (competitorPlayer.Players == null)
+            if (competitorPlayer == null || competitorPlayer.Players == null)
             {
                 continue;
             }
 
-            players.AddRange(competitorPlayer.Players.Select(p => new Player
+            var competitorId = competitorPlayer.Id;
+
+            foreach (var player in competitorPlayer.Players)
             {
-                Id = p.Id,
-                CompetitorId = competitorPlayer.Id,
-                Name = p.Name,
-                Type = p.Type,
-                JerseyNumber = p.JerseyNumber,
-                Height = p.Height,
-                Nationality = p.Nationality,
-                DateOfBirth = p.DateOfBirth
-            }));
+                if (player == null)
+                {
+                    continue;
+                }
+
+                players.Add(new Player
+                {
+                    Id = player.Id,
+                    CompetitorId = competitorId,
+                    Name = player.Name,
+                    Type = player.Type,
+                    JerseyNumber = player.JerseyNumber,
+                    Height = player.Height,
+                    DateOfBirth = player.DateOfBirth,
+                    Nationality = player.Nationality,
+                });
+            }
         }
 
         return players;
@@ -201,6 +217,11 @@ public class SportradarApiClient : ISportradarApiClient
         var venues = new List<Venue>();
         foreach (var venue in venuesResponse.Summaries.Select(s => s.SportEvent.Venue))
         {
+            if (venues.Any(v => v.Id == venue.Id))
+            {
+                continue;
+            }
+
             venues.Add(new Venue
             {
                 Id = venue.Id,
@@ -234,6 +255,12 @@ public class SportradarApiClient : ISportradarApiClient
             }
 
             var referee = se.SportEventConditions.Referees.Single(r => r.Type == "main_referee");
+
+            if (referees.Any(r => r.Id == referee.Id))
+            {
+                continue;
+            }
+
             referees.Add(new Referee
             {
                 Id = referee.Id,
@@ -322,27 +349,27 @@ public class SportradarApiClient : ISportradarApiClient
             ?? throw new SportradarBadResponseException($"Failed to deserialize standings response: {content}.");
 
         var standings = new List<Standing>();
-        foreach (var standing in standingsResponse.Standings)
+        var totalStandings = standingsResponse.Standings.SingleOrDefault(s => s.Type == "total")
+            ?? throw new SportradarBadResponseException($"Failed to find total standings");
+
+        foreach (var group in totalStandings.Groups)
         {
-            foreach (var group in standing.Groups)
+            var stageId = group.Stage.Order;
+            foreach (var competitorStanding in group.Standings)
             {
-                var stageId = group.Stage.Order;
-                foreach (var competitorStanding in group.Standings)
+                standings.Add(new Standing
                 {
-                    standings.Add(new Standing
-                    {
-                        StageId = stageId,
-                        CompetitorId = competitorStanding.Competitor.Id,
-                        Points = competitorStanding.Points,
-                        Rank = competitorStanding.Rank,
-                        Played = competitorStanding.Played,
-                        Win = competitorStanding.Win,
-                        Draw = competitorStanding.Draw,
-                        Loss = competitorStanding.Loss,
-                        GoalsFor = competitorStanding.GoalsFor,
-                        GoalsAgainst = competitorStanding.GoalsAgainst
-                    });
-                }
+                    StageId = stageId,
+                    CompetitorId = competitorStanding.Competitor.Id,
+                    Points = competitorStanding.Points,
+                    Rank = competitorStanding.Rank,
+                    Played = competitorStanding.Played,
+                    Win = competitorStanding.Win,
+                    Draw = competitorStanding.Draw,
+                    Loss = competitorStanding.Loss,
+                    GoalsFor = competitorStanding.GoalsFor,
+                    GoalsAgainst = competitorStanding.GoalsAgainst
+                });
             }
         }
 
