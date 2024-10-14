@@ -93,11 +93,17 @@ public class ApiDataSyncService : IApiDataSyncService
 
         if (dbCompetition == null)
         {
+            var isParsed = int.TryParse(srCompetition.Id.ToLower().Replace(_competitionPrefix, ""), out int sportradarId);
+            if (!isParsed)
+            {
+                throw new InvalidOperationException("Sportradar ID is not in the correct format.");
+            }
+
             dbCompetition = new Competition
             {
                 Name = srCompetition.Name,
                 Region = srCompetition.Region,
-                SportradarId = int.Parse(srCompetition.Id.ToLower().Replace(_competitionPrefix, "")),
+                SportradarId = sportradarId
             };
 
             await _context.Competitions.AddAsync(dbCompetition);
@@ -118,13 +124,25 @@ public class ApiDataSyncService : IApiDataSyncService
 
             if (dbSeason == null)
             {
+                var isSportradaarIdParsed = int.TryParse(srSeason.Id.ToLower().Replace(_seasonPrefix, ""), out int sportradarId);
+                if (!isSportradaarIdParsed)
+                    throw new InvalidOperationException("Sportradar ID is not in the correct format.");
+
+                var isStartDateParsed = DateTime.TryParse(srSeason.StartDate, out DateTime startDate);
+                if (!isStartDateParsed)
+                    throw new InvalidOperationException("Start date is not in the correct format.");
+
+                var isEndDateParsed = DateTime.TryParse(srSeason.EndDate, out DateTime endDate);
+                if (!isEndDateParsed)
+                    throw new InvalidOperationException("End date is not in the correct format.");
+
                 seasons.Add(new Season
                 {
                     Name = srSeason.Name,
-                    SportradarId = int.Parse(srSeason.Id.ToLower().Replace(_seasonPrefix, "")),
+                    SportradarId = sportradarId,
                     CompetitionId = dbCompetition?.Id ?? 0,
-                    StartAt = DateTime.Parse(srSeason.StartDate),
-                    EndAt = DateTime.Parse(srSeason.EndDate),
+                    StartAt = startDate,
+                    EndAt = endDate
                 });
             }
         }
@@ -144,12 +162,16 @@ public class ApiDataSyncService : IApiDataSyncService
 
             if (dbStage == null)
             {
+                var seasonId = dbSeasons.FirstOrDefault(season => 
+                    _seasonPrefix + season.SportradarId == srStage.SeasonId)?.Id ?? 0;
+                if (seasonId == 0)
+                    throw new InvalidOperationException("Season ID is not found.");
+
                 stages.Add(new Stage
                 {
                     Name = srStage.Phase,
                     Type = srStage.Type,
-                    SeasonId = dbSeasons.FirstOrDefault(season =>
-                        _seasonPrefix + season.SportradarId == srStage.SeasonId)?.Id ?? 0,
+                    SeasonId = seasonId,
                     StageOrder = srStage.Order,
                 });
             }
@@ -171,6 +193,10 @@ public class ApiDataSyncService : IApiDataSyncService
 
             if (dbTeam == null)
             {
+                var isSportradarIdParsed = int.TryParse(srCompetitor.Id.ToLower().Replace(_competitorPrefix, ""), out int sportradarId);
+                if (!isSportradarIdParsed)
+                    throw new InvalidOperationException("Sportradar ID is not in the correct format.");
+
                 teams.Add(new Team
                 {
                     Name = srCompetitor.Name,
@@ -178,7 +204,7 @@ public class ApiDataSyncService : IApiDataSyncService
                     Country = srCompetitor.Country,
                     Manager = srCompetitor.Manager,
                     Stadium = srCompetitor.Stadium,
-                    SportradarId = int.Parse(srCompetitor.Id.ToLower().Replace(_competitorPrefix, ""))
+                    SportradarId = sportradarId
                 });
             }
         }
@@ -199,13 +225,17 @@ public class ApiDataSyncService : IApiDataSyncService
 
             if (dbVenue == null)
             {
+                var isSportradarIdParsed = int.TryParse(srVenue.Id.ToLower().Replace(_venuePrefix, ""), out int sportradarId);
+                if (!isSportradarIdParsed)
+                    throw new InvalidOperationException("Sportradar ID is not in the correct format.");
+
                 venues.Add(new Venue
                 {
                     Name = srVenue.Name,
                     City = srVenue.CityName,
                     Capacity = srVenue.Capacity,
                     Country = srVenue.CountryName,
-                    SportradarId = int.Parse(srVenue.Id.ToLower().Replace(_venuePrefix, ""))
+                    SportradarId = sportradarId
                 });
             }
         }
@@ -226,11 +256,15 @@ public class ApiDataSyncService : IApiDataSyncService
 
             if (dbReferee == null)
             {
+                var isSportradarIdParsed = int.TryParse(srReferee.Id.ToLower().Replace(_refereePrefix, ""), out int sportradarId);
+                if (!isSportradarIdParsed)
+                    throw new InvalidOperationException("Sportradar ID is not in the correct format.");
+
                 referees.Add(new Referee
                 {
                     Name = srReferee.Name,
                     Nationality = srReferee.Nationality,
-                    SportradarId = int.Parse(srReferee.Id.ToLower().Replace(_refereePrefix, ""))
+                    SportradarId = sportradarId
                 });
             }
         }
@@ -246,25 +280,55 @@ public class ApiDataSyncService : IApiDataSyncService
         var matches = new List<Match>();
         foreach (var srSportEvent in srSportEvents)
         {
-            var dbMatch = dbMatches.FirstOrDefault(match => _sportEventPrefix + match.SportradarId == srSportEvent.Id);
+            var dbMatch = dbMatches.FirstOrDefault(match => 
+                _sportEventPrefix + match.SportradarId == srSportEvent.Id);
 
             if (dbMatch == null)
             {
+                var isSportradarIdParsed = int.TryParse(srSportEvent.Id.ToLower().Replace(_sportEventPrefix, ""), out int sportradarId);
+                if (!isSportradarIdParsed)
+                    throw new InvalidOperationException("Sportradar ID is not in the correct format.");
+
+                var isDateParsed = DateTime.TryParse(srSportEvent.Date, out DateTime date);
+                if (!isDateParsed)
+                    throw new InvalidOperationException("Date is not in the correct format.");
+
+                var stageId = dbStages.FirstOrDefault(stage =>
+                    stage.StageOrder == srSportEvent.StageId)?.Id ?? 0;
+                if (stageId == 0)
+                    throw new InvalidOperationException("Stage ID is not found.");
+
+                var homeTeamId = dbTeams.FirstOrDefault(team =>
+                    _competitorPrefix + team.SportradarId == srSportEvent.HomeCompetitorId)?.Id ?? 0;
+                if (homeTeamId == 0)
+                    throw new InvalidOperationException("Home team ID is not found.");
+
+                var awayTeamId = dbTeams.FirstOrDefault(team =>
+                    _competitorPrefix + team.SportradarId == srSportEvent.AwayCompetitorId)?.Id ?? 0;
+                if (awayTeamId == 0)
+                    throw new InvalidOperationException("Away team ID is not found.");
+
+                var venueId = dbVenues.FirstOrDefault(venue =>
+                    _venuePrefix + venue.SportradarId == srSportEvent.VenueId)?.Id ?? 0;
+                if (venueId == 0)
+                    throw new InvalidOperationException("Venue ID is not found.");
+
+                var refereeId = dbReferees.FirstOrDefault(referee =>
+                    _refereePrefix + referee.SportradarId == srSportEvent.RefereeId)?.Id ?? 0;
+                if (refereeId == 0)
+                    throw new InvalidOperationException("Referee ID is not found.");
+
                 matches.Add(new Match
                 {
-                    StageId = dbStages.FirstOrDefault(stage => stage.StageOrder == srSportEvent.StageId)?.Id ?? 0,
-                    HomeTeamId = dbTeams.FirstOrDefault(team =>
-                        _competitorPrefix + team.SportradarId == srSportEvent.HomeCompetitorId)?.Id ?? 0,
-                    AwayTeamId = dbTeams.FirstOrDefault(team =>
-                        _competitorPrefix + team.SportradarId == srSportEvent.AwayCompetitorId)?.Id ?? 0,
-                    Date = DateTime.Parse(srSportEvent.Date),
-                    VenueId = dbVenues.FirstOrDefault(venue =>
-                        _venuePrefix + venue.SportradarId == srSportEvent.VenueId)?.Id ?? 0,
-                    RefereeId = dbReferees.FirstOrDefault(referee =>
-                        _refereePrefix + referee.SportradarId == srSportEvent.RefereeId)?.Id ?? 0,
+                    StageId = stageId,
+                    HomeTeamId = homeTeamId,
+                    AwayTeamId = awayTeamId,
+                    Date = date,
+                    VenueId = venueId,
+                    RefereeId = refereeId,
                     HomeTeamScore = srSportEvent.HomeCompetitorScore,
                     AwayTeamScore = srSportEvent.AwayCompetitorScore,
-                    SportradarId = int.Parse(srSportEvent.Id.ToLower().Replace(_sportEventPrefix, ""))
+                    SportradarId = sportradarId
                 });
             }
         }
@@ -284,7 +348,16 @@ public class ApiDataSyncService : IApiDataSyncService
 
             if (dbPlayer == null)
             {
-                DateOnly.TryParse(srPlayer.DateOfBirth, out DateOnly dateOfBirth);
+                var isDateParsed = DateOnly.TryParse(srPlayer.DateOfBirth, out DateOnly dateOfBirth);
+                if (!isDateParsed)
+                    throw new InvalidOperationException("Date of birth is not in the correct format.");
+
+                var teamId = dbTeams.FirstOrDefault(team =>
+                    _competitorPrefix + team.SportradarId == srPlayer.CompetitorId)?.Id ?? 0;
+
+                var isSportradarIdParsed = int.TryParse(srPlayer.Id.ToLower().Replace(_playerPrefix, ""), out int sportradarId);
+                if (!isSportradarIdParsed)
+                    throw new InvalidOperationException("Sportradar ID is not in the correct format.");
 
                 players.Add(new Player
                 {
@@ -294,9 +367,8 @@ public class ApiDataSyncService : IApiDataSyncService
                     Height = srPlayer.Height,
                     Nationality = srPlayer.Nationality,
                     DateOfBirth = dateOfBirth,
-                    TeamId = dbTeams.FirstOrDefault(team =>
-                        _competitorPrefix + team.SportradarId == srPlayer.CompetitorId)?.Id ?? 0,
-                    SportradarId = int.Parse(srPlayer.Id.ToLower().Replace(_playerPrefix, ""))
+                    TeamId = teamId,
+                    SportradarId = sportradarId
                 });
             }
         }
@@ -331,12 +403,20 @@ public class ApiDataSyncService : IApiDataSyncService
 
                 if (dbTeamStat == null)
                 {
+                    var matchId = dbMatches.FirstOrDefault(match =>
+                        _sportEventPrefix + match.SportradarId == sportEventId)?.Id ?? 0;
+                    if (matchId == 0)
+                        throw new InvalidOperationException("Match ID is not found.");
+
+                    var teamId = dbTeams.FirstOrDefault(team =>
+                        _competitorPrefix + team.SportradarId == srCompetitorStat.TeamId)?.Id ?? 0;
+                    if (teamId == 0)
+                        throw new InvalidOperationException("Team ID is not found.");
+
                     teamStats.Add(new TeamStat
                     {
-                        MatchId = dbMatches.FirstOrDefault(match =>
-                            _sportEventPrefix + match.SportradarId == sportEventId)?.Id ?? 0,
-                        TeamId = dbTeams.FirstOrDefault(team =>
-                            _competitorPrefix + team.SportradarId == srCompetitorStat.TeamId)?.Id ?? 0,
+                        MatchId = matchId,
+                        TeamId = teamId,
                         Possession = srCompetitorStat.Possession,
                         Corners = srCompetitorStat.CornerKicks,
                         Offsides = srCompetitorStat.Offsides,
@@ -361,14 +441,24 @@ public class ApiDataSyncService : IApiDataSyncService
 
                     if (dbPlayerStat == null)
                     {
+                        var matchId = dbMatches.FirstOrDefault(match =>
+                            _sportEventPrefix + match.SportradarId == sportEventId)?.Id ?? 0;
+                        if (matchId == 0)
+                            throw new InvalidOperationException("Match ID is not found.");
+
+                        var playerId = dbPlayers.FirstOrDefault(player =>
+                            _playerPrefix + player.SportradarId == srPlayerStat.PlayerId)?.Id ?? 0;
+                        if (playerId == 0)
+                            throw new InvalidOperationException("Player ID is not found.");
+
+                        var teamId = dbTeams.FirstOrDefault(team =>
+                            _competitorPrefix + team.SportradarId == srPlayerStat.CompetitorId)?.Id ?? 0;
+
                         playerStats.Add(new PlayerStat
                         {
-                            MatchId = dbMatches.FirstOrDefault(match =>
-                                _sportEventPrefix + match.SportradarId == sportEventId)?.Id ?? 0,
-                            PlayerId = dbPlayers.FirstOrDefault(player =>
-                                _playerPrefix + player.SportradarId == srPlayerStat.PlayerId)?.Id ?? 0,
-                            TeamId = dbTeams.FirstOrDefault(team =>
-                                _competitorPrefix + team.SportradarId == srPlayerStat.CompetitorId)?.Id ?? 0,
+                            MatchId = matchId,
+                            PlayerId = playerId,
+                            TeamId = teamId,
                             Goals = srPlayerStat.GoalsScored,
                             Assists = srPlayerStat.Assists,
                             Shots = srPlayerStat.ShotsTotal,
@@ -399,11 +489,20 @@ public class ApiDataSyncService : IApiDataSyncService
 
             if (dbStanding == null)
             {
+                var teamId = dbTeams.FirstOrDefault(team =>
+                    _competitorPrefix + team.SportradarId == srStanding.CompetitorId)?.Id ?? 0;
+                if (teamId == 0)
+                    throw new InvalidOperationException("Team ID is not found.");
+
+                var stageId = dbStages.FirstOrDefault(stage =>
+                    srStanding.StageId == stage.StageOrder)?.Id ?? 0;
+                if (stageId == 0)
+                    throw new InvalidOperationException("Stage ID is not found.");
+
                 standings.Add(new Standing
                 {
-                    TeamId = dbTeams.FirstOrDefault(team =>
-                        _competitorPrefix + team.SportradarId == srStanding.CompetitorId)?.Id ?? 0,
-                    StageId = dbStages.FirstOrDefault(stage => srStanding.StageId == stage.StageOrder)?.Id ?? 0,
+                    TeamId = teamId,
+                    StageId = stageId,
                     Points = srStanding.Points,
                     Place = srStanding.Rank,
                     MatchesPlayed = srStanding.Played,
