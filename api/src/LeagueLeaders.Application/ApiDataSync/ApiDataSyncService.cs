@@ -80,6 +80,7 @@ public class ApiDataSyncService : IApiDataSyncService
         await SyncRefereesAsync();
         await SyncPlayersAsync(teams);
         await SyncMatchesAsync(stages, teams, venues, referees);
+        await SyncScheduleAsync(stages, teams, venues, referees);
         await SyncStatsAsync(players, teams, matches);
         await SyncStandingsAsync(teams, stages);
     }
@@ -326,6 +327,63 @@ public class ApiDataSyncService : IApiDataSyncService
                     Date = date,
                     VenueId = venueId,
                     RefereeId = refereeId,
+                    HomeTeamScore = srSportEvent.HomeCompetitorScore,
+                    AwayTeamScore = srSportEvent.AwayCompetitorScore,
+                    SportradarId = sportradarId
+                });
+            }
+        }
+        await _context.Matches.AddRangeAsync(matches);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task SyncScheduleAsync(List<Stage> dbStages, List<Team> dbTeams, List<Venue> dbVenues, List<Referee> dbReferees)
+    {
+        var srSportEvents = await _sportradarApiClient.GetSchedulesAsync();
+        var dbMatches = await _context.Matches.AsNoTracking().ToListAsync();
+
+        var matches = new List<Match>();
+        foreach (var srSportEvent in srSportEvents)
+        {
+            var dbMatch = dbMatches.FirstOrDefault(match =>
+                _sportEventPrefix + match.SportradarId == srSportEvent.Id);
+
+            if (dbMatch == null)
+            {
+                var isSportradarIdParsed = int.TryParse(srSportEvent.Id.ToLower().Replace(_sportEventPrefix, ""), out int sportradarId);
+                if (!isSportradarIdParsed)
+                    throw new InvalidOperationException("Sportradar ID is not in the correct format.");
+
+                var isDateParsed = DateTime.TryParse(srSportEvent.Date, out DateTime date);
+                if (!isDateParsed)
+                    throw new InvalidOperationException("Date is not in the correct format.");
+
+                var stageId = dbStages.FirstOrDefault(stage =>
+                    stage.StageOrder == srSportEvent.StageId)?.Id ?? 0;
+                if (stageId == 0)
+                    throw new InvalidOperationException("Stage ID is not found.");
+
+                var homeTeamId = dbTeams.FirstOrDefault(team =>
+                    _competitorPrefix + team.SportradarId == srSportEvent.HomeCompetitorId)?.Id ?? 0;
+                if (homeTeamId == 0)
+                    throw new InvalidOperationException("Home team ID is not found.");
+
+                var awayTeamId = dbTeams.FirstOrDefault(team =>
+                    _competitorPrefix + team.SportradarId == srSportEvent.AwayCompetitorId)?.Id ?? 0;
+                if (awayTeamId == 0)
+                    throw new InvalidOperationException("Away team ID is not found.");
+
+                var venueId = dbVenues.FirstOrDefault(venue =>
+                    _venuePrefix + venue.SportradarId == srSportEvent.VenueId)?.Id;
+
+                matches.Add(new Match
+                {
+                    StageId = stageId,
+                    HomeTeamId = homeTeamId,
+                    AwayTeamId = awayTeamId,
+                    Date = date,
+                    VenueId = venueId,
+                    RefereeId = null,
                     HomeTeamScore = srSportEvent.HomeCompetitorScore,
                     AwayTeamScore = srSportEvent.AwayCompetitorScore,
                     SportradarId = sportradarId
