@@ -69,7 +69,6 @@ public class SportradarApiClient : ISportradarApiClient
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
-        Console.WriteLine(content);
         var stageResponse = JsonSerializer.Deserialize<StagesResponse>(content, _options)
             ?? throw new SportradarBadResponseException($"Failed to deserialize stages response: {content}.");
 
