@@ -20,6 +20,9 @@ public class PredictionService : IPredictionService
             .FirstOrDefaultAsync(m => m.Id == matchId)
             ?? throw new MatchesNotFoundException($"Match with Id {matchId} not found.");
 
+        if (match.Date < DateTime.UtcNow)
+            throw new MatchAlreadyStartedException($"Match with Id {matchId} already started.");
+
         var predictionForMatchExists = await _context.Predictions
             .AsNoTracking()
             .AnyAsync(p => p.MatchId == matchId);
