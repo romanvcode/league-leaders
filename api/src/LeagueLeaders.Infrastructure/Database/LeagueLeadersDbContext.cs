@@ -23,6 +23,7 @@ public class LeagueLeadersDbContext : DbContext
     public DbSet<PlayerStat> PlayerStats { get; set; }
     public DbSet<TeamStat> TeamStats { get; set; }
     public DbSet<Standing> Standings { get; set; }
+    public DbSet<Prediction> Predictions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
