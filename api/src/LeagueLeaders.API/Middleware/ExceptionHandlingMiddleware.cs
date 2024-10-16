@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using LeagueLeaders.Application;
 using LeagueLeaders.Application.Leaderboard;
+using LeagueLeaders.Application.Predictions;
 using LeagueLeaders.Application.Schedule;
 using LeagueLeaders.Application.Teams;
 
@@ -52,6 +53,16 @@ public class ExceptionHandlingMiddleware : IMiddleware
         catch (PlayersNotFoundException ex)
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
+            await context.Response.WriteAsync(ex.Message);
+        }
+        catch (MatchAlreadyStartedException ex)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await context.Response.WriteAsync(ex.Message);
+        }
+        catch (PredictionAlreadyExistsException ex)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsync(ex.Message);
         }
         catch (Exception ex)
