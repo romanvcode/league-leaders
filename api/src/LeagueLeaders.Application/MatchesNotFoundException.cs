@@ -1,4 +1,4 @@
-﻿namespace LeagueLeaders.Application.Teams;
+﻿namespace LeagueLeaders.Application;
 
 public class MatchesNotFoundException : Exception
 {
