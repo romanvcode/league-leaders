@@ -7,10 +7,10 @@ public class Match
     public int HomeTeamId { get; set; }
     public int AwayTeamId { get; set; }
     public DateTime Date { get; set; }
-    public int VenueId { get; set; }
-    public int RefereeId { get; set; }
-    public int HomeTeamScore { get; set; }
-    public int AwayTeamScore { get; set; }
+    public int? VenueId { get; set; }
+    public int? RefereeId { get; set; }
+    public int HomeTeamScore { get; set; } = 0;
+    public int AwayTeamScore { get; set; } = 0;
     public int SportradarId { get; set; }
 
     public Stage Stage { get; set; } = null!;

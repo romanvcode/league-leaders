@@ -63,12 +63,7 @@ static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
     return HttpPolicyExtensions
         .HandleTransientHttpError()
         .OrResult(msg => msg.StatusCode == HttpStatusCode.NotFound)
-        .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-        onRetry: (outcome, timespan, retryAttempt, context) =>
-            {
-                Console.WriteLine("Retry {RetryAttempt} after {RetryTimer} seconds.", retryAttempt, timespan.Seconds);
-            }
-        );
+        .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 }
 
 builder.Services.AddHttpClient<ISportradarApiClient, SportradarApiClient>(client =>

@@ -1,7 +1,7 @@
 ﻿namespace LeagueLeaders.Infrastructure.Clients.SportradarApi.Responses;
 
 internal record StandingsResponse(List<StandingResponse> Standings);
-internal record StandingResponse(List<GroupResponse> Groups);
+internal record StandingResponse(string Type, List<GroupResponse> Groups);
 internal record GroupResponse(StageResponse Stage, List<CompetitorWithStandingsResponse> Standings);
 internal record CompetitorWithStandingsResponse(
     CompetitorResponse Competitor,

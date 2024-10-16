@@ -8,6 +8,7 @@ public class LeagueLeadersDbContext : DbContext
 {
     public LeagueLeadersDbContext(DbContextOptions<LeagueLeadersDbContext> options) : base(options)
     {
+
     }
 
     public DbSet<SyncLog> SyncLogs { get; set; }
@@ -26,5 +27,10 @@ public class LeagueLeadersDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.EnableDetailedErrors();
     }
 }
