@@ -1,6 +1,8 @@
 ﻿using LeagueLeaders.Application.Predictions;
 using LeagueLeaders.Domain;
 using Microsoft.AspNetCore.Mvc;
+using FluentValidation;
+using LeagueLeaders.API.Validators;
 
 namespace LeagueLeaders.API.Controllers;
 [Route("api/[controller]")]
@@ -17,6 +19,22 @@ public class PredictionController : ControllerBase
     [HttpPost]
     public async Task<Prediction> CreatePredictionAsync(int matchId, int homeTeamScore, int awayTeamScore)
     {
+        var validator = new MatchIdValidor();
+        var validationResult = validator.Validate(matchId);
+
+        if (!validationResult.IsValid) {
+            throw new ValidationException(validationResult.Errors);
+        }
+
+        var scoreValidator = new ScoreValidator();
+        var homeScoreValidationResult = scoreValidator.Validate(homeTeamScore);
+        var awayScoreValidationResult = scoreValidator.Validate(awayTeamScore);
+
+        if (!homeScoreValidationResult.IsValid || !awayScoreValidationResult.IsValid)
+        {
+            throw new ValidationException(homeScoreValidationResult.Errors);
+        }
+
         var prediction = await _predictionService.CreatePredictionAsync(matchId, homeTeamScore, awayTeamScore);
 
         return prediction;
