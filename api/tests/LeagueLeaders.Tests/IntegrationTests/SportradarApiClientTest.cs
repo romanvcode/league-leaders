@@ -571,7 +571,8 @@ public class SportradarApiClientTest
                                 }
                             ]
                         }
-                    ]
+                    ],
+                    ""type"": ""total""
                 }
             ]
         }";
