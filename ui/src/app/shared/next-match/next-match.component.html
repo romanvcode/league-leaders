@@ -13,7 +13,10 @@
         <p class="font-medium suppercase">
           {{ timeLeft$ | async }}
         </p>
-        <mat-card class="bg-green-light-important text-white">
+        <mat-card
+          class="bg-green-light-important text-white hover:cursor-pointer"
+          (click)="onNextMatchClick()"
+        >
           <mat-card-header>
             <p class="font-medium">
               {{ match.homeTeam.name }} vs {{ match.awayTeam.name }}

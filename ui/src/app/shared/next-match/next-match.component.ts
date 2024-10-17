@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
 import { Match } from '@core/models/match.model';
 import { ApiService } from '@core/services/api.service';
+import { PredictionFormComponent } from '@shared/prediction-form/prediction-form.component';
 import { interval, map, Observable, Subject, takeUntil } from 'rxjs';
 import { NextMatchCountdown } from './next-match-countdown.model';
 
@@ -16,13 +18,23 @@ import { NextMatchCountdown } from './next-match-countdown.model';
 export class NextMatchComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
+  nextMatch: Match | null = null;
   nextMatch$: Subject<Match> = new Subject<Match>();
   timeLeft$: Observable<string> = new Observable<string>();
 
   error: string | null = null;
   isError = false;
 
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    private dialog: MatDialog
+  ) {}
+
+  onNextMatchClick(): void {
+    this.dialog.open(PredictionFormComponent, {
+      data: this.nextMatch,
+    });
+  }
 
   ngOnInit(): void {
     this.apiService
@@ -32,6 +44,7 @@ export class NextMatchComponent implements OnInit, OnDestroy {
         next: (matches) => {
           const nextMatch = matches[0];
           this.nextMatch$.next(nextMatch);
+          this.nextMatch = nextMatch;
 
           const matchDateEpoch = new Date(nextMatch.date).getTime();
 
