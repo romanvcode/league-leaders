@@ -35,11 +35,6 @@ public class ExceptionHandlingMiddleware : IMiddleware
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             await context.Response.WriteAsync(ex.Message);
         }
-        catch (StageNotFoundException ex)
-        {
-            context.Response.StatusCode = StatusCodes.Status404NotFound;
-            await context.Response.WriteAsync(ex.Message);
-        }
         catch (StandingsNotFoundException ex)
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
