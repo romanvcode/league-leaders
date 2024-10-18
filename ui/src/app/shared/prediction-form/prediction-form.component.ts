@@ -54,12 +54,10 @@ export class PredictionFormComponent {
         .createPrediction(this.matchId, this.homeTeamScore, this.awayTeamScore)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
-          next: (prediction) => {
-            console.log('Prediction Created', prediction);
+          next: () => {
             this.dialogRef.close();
           },
           error: (error) => {
-            console.error('Failed to create prediction', error.error);
             this.errorMessage = error.error;
             this.isError = true;
           },
