@@ -35,7 +35,7 @@ describe('StandingTableComponent', () => {
   });
 
   it('should not render #table on error', () => {
-    component.error = 'error';
+    component.isError = true;
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement;

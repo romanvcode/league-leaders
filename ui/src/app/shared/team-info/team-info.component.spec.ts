@@ -30,7 +30,7 @@ describe('TeamInfoComponent', () => {
   });
 
   it('should not render #team-info on error', () => {
-    component.error = 'error';
+    component.isError = true;
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement;

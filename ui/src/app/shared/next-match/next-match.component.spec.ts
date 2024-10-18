@@ -32,7 +32,7 @@ describe('NextMatchComponent', () => {
   });
 
   it('should not render #next-match on error', () => {
-    component.error = 'error';
+    component.isError = true;
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement;
