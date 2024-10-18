@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Match } from '@core/models/match.model';
+import { Prediction } from '@core/models/prediction.model';
 import { Team } from '@core/models/team.model';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
@@ -38,5 +39,17 @@ export class ApiService {
     return this.httpClient.get<Team[]>(
       `${this.apiUrl}/teams?searchTerm=${searchTerm}`
     );
+  }
+
+  createPrediction(
+    matchId: number,
+    homeTeamScore: number,
+    awayTeamScore: number
+  ): Observable<Prediction> {
+    return this.httpClient.post<Prediction>(`${this.apiUrl}/predictions`, {
+      matchId,
+      homeTeamScore,
+      awayTeamScore,
+    });
   }
 }
