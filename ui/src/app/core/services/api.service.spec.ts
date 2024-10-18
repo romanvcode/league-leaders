@@ -9,7 +9,7 @@ describe('ApiService', () => {
   let service: ApiService;
 
   beforeEach(() => {
-    httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+    httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post']);
     service = new ApiService(httpClientSpy);
   });
 
@@ -207,6 +207,40 @@ describe('ApiService', () => {
     httpClientSpy.get.and.returnValue(throwError(() => expectedError));
 
     service.getTeamsBySearchTerm('Team').subscribe({
+      next: () => done.fail,
+      error: (error) => {
+        expect(error).toEqual(expectedError);
+        done();
+      },
+    });
+  });
+
+  it('#createPrediction should return expected prediction (HttpClient called once)', (done: DoneFn) => {
+    const expectedPrediction = {
+      id: 1,
+      matchId: 1,
+      homeTeamScore: 1,
+      awayTeamScore: 0,
+    };
+
+    httpClientSpy.post.and.returnValue(of(expectedPrediction));
+
+    service.createPrediction(1, 1, 0).subscribe({
+      next: (prediction) => {
+        expect(prediction).toEqual(expectedPrediction);
+        done();
+      },
+      error: done.fail,
+    });
+    expect(httpClientSpy.post.calls.count()).toBe(1);
+  });
+
+  it('#createPrediction should return an error when the server returns an error', (done: DoneFn) => {
+    const expectedError = new HttpErrorResponse({});
+
+    httpClientSpy.post.and.returnValue(throwError(() => expectedError));
+
+    service.createPrediction(1, 1, 0).subscribe({
       next: () => done.fail,
       error: (error) => {
         expect(error).toEqual(expectedError);
