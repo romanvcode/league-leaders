@@ -5,7 +5,7 @@ using FluentValidation;
 using LeagueLeaders.API.Validators;
 
 namespace LeagueLeaders.API.Controllers;
-[Route("api/[controller]")]
+[Route("api/predictions")]
 [ApiController]
 public class PredictionController : ControllerBase
 {
@@ -17,27 +17,18 @@ public class PredictionController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<Prediction> CreatePredictionAsync(int matchId, int homeTeamScore, int awayTeamScore)
+    public async Task<Prediction> CreatePredictionAsync(PredictionRequest predictionRequest)
     {
-        var validator = new MatchIdValidor();
-        var validationResult = validator.Validate(matchId);
+        var predictionValidator = new PredictionValidator();
+        await predictionValidator.ValidateAndThrowAsync(predictionRequest);
 
-        if (!validationResult.IsValid) {
-            throw new ValidationException(validationResult.Errors);
-        }
+        var matchId = predictionRequest.MatchId;
+        var homeTeamScore = predictionRequest.HomeTeamScore;
+        var awayTeamScore = predictionRequest.AwayTeamScore;
 
-        var scoreValidator = new ScoreValidator();
-        var homeScoreValidationResult = scoreValidator.Validate(homeTeamScore);
-        var awayScoreValidationResult = scoreValidator.Validate(awayTeamScore);
+        var createdPrediction = await _predictionService.CreatePredictionAsync(matchId, homeTeamScore, awayTeamScore);
 
-        if (!homeScoreValidationResult.IsValid || !awayScoreValidationResult.IsValid)
-        {
-            throw new ValidationException(homeScoreValidationResult.Errors);
-        }
-
-        var prediction = await _predictionService.CreatePredictionAsync(matchId, homeTeamScore, awayTeamScore);
-
-        return prediction;
+        return createdPrediction;
     }
 
     [HttpGet]
