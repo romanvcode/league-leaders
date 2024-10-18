@@ -2,24 +2,46 @@
   <p class="text-center text-2xl font-semibold">
     {{ data.homeTeam.name }} vs {{ data.awayTeam.name }}
   </p>
+
   <div class="flex justify-center gap-4">
-    <mat-form-field>
-      <label for="awayTeamScore">{{ data.homeTeam.name }}</label>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ data.homeTeam.name }}</mat-label>
       <input
         matInput
         type="number"
-        placeholder="HomeTeamScore"
+        name="homeTeamScore"
+        min="0"
+        placeholder="Home Team Score"
         [(ngModel)]="homeTeamScore"
       />
+      <mat-error *ngIf="homeTeamScore < 0">
+        Score must be a positive number.
+      </mat-error>
     </mat-form-field>
-    <mat-form-field>
-      <label for="awayTeamScore">{{ data.awayTeam.name }}</label>
-      <input matInput type="number" [(ngModel)]="awayTeamScore" />
+    <mat-form-field appearance="outline">
+      <mat-label>{{ data.awayTeam.name }}</mat-label>
+      <input
+        matInput
+        type="number"
+        name="awayTeamScore"
+        min="0"
+        placeholder="Away Team Score"
+        [(ngModel)]="awayTeamScore"
+      />
+      <mat-error *ngIf="awayTeamScore < 0">
+        Score must be a positive number.
+      </mat-error>
     </mat-form-field>
+  </div>
+
+  <div *ngIf="isError" class="text-center text-red-500 mt-2">
+    {{ errorMessage }}
   </div>
 </mat-dialog-content>
 
-<mat-dialog-actions>
-  <button mat-flat-button (click)="onSubmit()">Predict</button>
+<mat-dialog-actions align="end">
+  <button mat-flat-button [disabled]="!isValidForm()" (click)="onSubmit()">
+    Predict
+  </button>
   <button mat-raised-button (click)="dialogRef.close()">Cancel</button>
 </mat-dialog-actions>
