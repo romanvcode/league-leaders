@@ -41,6 +41,10 @@ export class ApiService {
     );
   }
 
+  getPredictions(): Observable<Prediction[]> {
+    return this.httpClient.get<Prediction[]>(`${this.apiUrl}/predictions`);
+  }
+  
   createPrediction(
     matchId: number,
     homeTeamScore: number,
