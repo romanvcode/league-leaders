@@ -26,8 +26,6 @@ export class PredictionsResultsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (prediction) => {
-          // eslint-disable-next-line no-debugger
-          debugger;
           this.predictions = prediction;
         },
         error: (err) => {
