@@ -1,4 +1,5 @@
-﻿using LeagueLeaders.Domain;
+﻿using LeagueLeaders.Application.Common.Constants;
+using LeagueLeaders.Domain;
 using LeagueLeaders.Infrastructure.Clients.SportradarApi;
 using LeagueLeaders.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
@@ -40,7 +41,7 @@ public class ApiDataSyncService : IApiDataSyncService
         {
             Client = client,
             SyncTime = DateTime.UtcNow,
-            Status = "Successful",
+            Status = SyncLogStatus.Success,
         };
 
         await _context.SyncLogs.AddAsync(log);
@@ -53,7 +54,7 @@ public class ApiDataSyncService : IApiDataSyncService
         {
             Client = client,
             SyncTime = DateTime.UtcNow,
-            Status = "Failed",
+            Status = SyncLogStatus.Failure,
             Reason = reason,
         };
 
@@ -63,24 +64,30 @@ public class ApiDataSyncService : IApiDataSyncService
 
     public async Task SyncDataAsync()
     {
-        var competition = await _context.Competitions.SingleAsync();
-        var seasons = await _context.Seasons.AsNoTracking().ToListAsync();
-        var stages = await _context.Stages.AsNoTracking().ToListAsync();
-        var teams = await _context.Teams.AsNoTracking().ToListAsync();
-        var venues = await _context.Venues.AsNoTracking().ToListAsync();
-        var referees = await _context.Referees.AsNoTracking().ToListAsync();
-        var players = await _context.Players.AsNoTracking().ToListAsync();
-        var matches = await _context.Matches.AsNoTracking().ToListAsync();
 
         await SyncCompetitionAsync();
+
+        var competition = await _context.Competitions.AsNoTracking().FirstAsync();
         await SyncSeasonsAsync(competition);
+
+        var seasons = await _context.Seasons.AsNoTracking().ToListAsync();
         await SyncStagesAsync(seasons);
+
         await SyncTeamsAsync();
         await SyncVenuesAsync();
         await SyncRefereesAsync();
+
+        var teams = await _context.Teams.AsNoTracking().ToListAsync();
         await SyncPlayersAsync(teams);
+
+        var stages = await _context.Stages.AsNoTracking().ToListAsync();
+        var venues = await _context.Venues.AsNoTracking().ToListAsync();
+        var referees = await _context.Referees.AsNoTracking().ToListAsync();
         await SyncMatchesAsync(stages, teams, venues, referees);
         await SyncScheduleAsync(stages, teams, venues, referees);
+
+        var players = await _context.Players.AsNoTracking().ToListAsync();
+        var matches = await _context.Matches.AsNoTracking().ToListAsync();
         await SyncStatsAsync(players, teams, matches);
         await SyncStandingsAsync(teams, stages);
     }
@@ -97,7 +104,7 @@ public class ApiDataSyncService : IApiDataSyncService
             var isParsed = int.TryParse(srCompetition.Id.ToLower().Replace(_competitionPrefix, ""), out int sportradarId);
             if (!isParsed)
             {
-                throw new InvalidOperationException("Sportradar ID is not in the correct format.");
+                throw new InvalidOperationException(ExceptionMessages.SportradarIdIncorrectFormat);
             }
 
             dbCompetition = new Competition
@@ -127,15 +134,15 @@ public class ApiDataSyncService : IApiDataSyncService
             {
                 var isSportradaarIdParsed = int.TryParse(srSeason.Id.ToLower().Replace(_seasonPrefix, ""), out int sportradarId);
                 if (!isSportradaarIdParsed)
-                    throw new InvalidOperationException("Sportradar ID is not in the correct format.");
+                    throw new InvalidOperationException(ExceptionMessages.SportradarIdIncorrectFormat);
 
                 var isStartDateParsed = DateTime.TryParse(srSeason.StartDate, out DateTime startDate);
                 if (!isStartDateParsed)
-                    throw new InvalidOperationException("Start date is not in the correct format.");
+                    throw new InvalidOperationException(ExceptionMessages.StartDateIncorrectFormat);
 
                 var isEndDateParsed = DateTime.TryParse(srSeason.EndDate, out DateTime endDate);
                 if (!isEndDateParsed)
-                    throw new InvalidOperationException("End date is not in the correct format.");
+                    throw new InvalidOperationException(ExceptionMessages.EndDateIncorrectFormat);
 
                 seasons.Add(new Season
                 {
@@ -166,7 +173,7 @@ public class ApiDataSyncService : IApiDataSyncService
                 var seasonId = dbSeasons.FirstOrDefault(season => 
                     _seasonPrefix + season.SportradarId == srStage.SeasonId)?.Id ?? 0;
                 if (seasonId == 0)
-                    throw new InvalidOperationException("Season ID is not found.");
+                    throw new InvalidOperationException(ExceptionMessages.SeasonIdNotFound);
 
                 stages.Add(new Stage
                 {
@@ -196,7 +203,7 @@ public class ApiDataSyncService : IApiDataSyncService
             {
                 var isSportradarIdParsed = int.TryParse(srCompetitor.Id.ToLower().Replace(_competitorPrefix, ""), out int sportradarId);
                 if (!isSportradarIdParsed)
-                    throw new InvalidOperationException("Sportradar ID is not in the correct format.");
+                    throw new InvalidOperationException(ExceptionMessages.SportradarIdIncorrectFormat);
 
                 teams.Add(new Team
                 {
@@ -228,7 +235,7 @@ public class ApiDataSyncService : IApiDataSyncService
             {
                 var isSportradarIdParsed = int.TryParse(srVenue.Id.ToLower().Replace(_venuePrefix, ""), out int sportradarId);
                 if (!isSportradarIdParsed)
-                    throw new InvalidOperationException("Sportradar ID is not in the correct format.");
+                    throw new InvalidOperationException(ExceptionMessages.SportradarIdIncorrectFormat);
 
                 venues.Add(new Venue
                 {
@@ -259,7 +266,7 @@ public class ApiDataSyncService : IApiDataSyncService
             {
                 var isSportradarIdParsed = int.TryParse(srReferee.Id.ToLower().Replace(_refereePrefix, ""), out int sportradarId);
                 if (!isSportradarIdParsed)
-                    throw new InvalidOperationException("Sportradar ID is not in the correct format.");
+                    throw new InvalidOperationException(ExceptionMessages.SportradarIdIncorrectFormat);
 
                 referees.Add(new Referee
                 {
@@ -288,36 +295,36 @@ public class ApiDataSyncService : IApiDataSyncService
             {
                 var isSportradarIdParsed = int.TryParse(srSportEvent.Id.ToLower().Replace(_sportEventPrefix, ""), out int sportradarId);
                 if (!isSportradarIdParsed)
-                    throw new InvalidOperationException("Sportradar ID is not in the correct format.");
+                    throw new InvalidOperationException(ExceptionMessages.SportradarIdIncorrectFormat);
 
                 var isDateParsed = DateTime.TryParse(srSportEvent.Date, out DateTime date);
                 if (!isDateParsed)
-                    throw new InvalidOperationException("Date is not in the correct format.");
+                    throw new InvalidOperationException(ExceptionMessages.DateIncorrectFormat);
 
                 var stageId = dbStages.FirstOrDefault(stage =>
                     stage.StageOrder == srSportEvent.StageId)?.Id ?? 0;
                 if (stageId == 0)
-                    throw new InvalidOperationException("Stage ID is not found.");
+                    throw new InvalidOperationException(ExceptionMessages.StageIdNotFound);
 
                 var homeTeamId = dbTeams.FirstOrDefault(team =>
                     _competitorPrefix + team.SportradarId == srSportEvent.HomeCompetitorId)?.Id ?? 0;
                 if (homeTeamId == 0)
-                    throw new InvalidOperationException("Home team ID is not found.");
+                    throw new InvalidOperationException(ExceptionMessages.HomeTeamIdNotFound);
 
                 var awayTeamId = dbTeams.FirstOrDefault(team =>
                     _competitorPrefix + team.SportradarId == srSportEvent.AwayCompetitorId)?.Id ?? 0;
                 if (awayTeamId == 0)
-                    throw new InvalidOperationException("Away team ID is not found.");
+                    throw new InvalidOperationException(ExceptionMessages.AwayTeamIdNotFound);
 
                 var venueId = dbVenues.FirstOrDefault(venue =>
                     _venuePrefix + venue.SportradarId == srSportEvent.VenueId)?.Id ?? 0;
                 if (venueId == 0)
-                    throw new InvalidOperationException("Venue ID is not found.");
+                    throw new InvalidOperationException(ExceptionMessages.VenueIdNotFound);
 
                 var refereeId = dbReferees.FirstOrDefault(referee =>
                     _refereePrefix + referee.SportradarId == srSportEvent.RefereeId)?.Id ?? 0;
                 if (refereeId == 0)
-                    throw new InvalidOperationException("Referee ID is not found.");
+                    throw new InvalidOperationException(ExceptionMessages.RefereeIdNotFound);
 
                 matches.Add(new Match
                 {
@@ -352,26 +359,26 @@ public class ApiDataSyncService : IApiDataSyncService
             {
                 var isSportradarIdParsed = int.TryParse(srSportEvent.Id.ToLower().Replace(_sportEventPrefix, ""), out int sportradarId);
                 if (!isSportradarIdParsed)
-                    throw new InvalidOperationException("Sportradar ID is not in the correct format.");
+                    throw new InvalidOperationException(ExceptionMessages.SportradarIdIncorrectFormat);
 
                 var isDateParsed = DateTime.TryParse(srSportEvent.Date, out DateTime date);
                 if (!isDateParsed)
-                    throw new InvalidOperationException("Date is not in the correct format.");
+                    throw new InvalidOperationException(ExceptionMessages.DateIncorrectFormat);
 
                 var stageId = dbStages.FirstOrDefault(stage =>
                     stage.StageOrder == srSportEvent.StageId)?.Id ?? 0;
                 if (stageId == 0)
-                    throw new InvalidOperationException("Stage ID is not found.");
+                    throw new InvalidOperationException(ExceptionMessages.StageIdNotFound);
 
                 var homeTeamId = dbTeams.FirstOrDefault(team =>
                     _competitorPrefix + team.SportradarId == srSportEvent.HomeCompetitorId)?.Id ?? 0;
                 if (homeTeamId == 0)
-                    throw new InvalidOperationException("Home team ID is not found.");
+                    continue;
 
                 var awayTeamId = dbTeams.FirstOrDefault(team =>
                     _competitorPrefix + team.SportradarId == srSportEvent.AwayCompetitorId)?.Id ?? 0;
                 if (awayTeamId == 0)
-                    throw new InvalidOperationException("Away team ID is not found.");
+                    continue;
 
                 var venueId = dbVenues.FirstOrDefault(venue =>
                     _venuePrefix + venue.SportradarId == srSportEvent.VenueId)?.Id;
@@ -408,14 +415,14 @@ public class ApiDataSyncService : IApiDataSyncService
             {
                 var isDateParsed = DateOnly.TryParse(srPlayer.DateOfBirth, out DateOnly dateOfBirth);
                 if (!isDateParsed)
-                    throw new InvalidOperationException("Date of birth is not in the correct format.");
+                    dateOfBirth = DateOnly.MinValue;
 
                 var teamId = dbTeams.FirstOrDefault(team =>
                     _competitorPrefix + team.SportradarId == srPlayer.CompetitorId)?.Id ?? 0;
 
                 var isSportradarIdParsed = int.TryParse(srPlayer.Id.ToLower().Replace(_playerPrefix, ""), out int sportradarId);
                 if (!isSportradarIdParsed)
-                    throw new InvalidOperationException("Sportradar ID is not in the correct format.");
+                    throw new InvalidOperationException(ExceptionMessages.SportradarIdIncorrectFormat);
 
                 players.Add(new Player
                 {
@@ -448,6 +455,8 @@ public class ApiDataSyncService : IApiDataSyncService
         var playerStats = new List<PlayerStat>();
         foreach (var sportEventId in lastTenMatchesSportradarIds)
         {
+            await Task.Delay(500);
+
             var srCompetitorStats = await _sportradarApiClient.GetCompetitorStatsAsync(sportEventId);
             var dbTeamStats = await _context.TeamStats.ToListAsync();
 
@@ -464,12 +473,12 @@ public class ApiDataSyncService : IApiDataSyncService
                     var matchId = dbMatches.FirstOrDefault(match =>
                         _sportEventPrefix + match.SportradarId == sportEventId)?.Id ?? 0;
                     if (matchId == 0)
-                        throw new InvalidOperationException("Match ID is not found.");
+                        throw new InvalidOperationException(ExceptionMessages.MatchIdNotFound);
 
                     var teamId = dbTeams.FirstOrDefault(team =>
                         _competitorPrefix + team.SportradarId == srCompetitorStat.TeamId)?.Id ?? 0;
                     if (teamId == 0)
-                        throw new InvalidOperationException("Team ID is not found.");
+                        throw new InvalidOperationException(ExceptionMessages.TeamIdNotFound);
 
                     teamStats.Add(new TeamStat
                     {
@@ -485,6 +494,8 @@ public class ApiDataSyncService : IApiDataSyncService
                         ShotsOnTarget = srCompetitorStat.ShotsOnTarget,
                     });
                 }
+
+                await Task.Delay(500);
 
                 var srPlayerStats = await _sportradarApiClient.GetPlayerStatsAsync(sportEventId);
                 var dbPlayerStats = await _context.PlayerStats.ToListAsync();
@@ -502,12 +513,12 @@ public class ApiDataSyncService : IApiDataSyncService
                         var matchId = dbMatches.FirstOrDefault(match =>
                             _sportEventPrefix + match.SportradarId == sportEventId)?.Id ?? 0;
                         if (matchId == 0)
-                            throw new InvalidOperationException("Match ID is not found.");
+                            throw new InvalidOperationException(ExceptionMessages.MatchIdNotFound);
 
                         var playerId = dbPlayers.FirstOrDefault(player =>
                             _playerPrefix + player.SportradarId == srPlayerStat.PlayerId)?.Id ?? 0;
                         if (playerId == 0)
-                            throw new InvalidOperationException("Player ID is not found.");
+                            continue;
 
                         var teamId = dbTeams.FirstOrDefault(team =>
                             _competitorPrefix + team.SportradarId == srPlayerStat.CompetitorId)?.Id ?? 0;
@@ -550,12 +561,12 @@ public class ApiDataSyncService : IApiDataSyncService
                 var teamId = dbTeams.FirstOrDefault(team =>
                     _competitorPrefix + team.SportradarId == srStanding.CompetitorId)?.Id ?? 0;
                 if (teamId == 0)
-                    throw new InvalidOperationException("Team ID is not found.");
+                    throw new InvalidOperationException(ExceptionMessages.TeamIdNotFound);
 
                 var stageId = dbStages.FirstOrDefault(stage =>
                     srStanding.StageId == stage.StageOrder)?.Id ?? 0;
                 if (stageId == 0)
-                    throw new InvalidOperationException("Stage ID is not found.");
+                    throw new InvalidOperationException(ExceptionMessages.StageIdNotFound);
 
                 standings.Add(new Standing
                 {
