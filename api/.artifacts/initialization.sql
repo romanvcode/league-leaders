@@ -4,14 +4,6 @@ GO
 USE ChampionsLeagueDB;
 GO
 
-CREATE TABLE SyncLogs (
-    Id INT PRIMARY KEY IDENTITY(1,1),
-    Client NVARCHAR(100) NOT NULL,
-    SyncTime DATETIME NOT NULL,
-    Status NVARCHAR(50) NOT NULL,
-    Reason NVARCHAR(1000)
-);
-
 CREATE TABLE Competitions (
     Id INT PRIMARY KEY IDENTITY(1,1),
     Name NVARCHAR(100) NOT NULL,
@@ -34,7 +26,7 @@ CREATE TABLE Stages (
     Name NVARCHAR(100) NOT NULL,
     SeasonId INT NOT NULL,
     Type NVARCHAR(50),
-    Order INT UNIQUE,
+    StageOrder INT UNIQUE,
     FOREIGN KEY (SeasonId) REFERENCES Seasons(Id)
 );
 
@@ -83,10 +75,10 @@ CREATE TABLE Matches (
     HomeTeamId INT NOT NULL,
     AwayTeamId INT NOT NULL,
     Date DATETIME,
-    VenueId INT NOT NULL,
-    RefereeId INT NOT NULL,
-    HomeTeamScore INT,
-    AwayTeamScore INT,
+    VenueId INT,
+    RefereeId INT,
+    HomeTeamScore INT NOT NULL DEFAULT(0),
+    AwayTeamScore INT NOT NULL DEFAULT(0),
     SportradarId INT UNIQUE,
     FOREIGN KEY (StageId) REFERENCES Stages(Id),
     FOREIGN KEY (HomeTeamId) REFERENCES Teams(Id),
@@ -100,12 +92,12 @@ CREATE TABLE PlayerStats (
     MatchId INT NOT NULL,
     PlayerId INT NOT NULL,
     TeamId INT NOT NULL,
-    Goals INT,
-    Assists INT,
-    RedCards INT,
-    YellowCards INT,
-    Shots INT,
-    ShotsOnTarget INT,
+    Goals INT DEFAULT(0),
+    Assists INT DEFAULT(0),
+    RedCards INT DEFAULT(0),
+    YellowCards INT DEFAULT(0),
+    Shots INT DEFAULT(0),
+    ShotsOnTarget INT DEFAULT(0),
     FOREIGN KEY (MatchId) REFERENCES Matches(Id),
     FOREIGN KEY (PlayerId) REFERENCES Players(Id),
     FOREIGN KEY (TeamId) REFERENCES Teams(Id)
@@ -115,14 +107,14 @@ CREATE TABLE TeamStats (
     Id INT PRIMARY KEY IDENTITY(1,1),
     MatchId INT NOT NULL,
     TeamId INT NOT NULL,
-    Possession INT,
-    RedCards INT,
-    YellowCards INT,
-    Corners INT,
-    Offsides INT,
-    Fouls INT,
-    Shots INT,
-    ShotsOnTarget INT,
+    Possession INT DEFAULT(0),
+    RedCards INT DEFAULT(0),
+    YellowCards INT DEFAULT(0),
+    Corners INT DEFAULT(0),
+    Offsides INT DEFAULT(0),
+    Fouls INT DEFAULT(0),
+    Shots INT DEFAULT(0),
+    ShotsOnTarget INT DEFAULT(0),
     FOREIGN KEY (MatchId) REFERENCES Matches(Id),
     FOREIGN KEY (TeamId) REFERENCES Teams(Id)
 );
@@ -131,16 +123,32 @@ CREATE TABLE Standings (
     Id INT PRIMARY KEY IDENTITY(1,1),
     StageId INT NOT NULL,
     TeamId INT NOT NULL,
-    Points INT,
-    Place INT,
-    MatchesPlayed INT,
-    Wins INT,
-    Draws INT,
-    Losses INT,
-    GoalsFor INT,
-    GoalsAgainst INT,
+    Points INT DEFAULT(0),
+    Place INT DEFAULT(0),
+    MatchesPlayed INT DEFAULT(0),
+    Wins INT DEFAULT(0),
+    Draws INT DEFAULT(0),
+    Losses INT DEFAULT(0),
+    GoalsFor INT DEFAULT(0),
+    GoalsAgainst INT DEFAULT(0),
     FOREIGN KEY (StageId) REFERENCES Stages(Id),
     FOREIGN KEY (TeamId) REFERENCES Teams(Id)
+);
+
+CREATE TABLE SyncLogs (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Client NVARCHAR(100) NOT NULL,
+    SyncTime DATETIME NOT NULL,
+    Status NVARCHAR(50) NOT NULL,
+    Reason NVARCHAR(1000)
+);
+
+CREATE TABLE Predictions (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    MatchId INT NOT NULL,
+    HomeTeamScore INT,
+    AwayTeamScore INT,
+    FOREIGN KEY (MatchId) REFERENCES Matches(Id)
 );
 GO
 

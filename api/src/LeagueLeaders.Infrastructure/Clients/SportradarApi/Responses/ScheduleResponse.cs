@@ -8,7 +8,7 @@ internal record ScheduleSEResponse(
     ScheduleSEContextResponse SportEventContext,
     List<CompetitorResponse> Competitors,
     string StartTime,
-    VenueResponse Venue
+    VenueResponse? Venue
     );
 
 internal record ScheduleSEContextResponse(ScheduleStageResponse Stage);

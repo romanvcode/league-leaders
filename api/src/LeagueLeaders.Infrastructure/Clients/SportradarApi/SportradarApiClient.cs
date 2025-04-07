@@ -97,6 +97,8 @@ public class SportradarApiClient : ISportradarApiClient
         {
             url = $"competitors/{competitor.Id}/profile?api_key={_apiKey}";
 
+            await Task.Delay(500);
+
             var profileResponse = await _httpClient.GetAsync(url);
             profileResponse.EnsureSuccessStatusCode();
 
@@ -141,7 +143,7 @@ public class SportradarApiClient : ISportradarApiClient
                 AwayCompetitorId = schedule.SportEvent.Competitors.Single(c => c.Qualifier == "away").Id,
                 Date = schedule.SportEvent.StartTime,
                 RefereeId = null,
-                VenueId = schedule.SportEvent.Venue.Id,
+                VenueId = schedule.SportEvent.Venue?.Id,
                 HomeCompetitorScore = schedule.SportEventStatus.HomeScore ?? 0,
                 AwayCompetitorScore = schedule.SportEventStatus.AwayScore ?? 0
             });
