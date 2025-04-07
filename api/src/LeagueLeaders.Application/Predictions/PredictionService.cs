@@ -47,6 +47,10 @@ public class PredictionService : IPredictionService
     {
         var predictions = await _context.Predictions
             .AsNoTracking()
+            .Include(p => p.Match)
+                .ThenInclude(m => m.HomeTeam)
+            .Include(p => p.Match)
+                .ThenInclude(m => m.AwayTeam)
             .ToListAsync();
 
         return predictions;
