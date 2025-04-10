@@ -5,12 +5,12 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Standing } from '@core/models/standing.model';
 import { ApiService } from '@core/services/api.service';
 import { Subject, takeUntil } from 'rxjs';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-standing-table',
   standalone: true,
-  imports: [MatTableModule, MatCardModule, MatProgressSpinner, RouterLink],
+  imports: [MatTableModule, MatCardModule, MatProgressSpinner],
   templateUrl: './standing-table.component.html',
   styleUrl: './standing-table.component.css',
 })
