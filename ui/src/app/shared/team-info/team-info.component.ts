@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -8,6 +7,7 @@ import { Team } from '@core/models/team.model';
 import { ApiService } from '@core/services/api.service';
 import { Subject, takeUntil } from 'rxjs';
 import { MatchInfoComponent } from '../match-info/match-info.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-team-info',
@@ -16,8 +16,8 @@ import { MatchInfoComponent } from '../match-info/match-info.component';
     MatCardModule,
     MatListModule,
     MatGridListModule,
-    DatePipe,
     MatchInfoComponent,
+    DatePipe,
   ],
   templateUrl: './team-info.component.html',
   styleUrl: './team-info.component.css',
@@ -59,10 +59,6 @@ export class TeamInfoComponent implements OnInit, OnDestroy {
           this.isError = true;
         },
       });
-  }
-
-  ngOnChanges(): void {
-    this.ngOnInit();
   }
 
   ngOnDestroy(): void {
