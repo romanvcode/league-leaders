@@ -35,7 +35,7 @@ describe('LandingComponent', () => {
   });
 
   it('should have a title', () => {
-    expect(expectedFeature).toContain(component.curretFeature);
+    expect(expectedFeature).toContain(component.currentFeature);
   });
 
   it('should render child components', () => {

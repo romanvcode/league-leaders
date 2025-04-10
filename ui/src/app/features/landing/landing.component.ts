@@ -11,5 +11,5 @@ import { StandingTableComponent } from '@shared/standing-table/standing-table.co
   styleUrl: './landing.component.css',
 })
 export class LandingComponent {
-  curretFeature = 'Leaderboard';
+  currentFeature = 'Leaderboard';
 }
