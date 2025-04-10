@@ -5,11 +5,12 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Standing } from '@core/models/standing.model';
 import { ApiService } from '@core/services/api.service';
 import { Subject, takeUntil } from 'rxjs';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-standing-table',
   standalone: true,
-  imports: [MatTableModule, MatCardModule, MatProgressSpinner],
+  imports: [MatTableModule, MatCardModule, MatProgressSpinner, RouterLink],
   templateUrl: './standing-table.component.html',
   styleUrl: './standing-table.component.css',
 })
@@ -23,7 +24,10 @@ export class StandingTableComponent implements OnInit, OnDestroy {
   error: string | null = null;
   isError = false;
 
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    private router: Router
+  ) {}
 
   displayedColumns: string[] = [
     'place',
@@ -56,6 +60,10 @@ export class StandingTableComponent implements OnInit, OnDestroy {
           this.isFetching = false;
         },
       });
+  }
+
+  onSelect(id: number): void {
+    this.router.navigate(['/team'], { queryParams: { id } });
   }
 
   ngOnDestroy(): void {
