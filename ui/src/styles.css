@@ -14,38 +14,38 @@ body {
 }
 
 .bg-green-white {
-  background-color: #d6efd8;
+  background-color: #f8da5b;
 }
 
 .bg-green-light {
-  background-color: #80af81;
+  background-color: #24527a;
 }
 
 .bg-green-medium {
-  background-color: #71bc78;
+  background-color: #5a7fab;
 }
 
 .bg-green-dark {
-  background-color: #2d8641;
+  background-color: #455d7a;
 }
 
 .bg-green-white-important {
-  background-color: #d6efd8 !important;
+  background-color: #ff5722 !important;
 }
 
 .bg-green-light-important {
-  background-color: #80af81 !important;
+  background-color: #f8da5b !important;
 }
 
 .bg-green-dark-important {
-  background-color: #2d8641 !important;
+  background-color: #24527a !important;
 }
 
 hr {
   display: block;
   height: 1px;
   border: 0;
-  border-top: 1px solid #80af81;
+  border-top: 1px solid #fbf2d5;
   margin: 0 0;
   padding: 0;
 }

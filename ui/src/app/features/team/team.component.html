@@ -10,9 +10,17 @@
         id="current-feature"
         class="text-2xl md:text-3xl font-semibold tracking-wider"
       >
-        {{ curretFeature }}
+        {{ currentFeature }}
       </p>
-      <app-search-input />
+      <div class="flex items-center gap-4">
+        <a
+          href="javascript:history.back()"
+          class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg transition"
+        >
+          Go Back
+        </a>
+        <app-search-input />
+      </div>
     </div>
     <app-team-info [teamId]="teamId" />
   </div>

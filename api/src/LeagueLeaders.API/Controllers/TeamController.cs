@@ -87,7 +87,7 @@ public class TeamController : ControllerBase
             throw new ValidationException(validationResult.Errors);
         }
 
-        var matches = await _teamService.GetMatchHistoryForTeamAsync(teamId);
+        var matches = await _teamService.GetMatchHistoryForTeamAsync(teamId, 4);
 
         return matches;
     }

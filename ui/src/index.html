@@ -18,4 +18,66 @@
   <body class="mat-typography">
     <app-root></app-root>
   </body>
+  <style>
+    body {
+        height: calc(100vh - 35px);
+        margin-top: 35px;
+    }
+    
+    .support-ukraine, .support-ukraine:visited {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: #24527a;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5px 10px;
+        z-index: 10000;
+        text-decoration: none;
+        font-family: Arial, sans-serif;
+    }
+
+    .support-ukraine:hover, .support-ukraine:active {
+        background: #455d7a;
+        text-decoration: none;
+    }
+
+    .support-ukraine__flag {
+        height: 25px;
+        margin-right: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .support-ukraine__flag__blue {
+        width: 40px;
+        height: 12.5px;
+        background: #005BBB;
+    }
+
+    .support-ukraine__flag__yellow {
+        width: 40px;
+        height: 12.5px;
+        background: #FFD500;
+    }
+
+    .support-ukraine__label {
+        color: white;
+        font-size: 14px;
+        line-height: 1.2;
+    }
+  </style>
+
+  <a class="support-ukraine" href="https://savelife.in.ua/en/donate-en/" target="_blank" rel="nofollow noopener" title="Donate to support Ukraine's independence.">
+    <div class="support-ukraine__flag" role="img" aria-label="Flag of Ukraine">
+      <div class="support-ukraine__flag__blue"></div>
+      <div class="support-ukraine__flag__yellow"></div>
+    </div>
+    <div class="support-ukraine__label">
+      Donate to support Ukraine's independence.
+    </div>
+  </a>
 </html>

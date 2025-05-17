@@ -1,25 +1,27 @@
-<div class="flex flex-col h-screen">
-  <div class="bg-green-light text-white text-center py-2 font-bold">
-    🇺🇦 Stand with Ukraine 🇺🇦
-  </div>
-
-  <div class="landing-container flex flex-col md:flex-row h-full">
-    <div class="basis-full md:basis-1/6 bg-green-medium px-8 py-4">
-      <div class="flex flex-col items-center justify-center h-full">
-        <app-next-match />
-      </div>
+<div class="landing-container flex flex-col md:flex-row h-full">
+  <div class="basis-full md:basis-1/6 bg-green-medium px-8 py-4">
+    <div class="flex flex-col items-center justify-center h-full">
+      <app-next-match />
     </div>
-    <div class="basis-full md:basis-5/6 bg-green-white px-8 py-4">
-      <div class="flex flex-col md:flex-row justify-between items-end">
-        <p
-          id="current-feature"
-          class="text-2xl md:text-3xl font-semibold tracking-wider"
+  </div>
+  <div class="basis-full md:basis-5/6 bg-green-white px-8 py-4">
+    <div class="flex flex-col md:flex-row justify-between items-end">
+      <p
+        id="current-feature"
+        class="text-2xl md:text-3xl font-semibold tracking-wider"
+      >
+        {{ currentFeature }}
+      </p>
+      <div class="flex items-center gap-4">
+        <a
+          href="javascript:history.back()"
+          class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg transition"
         >
-          {{ currentFeature }}
-        </p>
+          Go Back
+        </a>
         <app-search-input />
       </div>
-      <app-predictions-results />
     </div>
+    <app-predictions-results />
   </div>
 </div>

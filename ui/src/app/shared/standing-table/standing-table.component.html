@@ -9,7 +9,7 @@
       <p>{{ error }}</p>
     </mat-card-content>
   } @else {
-    <div class="responsive-table mat-elevation-z8 overflow-y-scroll">
+    <div class="responsive-table mat-elevation-z8 overflow-y-scroll w-full block">
       <table mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="place">
           <th mat-header-cell *matHeaderCellDef>Position</th>
@@ -18,7 +18,19 @@
 
         <ng-container matColumnDef="team">
           <th mat-header-cell *matHeaderCellDef>Team</th>
-          <td mat-cell *matCellDef="let element">{{ element.team.name }}</td>
+          <td mat-cell *matCellDef="let element">
+            <button
+              (click)="onSelect(element.team.id)"
+              class="flex items-center gap-2 hover:text-blue-800"
+            >
+              <img
+                width="35"
+                src="teams/{{ element.team.name }}.png"
+                alt="{{ element.team.name }}"
+              />
+              <span>{{ element.team.name }}</span>
+            </button>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="matchesPlayed">

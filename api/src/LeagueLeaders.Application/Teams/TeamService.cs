@@ -41,7 +41,7 @@ public class TeamService : ITeamService
         return players;
     }
 
-    public async Task<List<Match>> GetMatchHistoryForTeamAsync(int teamId, int lastMatches = 5)
+    public async Task<List<Match>> GetMatchHistoryForTeamAsync(int teamId, int lastMatches = 4)
     {
         var teamExists = await _context.Teams
             .AsNoTracking()

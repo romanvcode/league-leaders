@@ -1,19 +1,26 @@
-<div class="flex flex-col gap-8 items-center mt-12">
-  <mat-card class="w-full sm:w-5/6 md:w-1/2">
+<div class="flex flex-col gap-8 items-center">
+  <mat-card class="w-full sm:w-5/6 md:w-1/2 border border-gray-200 rounded-2xl shadow-md transition hover:shadow-xl">
     @if (isError) {
       <mat-card-content>
         <p>{{ error }}</p>
       </mat-card-content>
     } @else {
-      <mat-card-header>
-        <mat-card-title>
-          {{ team?.name }}
-        </mat-card-title>
-        <mat-card-subtitle>{{ team?.abbreviation }}</mat-card-subtitle>
-      </mat-card-header>
-
+      <div
+        class="flex items-center gap-2"
+        >
+        <img
+          width="35"
+          src="teams/{{ team?.name }}.png"
+          alt="{{ team?.name }}"
+          class="ml-4 mt-4"
+        />
+        <mat-card-header>
+          <mat-card-title>{{ team?.name }}</mat-card-title>
+          <mat-card-subtitle>{{ team?.abbreviation }}</mat-card-subtitle>
+        </mat-card-header>
+      </div>
       <mat-card-content>
-        <section class="team-overview">
+        <section class="team-overview text-gray-600">
           <hr />
           <p><strong>Country:</strong> {{ team?.country }}</p>
           <p><strong>Stadium:</strong> {{ team?.stadium }}</p>
@@ -24,7 +31,7 @@
   </mat-card>
 
   <section
-    class="grid grid-cols-1 lg:grid-cols-2 w-full sm:w-5/6 md:w-2/3 lg:w-5/6 xl:w-3/4 gap-2"
+    class="grid grid-cols-1 md:grid-cols-2 w-full sm:w-5/6 md:w-2/3 lg:w-5/6 xl:w-3/4 gap-4"
   >
     @for (match of matches; track match.id) {
       <app-match-info [match]="match" />

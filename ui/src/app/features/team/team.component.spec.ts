@@ -49,7 +49,7 @@ describe('TeamComponent', () => {
   });
 
   it('should have a title', () => {
-    expect(expectedFeature).toContain(component.curretFeature);
+    expect(expectedFeature).toContain(component.currentFeature);
   });
 
   it('should set teamId from route parameters when navigating to /team/1', async () => {
