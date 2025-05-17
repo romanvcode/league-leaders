@@ -39,4 +39,10 @@ public class PredictionController : ControllerBase
 
         return predicitons;
     }
+
+    [HttpDelete("{predictionId}")]
+    public async Task DeletePredictionAsync(int predictionId)
+    {
+        await _predictionService.DeletePrediciotnAsync(predictionId);
+    }
 }

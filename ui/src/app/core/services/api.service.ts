@@ -65,4 +65,8 @@ export class ApiService {
       predicted
     });
   }
+  
+  deletePrediction(predictionId: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.apiUrl}/predictions/${predictionId}`);
+  }
 }
