@@ -4,6 +4,6 @@ namespace LeagueLeaders.Application.Predictions;
 
 public interface IPredictionService
 {
-    Task<Prediction> CreatePredictionAsync(int matchId, int homeTeamScore, int awayTeamScore);
+    Task<Prediction> CreatePredictionAsync(int matchId, int homeTeamScore, int awayTeamScore, bool predicted);
     Task<List<Prediction>> GetPredictionsAsync();
 }

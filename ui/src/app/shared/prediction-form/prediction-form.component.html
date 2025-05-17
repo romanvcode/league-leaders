@@ -34,6 +34,11 @@
     </mat-form-field>
   </div>
 
+  <div *ngIf="isGenerating" class="ai-loader-ring-wrapper">
+    <div class="ai-loader-ring"></div>
+  </div>
+
+
   <div *ngIf="isError" class="text-center text-red-500 mt-2">
     {{ errorMessage }}
   </div>
@@ -43,5 +48,10 @@
   <button mat-flat-button [disabled]="!isValidForm()" (click)="onSubmit()">
     Predict
   </button>
-  <button mat-raised-button (click)="dialogRef.close()">Cancel</button>
+  <button mat-stroked-button color="accent" (click)="generateWithAI()">
+    Generate with AI
+  </button>
+  <button mat-raised-button (click)="dialogRef.close()">
+    Cancel
+  </button>
 </mat-dialog-actions>

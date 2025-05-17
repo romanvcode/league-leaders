@@ -1,12 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { Prediction } from '@core/models/prediction.model';
 import { MatCardModule } from '@angular/material/card';
-import { NgClass, NgOptimizedImage, SlicePipe } from '@angular/common';
+import { NgClass } from '@angular/common';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-prediction-info',
   standalone: true,
-  imports: [MatCardModule, NgClass, SlicePipe, NgOptimizedImage],
+  imports: [MatCardModule, MatTooltipModule, NgClass],
   templateUrl: './prediction-info.component.html',
   styleUrl: './prediction-info.component.css',
 })

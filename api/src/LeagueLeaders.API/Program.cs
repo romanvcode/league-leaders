@@ -14,6 +14,8 @@ using System.Net;
 using LeagueLeaders.Application.ApiDataSync;
 using LeagueLeaders.API.Workers;
 using LeagueLeaders.Application.Predictions;
+using Microsoft.Extensions.AI;
+using LeagueLeaders.Application.Matches;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,8 +50,10 @@ builder.Services.AddDbContext<LeagueLeadersDbContext>(options =>
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
+builder.Services.AddScoped<IMatchesService, MatchesService>();
 builder.Services.AddScoped<IPredictionService, PredictionService>();
 builder.Services.AddScoped<IApiDataSyncService, ApiDataSyncService>();
+builder.Services.AddChatClient(new OllamaChatClient(new Uri("http://localhost:11434"), "llama3"));
 builder.Services.AddScoped<ExceptionHandlingMiddleware>();
 
 builder.Services.AddCors(options =>

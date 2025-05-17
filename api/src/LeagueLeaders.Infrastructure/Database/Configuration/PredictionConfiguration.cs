@@ -12,6 +12,7 @@ class PredictionConfiguration : IEntityTypeConfiguration<Prediction>
         builder.HasKey(s => s.Id);
         builder.Property(s => s.HomeTeamScore).IsRequired();
         builder.Property(s => s.AwayTeamScore).IsRequired();
+        builder.Property(s => s.IsCorrect).IsRequired(false);
         builder
             .HasOne(p => p.Match)
             .WithOne()

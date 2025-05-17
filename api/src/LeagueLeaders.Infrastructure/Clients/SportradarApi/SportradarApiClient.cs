@@ -168,11 +168,6 @@ public class SportradarApiClient : ISportradarApiClient
 
         foreach (var sportEvent in sportEvents)
         {
-            if (sportEvent.SportEvent.SportEventConditions.Referees == null)
-            {
-                continue;
-            }
-
             events.Add(new SportEvent
             {
                 Id = sportEvent.SportEvent.Id,
@@ -181,7 +176,7 @@ public class SportradarApiClient : ISportradarApiClient
                 AwayCompetitorId = sportEvent.SportEvent.Competitors.Single(c => c.Qualifier == "away").Id,
                 Date = sportEvent.SportEvent.StartTime,
                 VenueId = sportEvent.SportEvent.Venue.Id,
-                RefereeId = sportEvent.SportEvent.SportEventConditions.Referees.Single(r => r.Type == "main_referee").Id,
+                RefereeId = sportEvent.SportEvent.SportEventConditions?.Referees?.Single(r => r.Type == "main_referee").Id,
                 HomeCompetitorScore = sportEvent.SportEventStatus.HomeScore,
                 AwayCompetitorScore = sportEvent.SportEventStatus.AwayScore
             });

@@ -5,5 +5,6 @@
         public int MatchId { get; set; }
         public int HomeTeamScore { get; set; }
         public int AwayTeamScore { get; set; }
+        public bool Predicted { get; set; }
     }
 }
