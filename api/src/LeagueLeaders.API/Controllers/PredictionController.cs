@@ -25,8 +25,9 @@ public class PredictionController : ControllerBase
         var matchId = predictionRequest.MatchId;
         var homeTeamScore = predictionRequest.HomeTeamScore;
         var awayTeamScore = predictionRequest.AwayTeamScore;
+        var predicted = predictionRequest.Predicted;
 
-        var createdPrediction = await _predictionService.CreatePredictionAsync(matchId, homeTeamScore, awayTeamScore);
+        var createdPrediction = await _predictionService.CreatePredictionAsync(matchId, homeTeamScore, awayTeamScore, predicted);
 
         return createdPrediction;
     }

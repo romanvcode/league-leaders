@@ -39,7 +39,7 @@ public class PredictionServiceTest : IDisposable
         var createPrediction = () => _predictionService.CreatePredictionAsync(matchId, homeTeamScore, awayTeamScore);
 
 
-        await createPrediction.Should().ThrowAsync<MatchesNotFoundException>();
+        await createPrediction.Should().ThrowAsync<TeamStatsNotFoundException>();
     }
 
     [Fact]

@@ -64,7 +64,18 @@ public class ApiDataSyncService : IApiDataSyncService
 
     public async Task SyncDataAsync()
     {
+        if (!await _context.Competitions.AnyAsync())
+        {
+            await InitializeDataAsync();
+        }
+        else
+        {
+            await UpdateDataAsync();
+        }
+    }
 
+    private async Task InitializeDataAsync()
+    {
         await SyncCompetitionAsync();
 
         var competition = await _context.Competitions.AsNoTracking().FirstAsync();
@@ -90,6 +101,21 @@ public class ApiDataSyncService : IApiDataSyncService
         var matches = await _context.Matches.AsNoTracking().ToListAsync();
         await SyncStatsAsync(players, teams, matches);
         await SyncStandingsAsync(teams, stages);
+    }
+
+    private async Task UpdateDataAsync()
+    {
+        var teams = await _context.Teams.AsNoTracking().ToListAsync();
+        var stages = await _context.Stages.AsNoTracking().ToListAsync();
+        var venues = await _context.Venues.AsNoTracking().ToListAsync();
+        var referees = await _context.Referees.AsNoTracking().ToListAsync();
+        //await SyncMatchesAsync(stages, teams, venues, referees);
+        //await SyncScheduleAsync(stages, teams, venues, referees);
+
+        var players = await _context.Players.AsNoTracking().ToListAsync();
+        var matches = await _context.Matches.AsNoTracking().ToListAsync();
+        await SyncStatsAsync(players, teams, matches);
+        //await SyncStandingsAsync(teams, stages);
     }
 
     private async Task SyncCompetitionAsync()
@@ -339,7 +365,21 @@ public class ApiDataSyncService : IApiDataSyncService
                     SportradarId = sportradarId
                 });
             }
+            else
+            {
+                dbMatch.HomeTeamScore = srSportEvent.HomeCompetitorScore;
+                dbMatch.AwayTeamScore = srSportEvent.AwayCompetitorScore;
+                dbMatch.Date = DateTime.Parse(srSportEvent.Date);
+                dbMatch.RefereeId = dbReferees.FirstOrDefault(referee =>
+                    _refereePrefix + referee.SportradarId == srSportEvent.RefereeId)?.Id ?? 0;
+            }
         }
+
+        if (dbMatches.Any())
+        {
+            _context.Matches.UpdateRange(dbMatches);
+        }
+
         await _context.Matches.AddRangeAsync(matches);
         await _context.SaveChangesAsync();
     }
@@ -396,7 +436,19 @@ public class ApiDataSyncService : IApiDataSyncService
                     SportradarId = sportradarId
                 });
             }
+            else
+            {
+                dbMatch.HomeTeamScore = srSportEvent.HomeCompetitorScore;
+                dbMatch.AwayTeamScore = srSportEvent.AwayCompetitorScore;
+                dbMatch.Date = DateTime.Parse(srSportEvent.Date);
+            }
         }
+
+        if (dbMatches.Any())
+        {
+            _context.Matches.UpdateRange(dbMatches);
+        }
+
         await _context.Matches.AddRangeAsync(matches);
         await _context.SaveChangesAsync();
     }
@@ -494,6 +546,17 @@ public class ApiDataSyncService : IApiDataSyncService
                         ShotsOnTarget = srCompetitorStat.ShotsOnTarget,
                     });
                 }
+                else
+                {
+                    dbTeamStat.Possession = srCompetitorStat.Possession;
+                    dbTeamStat.Corners = srCompetitorStat.CornerKicks;
+                    dbTeamStat.Offsides = srCompetitorStat.Offsides;
+                    dbTeamStat.Fouls = srCompetitorStat.Fouls;
+                    dbTeamStat.YellowCards = srCompetitorStat.YellowCards;
+                    dbTeamStat.RedCards = srCompetitorStat.RedCards;
+                    dbTeamStat.Shots = srCompetitorStat.ShotsTotal;
+                    dbTeamStat.ShotsOnTarget = srCompetitorStat.ShotsOnTarget;
+                }
 
                 await Task.Delay(500);
 
@@ -536,7 +599,21 @@ public class ApiDataSyncService : IApiDataSyncService
                             RedCards = srPlayerStat.RedCards,
                         });
                     }
+                    else
+                    {
+                        dbPlayerStat.Goals = srPlayerStat.GoalsScored;
+                        dbPlayerStat.Assists = srPlayerStat.Assists;
+                        dbPlayerStat.Shots = srPlayerStat.ShotsTotal;
+                        dbPlayerStat.ShotsOnTarget = srPlayerStat.ShotsOnTarget;
+                        dbPlayerStat.YellowCards = srPlayerStat.YellowCards;
+                        dbPlayerStat.RedCards = srPlayerStat.RedCards;
+                    }
                 }
+            }
+
+            if (dbTeamStats.Any())
+            {
+                _context.TeamStats.UpdateRange(dbTeamStats);
             }
         }
         await _context.TeamStats.AddRangeAsync(teamStats);
@@ -582,7 +659,24 @@ public class ApiDataSyncService : IApiDataSyncService
                     GoalsAgainst = srStanding.GoalsAgainst,
                 });
             }
+            else
+            {
+                dbStanding.Points = srStanding.Points;
+                dbStanding.Place = srStanding.Rank;
+                dbStanding.MatchesPlayed = srStanding.Played;
+                dbStanding.Wins = srStanding.Win;
+                dbStanding.Draws = srStanding.Draw;
+                dbStanding.Losses = srStanding.Loss;
+                dbStanding.GoalsFor = srStanding.GoalsFor;
+                dbStanding.GoalsAgainst = srStanding.GoalsAgainst;
+            }
         }
+
+        if (dbStandings.Any())
+        {
+            _context.Standings.UpdateRange(dbStandings);
+        }
+
         await _context.Standings.AddRangeAsync(standings);
         await _context.SaveChangesAsync();
     }

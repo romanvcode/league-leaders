@@ -221,11 +221,36 @@ describe('ApiService', () => {
       matchId: 1,
       homeTeamScore: 1,
       awayTeamScore: 0,
+      isCorrect: true,
+      match: {
+        id: 1,
+        homeTeam: {
+          id: 1,
+          name: 'Team A',
+          abbreviation: 'A',
+          country: 'Country A',
+          stadium: 'Stadium A',
+          manager: 'Manager A',
+          players: []
+        },
+        awayTeam: {
+          id: 2,
+          name: 'Team B',
+          abbreviation: 'B',
+          country: 'Country B',
+          stadium: 'Stadium B',
+          manager: 'Manager B',
+          players: []
+        },
+        date: new Date().getDate().toString(),
+        homeTeamScore: 1,
+        awayTeamScore: 0
+      }
     };
 
     httpClientSpy.post.and.returnValue(of(expectedPrediction));
 
-    service.createPrediction(1, 1, 0).subscribe({
+    service.createPrediction(1, 1, 0, false).subscribe({
       next: (prediction) => {
         expect(prediction).toEqual(expectedPrediction);
         done();
@@ -240,7 +265,7 @@ describe('ApiService', () => {
 
     httpClientSpy.post.and.returnValue(throwError(() => expectedError));
 
-    service.createPrediction(1, 1, 0).subscribe({
+    service.createPrediction(1, 1, 0, false).subscribe({
       next: () => done.fail,
       error: (error) => {
         expect(error).toEqual(expectedError);

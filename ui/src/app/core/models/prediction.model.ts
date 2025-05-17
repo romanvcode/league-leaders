@@ -5,5 +5,6 @@ export interface Prediction {
   matchId: number;
   homeTeamScore: number;
   awayTeamScore: number;
+  isCorrect: boolean | null;
   match: Match;
 }
