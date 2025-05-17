@@ -6,6 +6,7 @@ import { Team } from '@core/models/team.model';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { Standing } from '../models/standing.model';
+import { TeamStat } from '@core/models/team-stat.model';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +35,12 @@ export class ApiService {
       `${this.apiUrl}/teams/${teamId}/matches`
     );
   }
+  
+  getTeamsStats(matchId: number): Observable<TeamStat[]> {
+    return this.httpClient.get<TeamStat[]>(
+      `${this.apiUrl}/matches/${matchId}/teams-stats`
+    );
+  }
 
   getTeamsBySearchTerm(searchTerm: string): Observable<Team[]> {
     return this.httpClient.get<Team[]>(
@@ -48,12 +55,14 @@ export class ApiService {
   createPrediction(
     matchId: number,
     homeTeamScore: number,
-    awayTeamScore: number
+    awayTeamScore: number,
+    predicted: boolean,
   ): Observable<Prediction> {
     return this.httpClient.post<Prediction>(`${this.apiUrl}/predictions`, {
       matchId,
       homeTeamScore,
       awayTeamScore,
+      predicted
     });
   }
 }

@@ -10,11 +10,12 @@
     <hr />
     @if (nextMatch$ | async; as match) {
       <mat-card-content>
-        <p class="font-medium suppercase">
+        <p class="font-medium uppercase tracking-wider text-blue-100">
           {{ timeLeft$ | async }}
         </p>
         <mat-card
           class="bg-green-light-important text-black hover:cursor-pointer transition-all duration-300 ease-in-out transform hover:scale-105 cursor-pointer rounded-lg shadow-md"
+          [title]="match.homeTeam.name + ' vs ' + match.awayTeam.name"
           (click)="onNextMatchClick()"
         >
           <mat-card-header>

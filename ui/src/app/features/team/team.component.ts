@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NextMatchComponent } from '@shared/next-match/next-match.component';
 import { SearchInputComponent } from '@shared/search-input/search-input.component';
 import { TeamInfoComponent } from '@shared/team-info/team-info.component';
-import { StandingTableComponent } from '@shared/standing-table/standing-table.component';
 
 @Component({
   selector: 'app-team',
@@ -12,7 +11,7 @@ import { StandingTableComponent } from '@shared/standing-table/standing-table.co
     NextMatchComponent,
     SearchInputComponent,
     TeamInfoComponent,
-    StandingTableComponent,
+    RouterLink,
   ],
   templateUrl: './team.component.html',
   styleUrl: './team.component.css',

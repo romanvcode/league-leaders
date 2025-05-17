@@ -1,4 +1,7 @@
-<mat-card class="border border-gray-200 rounded-2xl shadow-md transition hover:shadow-xl">
+<mat-card 
+  class="border border-gray-200 rounded-2xl shadow-md transition hover:shadow-xl cursor-pointer"
+  (click)="openMatchDetails(match)"
+>
   <mat-card-header class="px-4">
     <div class="flex items-center gap-1 overflow-hidden">
       <img

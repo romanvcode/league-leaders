@@ -2,7 +2,7 @@
 using LeagueLeaders.Application;
 using LeagueLeaders.Application.Leaderboard;
 using LeagueLeaders.Application.Predictions;
-using LeagueLeaders.Application.Schedule;
+using LeagueLeaders.Application.Matches;
 using LeagueLeaders.Application.Teams;
 
 namespace LeagueLeaders.API.Middleware;
@@ -40,7 +40,7 @@ public class ExceptionHandlingMiddleware : IMiddleware
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             await context.Response.WriteAsync(ex.Message);
         }
-        catch (MatchesNotFoundException ex)
+        catch (TeamStatsNotFoundException ex)
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             await context.Response.WriteAsync(ex.Message);
