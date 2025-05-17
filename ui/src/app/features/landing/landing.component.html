@@ -13,12 +13,12 @@
         {{ currentFeature }}
       </p>
       <div class="flex items-center gap-4">
-        <a
-          href="/predictions"
+        <button
           class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg transition"
+          [routerLink]="['/predictions']"
         >
           Go to Predictions
-        </a>
+        </button>
         <app-search-input />
       </div>
     </div>
