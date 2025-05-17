@@ -74,6 +74,16 @@ public class PredictionService : IPredictionService
         return predictions;
     }
 
+    public async Task DeletePrediciotnAsync(int predictionId)
+    {
+        var prediction = await _context.Predictions
+            .FirstOrDefaultAsync(p => p.Id == predictionId)
+            ?? throw new PredictionNotFoundException($"Prediction with Id {predictionId} not found.");
+
+        _context.Predictions.Remove(prediction);
+        await _context.SaveChangesAsync();
+    }
+
     private async Task<(int homeTeamScore, int awayTeamScore)> PredictScore(int homeTeamId, int awayTeamId)
     {
         var homeMatches = await _context.Matches
