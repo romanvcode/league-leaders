@@ -10,6 +10,13 @@
             </summary>
             <returns>List of <see cref="T:LeagueLeaders.Domain.Standing"/>s.</returns>
         </member>
+        <member name="M:LeagueLeaders.API.Controllers.MatchesController.GetMatchStatsAsync(System.Int32)">
+            <summary>
+            Get the Teams Stats by Match ID.
+            </summary>
+            <param name="matchId">The ID of the Match.</param>
+            <returns>The list of found <see cref="T:LeagueLeaders.Domain.TeamStat"/>s.</returns>
+        </member>
         <member name="M:LeagueLeaders.API.Controllers.ScheduleController.GetClosestMatchesAsync">
             <summary>
             Get five closest Matches of the current Stage.
