@@ -44,9 +44,9 @@ public class ScheduleServiceTests : IDisposable
 
         var season = new Season
         {
-            Name = "2024/2025",
-            StartAt = new DateTime(2024, 1, 1),
-            EndAt = new DateTime(2025, 1, 1)
+            Name = "2025/2026",
+            StartAt = new DateTime(2025, 1, 1),
+            EndAt = new DateTime(2026, 1, 1)
         };
 
         var stage = new Stage

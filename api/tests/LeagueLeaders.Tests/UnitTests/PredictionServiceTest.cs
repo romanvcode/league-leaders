@@ -4,12 +4,15 @@ using LeagueLeaders.Application.Predictions;
 using LeagueLeaders.Domain;
 using LeagueLeaders.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.AI;
+using NSubstitute;
 
 namespace LeagueLeaders.Tests.UnitTests;
 
 public class PredictionServiceTest : IDisposable
 {
     private readonly LeagueLeadersDbContext _context;
+    private readonly IChatClient _chatClient;
 
     public PredictionServiceTest()
     {
@@ -18,6 +21,7 @@ public class PredictionServiceTest : IDisposable
             .Options;
 
         _context = new LeagueLeadersDbContext(options);
+        _chatClient = Substitute.For<IChatClient>();
     }
 
     public void Dispose()
@@ -29,23 +33,23 @@ public class PredictionServiceTest : IDisposable
     [Fact]
     public async Task CreatePredictionAsync_MatchNotFound_ShouldThrowException()
     {
-        var _predictionService = new PredictionService(_context);
+        var _predictionService = new PredictionService(_context, _chatClient);
 
         var matchId = 1;
         var homeTeamScore = 1;
         var awayTeamScore = 1;
 
 
-        var createPrediction = () => _predictionService.CreatePredictionAsync(matchId, homeTeamScore, awayTeamScore);
+        var createPrediction = () => _predictionService.CreatePredictionAsync(matchId, homeTeamScore, awayTeamScore, true);
 
 
-        await createPrediction.Should().ThrowAsync<TeamStatsNotFoundException>();
+        await createPrediction.Should().ThrowAsync<MatchesNotFoundException>();
     }
 
     [Fact]
     public async Task CreatePredictionAsync_MatchStarted_ShouldThrowException()
     {
-        var _predictionService = new PredictionService(_context);
+        var _predictionService = new PredictionService(_context, _chatClient);
 
         var match = new Match
         {
@@ -59,7 +63,7 @@ public class PredictionServiceTest : IDisposable
         var awayTeamScore = 1;
 
 
-        var createPrediction = () => _predictionService.CreatePredictionAsync(match.Id, homeTeamScore, awayTeamScore);
+        var createPrediction = () => _predictionService.CreatePredictionAsync(match.Id, homeTeamScore, awayTeamScore, true);
 
 
         await createPrediction.Should().ThrowAsync<MatchAlreadyStartedException>();
@@ -68,7 +72,7 @@ public class PredictionServiceTest : IDisposable
     [Fact]
     public async Task CreatePredictionAsync_PredictionExists_ShouldThrowException()
     {
-        var _predictionService = new PredictionService(_context);
+        var _predictionService = new PredictionService(_context, _chatClient);
 
         var match = new Match
         {
@@ -91,7 +95,7 @@ public class PredictionServiceTest : IDisposable
         await _context.SaveChangesAsync();
 
 
-        var createPrediction = () => _predictionService.CreatePredictionAsync(match.Id, homeTeamScore, awayTeamScore);
+        var createPrediction = () => _predictionService.CreatePredictionAsync(match.Id, homeTeamScore, awayTeamScore, true);
 
 
         await createPrediction.Should().ThrowAsync<PredictionAlreadyExistsException>();
@@ -100,7 +104,7 @@ public class PredictionServiceTest : IDisposable
     [Fact]
     public async Task CreatePredictionAsync_ValidData_ShouldCreate()
     {
-        var _predictionService = new PredictionService(_context);
+        var _predictionService = new PredictionService(_context, _chatClient);
 
         var match = new Match
         {
@@ -118,11 +122,12 @@ public class PredictionServiceTest : IDisposable
             Id = 1,
             HomeTeamScore = homeTeamScore,
             AwayTeamScore = awayTeamScore,
-            MatchId = match.Id
+            MatchId = match.Id,
+            Match = match
         };
 
 
-        var actualPrediction = await _predictionService.CreatePredictionAsync(match.Id, homeTeamScore, awayTeamScore);
+        var actualPrediction = await _predictionService.CreatePredictionAsync(match.Id, homeTeamScore, awayTeamScore, true);
 
 
         actualPrediction.Should().BeEquivalentTo(expectedPrediction);
@@ -133,7 +138,7 @@ public class PredictionServiceTest : IDisposable
     [Fact]
     public async Task GetPredictionsAsync_NoPredictions_ShouldReturnEmptyList()
     {
-        var _predictionService = new PredictionService(_context);
+        var _predictionService = new PredictionService(_context, _chatClient);
 
 
         var predictions = await _predictionService.GetPredictionsAsync();
@@ -145,11 +150,19 @@ public class PredictionServiceTest : IDisposable
     [Fact]
     public async Task GetPredictionsAsync_ValidData_ShouldReturnPredictions()
     {
-        var _predictionService = new PredictionService(_context);
+        var _predictionService = new PredictionService(_context, _chatClient);
 
         var match = new Match
         {
-            Date = DateTime.Now.AddDays(1)
+            Date = DateTime.Now.AddDays(1),
+            HomeTeam = new Team
+            {
+                Name = "Home Team"
+            },
+            AwayTeam = new Team
+            {
+                Name = "Away Team"
+            }
         };
 
         await _context.AddAsync(match);
@@ -163,6 +176,7 @@ public class PredictionServiceTest : IDisposable
             HomeTeamScore = homeTeamScore,
             AwayTeamScore = awayTeamScore,
             MatchId = match.Id,
+            Match = match
         };
 
         await _context.AddAsync(prediction);
