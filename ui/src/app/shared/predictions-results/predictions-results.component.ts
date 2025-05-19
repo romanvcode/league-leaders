@@ -35,6 +35,10 @@ export class PredictionsResultsComponent implements OnInit, OnDestroy {
       });
   }
 
+  onPredictionDeleted() {
+    this.ngOnInit();
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
