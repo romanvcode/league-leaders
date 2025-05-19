@@ -7,7 +7,6 @@ import { Team } from '@core/models/team.model';
 import { ApiService } from '@core/services/api.service';
 import { Subject, takeUntil } from 'rxjs';
 import { MatchInfoComponent } from '../match-info/match-info.component';
-import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-team-info',
@@ -17,7 +16,6 @@ import { DatePipe } from '@angular/common';
     MatListModule,
     MatGridListModule,
     MatchInfoComponent,
-    DatePipe,
   ],
   templateUrl: './team-info.component.html',
   styleUrl: './team-info.component.css',
@@ -47,15 +45,15 @@ export class TeamInfoComponent implements OnInit, OnDestroy {
               this.matches = matches;
             },
             error: (error) => {
-              console.error('Failed to load team matches', error);
-              this.error = 'An error occurred while fetching the team matches';
+              console.error('Не вдалося завантажити матчі команди', error);
+              this.error = 'Сталася помилка під час отримання матчів команди';
               this.isError = true;
             },
           });
         },
         error: (error) => {
-          console.error('Failed to load team', error);
-          this.error = 'An error occurred while fetching the team';
+          console.error('Не вдалося завантажити команду', error);
+          this.error = 'Сталася помилка під час отримання даних про команду';
           this.isError = true;
         },
       });

@@ -17,7 +17,7 @@ import { TeamInfoComponent } from '@shared/team-info/team-info.component';
   styleUrl: './team.component.css',
 })
 export class TeamComponent implements OnInit {
-  currentFeature = 'Team';
+  currentFeature = 'Команда';
 
   teamId!: number;
 

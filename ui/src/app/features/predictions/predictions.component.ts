@@ -17,5 +17,5 @@ import { RouterLink } from '@angular/router';
   styleUrl: './predictions.component.css',
 })
 export class PredictionsComponent {
-  currentFeature = 'Predictions';
+  currentFeature = 'Прогнози';
 }

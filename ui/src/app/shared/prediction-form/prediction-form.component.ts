@@ -68,20 +68,20 @@ export class PredictionFormComponent {
           this.isGenerating = false;
           this.dialogRef.close();
           this.router.navigate(['/predictions']).then(() => {
-            this.snackbarService.open('Prediction saved', 'Close', {
+            this.snackbarService.open('Прогноз збережено', 'Закрити', {
               duration: 2000,
               panelClass: ['success-snackbar'],
               verticalPosition: 'bottom',
               horizontalPosition: 'right',
               data: {
-                message: 'Prediction saved',
+                message: 'Прогноз збережено',
               },
             })
           })
         },
-        error: (error) => {
+        error: () => {
           this.isGenerating = false;
-          this.errorMessage = error.error;
+          this.errorMessage = "Не вдолася зробити прогноз. Модель ШІ не запущена.";
           this.isError = true;
         },
       });

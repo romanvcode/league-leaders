@@ -56,8 +56,8 @@ export class NextMatchComponent implements OnInit, OnDestroy {
           );
         },
         error: (error) => {
-          console.error('Failed to load upcoming match', error);
-          this.error = 'An error occurred while fetching the next match';
+          console.error('Не вдалося завантажити майбутній матч', error);
+          this.error = 'Сталася помилка під час отримання наступного матчу';
           this.isError = true;
         },
       });
@@ -86,10 +86,10 @@ export class NextMatchComponent implements OnInit, OnDestroy {
     const seconds = String(countdown.seconds).padStart(2, '0');
 
     if (countdown.days > 1) {
-      return `${days} days to go`;
+      return `${days} днів залишилось`;
     }
 
-    return `${hours}h ${minutes}m ${seconds}s`;
+    return `${hours}г ${minutes}х ${seconds}с`;
   }
 
   ngOnDestroy(): void {

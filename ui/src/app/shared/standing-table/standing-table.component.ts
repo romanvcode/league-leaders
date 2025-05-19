@@ -52,8 +52,8 @@ export class StandingTableComponent implements OnInit, OnDestroy {
           this.dataSource.data = standings;
         },
         error: (error) => {
-          console.error('Failed to load standings', error);
-          this.error = 'An error occurred while fetching standings';
+          console.error('Не вдалося завантажити турнірну таблицю', error);
+          this.error = 'Сталася помилка під час отримання турнірної таблиці';
           this.isError = true;
         },
         complete: () => {

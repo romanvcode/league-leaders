@@ -5,7 +5,7 @@
     </mat-card-content>
   } @else {
     <mat-card-header id="next-match">
-      <mat-card-title>Next Match</mat-card-title>
+      <mat-card-title>Наступний матч</mat-card-title>
     </mat-card-header>
     <hr />
     @if (nextMatch$ | async; as match) {
@@ -36,7 +36,7 @@
         </mat-card>
       </mat-card-content>
     } @else {
-      <mat-card-content>Loading...</mat-card-content>
+      <mat-card-content>Завантаження...</mat-card-content>
     }
   }
 </mat-card>
