@@ -67,9 +67,12 @@ public class MatchesService : IMatchesService
             };
             teamsStats.Add(teamStat);
         }
-        await _context.TeamStats.AddRangeAsync(teamsStats.AsList());
+
+        var teamStatsList = teamsStats.AsList();
+
+        await _context.TeamStats.AddRangeAsync(teamStatsList);
         await _context.SaveChangesAsync();
 
-        return teamsStats.AsList();
+        return teamStatsList;
     }
 }
