@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { Prediction } from '@core/models/prediction.model';
 import { MatCardModule } from '@angular/material/card';
 import { NgClass } from '@angular/common';
@@ -19,13 +19,15 @@ export class PredictionInfoComponent implements OnDestroy {
   
   @Input({ required: true }) prediction!: Prediction;
   
+  @Output() predictionDeleted = new EventEmitter<void>();
+  
   constructor(private service: ApiService) {}
 
   deletePrediction() {
     this.service
       .deletePrediction(this.prediction.id!)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => window.location.reload());
+      .subscribe(() => this.predictionDeleted.emit());
   }
 
   ngOnDestroy(): void {
