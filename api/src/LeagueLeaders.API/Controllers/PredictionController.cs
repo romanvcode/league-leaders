@@ -3,6 +3,7 @@ using LeagueLeaders.Domain;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
 using LeagueLeaders.API.Validators;
+using LeagueLeaders.API.Workers;
 
 namespace LeagueLeaders.API.Controllers;
 [Route("api/predictions")]
@@ -44,5 +45,21 @@ public class PredictionController : ControllerBase
     public async Task DeletePredictionAsync(int predictionId)
     {
         await _predictionService.DeletePrediciotnAsync(predictionId);
+    }
+
+    [HttpGet("backtest-csv")]
+    public async Task<IActionResult> DownloadBacktestCsv()
+    {
+        try
+        {
+            var csvBytes = await _predictionService.GenerateBacktestCsvAsync();
+            var fileName = $"prediction_analysis_{DateTime.UtcNow:yyyyMMdd_HHmm}.csv";
+
+            return File(csvBytes, "text/csv", fileName);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Analysis failed: {ex.Message}");
+        }
     }
 }

@@ -30,16 +30,9 @@ public class TeamController : ControllerBase
     public async Task<Team> GetTeamAsync(int teamId)
     {
         var validator = new TeamIdValidator();
-        var validationResult = validator.Validate(teamId);
+        await validator.ValidateAndThrowAsync(teamId);
 
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
-
-        var team = await _teamService.GetTeamAsync(teamId);
-
-        return team;
+        return await _teamService.GetTeamAsync(teamId);
     }
 
     /// <summary>
