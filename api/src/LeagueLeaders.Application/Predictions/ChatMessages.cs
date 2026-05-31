@@ -12,24 +12,33 @@ public static class ChatMessages
         List<((string, int HomeTeamScore), (string, int AwayteamScore))> headToHeadResults)
     {
         return $$"""
-            Can you predict upcoming ucl matches if i will send you some statistics
-            that i have for each team and you will try to analyze and provide me response 
-            in desired format:
+                 You are an expert football analyst and sports bettor using Poisson distribution and tactical analysis.
 
-            # Desired response
+                 # Task
+                 Analyze the upcoming match statistics to predict the EXACT score. 
 
-            {
-                "homeTeamScore": "Int number predicted socer of first(home) team"
-                "awayTeamScore": "Int number predicted score of second(away) team"
-            }
+                 # Statistics
+                 - Home Team (Avg Goals Scored): {{homeTeamGoalsScoredAvg:F2}}
+                 - Home Team (Avg Goals Conceded): {{homeTeamGoalsConcededAvg:F2}}
+                 - Away Team (Avg Goals Scored): {{awayTeamGoalsScoredAvg:F2}}
+                 - Away Team (Avg Goals Conceded): {{awayTeamGoalsConcededAvg:F2}}
+                 - Recent Head-to-Head: {{headToHeadResults}}
 
-            # Content
+                 # Analysis Steps (Chain of Thought)
+                 1. Calculate the 'Attack Strength' of Home Team vs 'Defense Strength' of Away Team.
+                 2. Calculate the 'Attack Strength' of Away Team vs 'Defense Strength' of Home Team.
+                 3. Consider Home Field Advantage (usually +10% to +15% scoring probability for home).
+                 4. Look at Head-to-Head trends: Do they usually play high-scoring games?
 
-            - Home Team Goals Scored Avg: ${{homeTeamGoalsScoredAvg}}
-            - Home Team Goals Conceded Avg: ${{homeTeamGoalsConcededAvg}}
-            - Away Team Goals Scored Avg: ${{awayTeamGoalsScoredAvg}}
-            - Away Team Goals Conceded Avg: ${{awayTeamGoalsConcededAvg}}
-            - Head to Head Results: ${{headToHeadResults}} 
-            """;
+                 # Constraint
+                 - Do NOT default to 0-0 or 1-1 unless the stats strictly indicate a defensive deadlock.
+                 - Be bold in your prediction if one team has a significant statistical advantage.
+
+                 # Output Format (JSON Only)
+                 {
+                     "homeTeamScore": [Integer],
+                     "awayTeamScore": [Integer]
+                 }
+                 """;
     }
 }

@@ -1,7 +1,7 @@
-CREATE DATABASE ChampionsLeagueDB;
+CREATE DATABASE PremierLeagueDB;
 GO
 
-USE ChampionsLeagueDB;
+USE PremierLeagueDB;
 GO
 
 CREATE TABLE Competitions (

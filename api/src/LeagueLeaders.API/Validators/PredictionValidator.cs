@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using LeagueLeaders.API.Workers;
 
 namespace LeagueLeaders.API.Validators;
 

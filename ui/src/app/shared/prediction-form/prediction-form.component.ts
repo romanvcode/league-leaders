@@ -79,9 +79,9 @@ export class PredictionFormComponent {
             })
           })
         },
-        error: () => {
+        error: (err) => {
+          this.errorMessage = err.status === 400 ? "Прогноз на цей матч уже зроблено." : "Не вдолася зробити прогноз. Модель ШІ не запущена.";
           this.isGenerating = false;
-          this.errorMessage = "Не вдолася зробити прогноз. Модель ШІ не запущена.";
           this.isError = true;
         },
       });

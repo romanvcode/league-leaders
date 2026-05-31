@@ -89,7 +89,7 @@ export class NextMatchComponent implements OnInit, OnDestroy {
       return `${days} днів залишилось`;
     }
 
-    return `${hours}г ${minutes}х ${seconds}с`;
+    return `${hours}г ${minutes}хв ${seconds}с`;
   }
 
   ngOnDestroy(): void {
