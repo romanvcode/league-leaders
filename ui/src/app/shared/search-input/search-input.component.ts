@@ -1,4 +1,3 @@
-import { NgForOf, NgIf } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -6,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { Team } from '@core/models/team.model';
 import { ApiService } from '@core/services/api.service';
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
@@ -21,9 +20,6 @@ import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
     MatButtonModule,
     MatIconModule,
     MatAutocompleteModule,
-    NgIf,
-    NgForOf,
-    RouterLink,
   ],
   templateUrl: './search-input.component.html',
   styleUrl: './search-input.component.css',

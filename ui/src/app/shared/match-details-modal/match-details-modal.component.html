@@ -1,6 +1,6 @@
 <div class="p-4 bg-white rounded-xl shadow-md">
   <div class="flex justify-between items-center mb-2">
-    <h2 mat-dialog-title class="text-lg font-semibold text-gray-800">Match Details</h2>
+    <h2 mat-dialog-title class="text-lg font-semibold text-gray-800">Деталі матчу</h2>
     <button mat-icon-button (click)="dialogRef.close()" class="text-gray-500 hover:text-gray-700">
       <mat-icon>close</mat-icon>
     </button>
@@ -44,42 +44,42 @@
           <div class="mt-4 border-t pt-3 space-y-2 text-sm">
             <div class="flex justify-between items-center">
               <span class="font-medium">{{ stats[0].possession }}%</span>
-              <span class="text-gray-500">Possession</span>
+              <span class="text-gray-500">Володіння м'ячем</span>
               <span class="font-medium">{{ stats[1].possession }}%</span>
             </div>
             <div class="flex justify-between items-center">
               <span class="font-medium">{{ stats[0].shots }}</span>
-              <span class="text-gray-500">Shots</span>
+              <span class="text-gray-500">Удари</span>
               <span class="font-medium">{{ stats[1].shots }}</span>
             </div>
             <div class="flex justify-between items-center">
               <span class="font-medium">{{ stats[0].shotsOnTarget }}</span>
-              <span class="text-gray-500">Shots on Target</span>
+              <span class="text-gray-500">Удари в площину</span>
               <span class="font-medium">{{ stats[1].shotsOnTarget }}</span>
             </div>
             <div class="flex justify-between items-center">
               <span class="font-medium">{{ stats[0].corners }}</span>
-              <span class="text-gray-500">Corners</span>
+              <span class="text-gray-500">Кутові</span>
               <span class="font-medium">{{ stats[1].corners }}</span>
             </div>
             <div class="flex justify-between items-center">
               <span class="font-medium">{{ stats[0].redCards }}</span>
-              <span class="text-gray-500">Red Cards</span>
+              <span class="text-gray-500">Червоні картки</span>
               <span class="font-medium">{{ stats[1].redCards }}</span>
             </div>
             <div class="flex justify-between items-center">
               <span class="font-medium">{{ stats[0].yellowCards }}</span>
-              <span class="text-gray-500">Yellow Cards</span>
+              <span class="text-gray-500">Жовті картки</span>
               <span class="font-medium">{{ stats[1].yellowCards }}</span>
             </div>
             <div class="flex justify-between items-center">
               <span class="font-medium">{{ stats[0].offsides }}</span>
-              <span class="text-gray-500">Offsides</span>
+              <span class="text-gray-500">Офсайди</span>
               <span class="font-medium">{{ stats[1].offsides }}</span>
             </div>
             <div class="flex justify-between items-center">
               <span class="font-medium">{{ stats[0].fouls }}</span>
-              <span class="text-gray-500">Fouls</span>
+              <span class="text-gray-500">Порушення правил</span>
               <span class="font-medium">{{ stats[1].fouls }}</span>
             </div>
           </div>
@@ -89,6 +89,6 @@
   </mat-dialog-content>
 
   <mat-dialog-actions align="end" class="mt-4">
-    <button mat-button (click)="dialogRef.close()" class="text-sm">Close</button>
+    <button mat-button (click)="dialogRef.close()" class="text-sm">Закрити</button>
   </mat-dialog-actions>
 </div>

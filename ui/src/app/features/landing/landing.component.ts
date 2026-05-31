@@ -17,5 +17,5 @@ import { RouterLink } from '@angular/router';
   styleUrl: './landing.component.css',
 })
 export class LandingComponent {
-  currentFeature = 'Leaderboard';
+  currentFeature = 'Турнірна таблиця';
 }

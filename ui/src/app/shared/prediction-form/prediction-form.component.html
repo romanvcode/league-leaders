@@ -11,11 +11,11 @@
         type="number"
         name="homeTeamScore"
         min="0"
-        placeholder="Home Team Score"
+        placeholder="Рахунок господарів"
         [(ngModel)]="homeTeamScore"
       />
       <mat-error *ngIf="homeTeamScore < 0">
-        Score must be a positive number.
+        Рахунок має бути додатнім числом.
       </mat-error>
     </mat-form-field>
     <mat-form-field appearance="outline">
@@ -25,11 +25,11 @@
         type="number"
         name="awayTeamScore"
         min="0"
-        placeholder="Away Team Score"
+        placeholder="Рахунок гостей"
         [(ngModel)]="awayTeamScore"
       />
       <mat-error *ngIf="awayTeamScore < 0">
-        Score must be a positive number.
+        Рахунок має бути додатнім числом.
       </mat-error>
     </mat-form-field>
   </div>
@@ -46,12 +46,12 @@
 
 <mat-dialog-actions align="end">
   <button mat-flat-button [disabled]="!isValidForm()" (click)="onSubmit()">
-    Predict
+    Спрогнозувати
   </button>
   <button mat-stroked-button color="accent" (click)="generateWithAI()">
-    Generate with AI
+    Спрогнозувати за допомогою ШІ
   </button>
-  <button mat-raised-button (click)="dialogRef.close()">
-    Cancel
+  <button class="mt-4" mat-raised-button (click)="dialogRef.close()">
+    Скасувати
   </button>
 </mat-dialog-actions>
