@@ -6,17 +6,25 @@
 </div>
 <div align="center">
   <p>
-  Think of it as your go-to spot for everything in Champions League. From tracking your favorite team's every move to discovering hidden gems, League Leaders has got you covered. So, grab your favorite jersey, kick back, and let the football fiesta begin! 
+  Ваша головна платформа для відстеження всього, що стосується Української Прем'єр-ліги (УПЛ). Від перегляду актуальних турнірних таблиць до прогнозування результатів матчів за допомогою штучного інтелекту — League Leaders має все необхідне. Обирайте свою улюблену команду та поринайте у світ сучасної футбольної аналітики!
   </p>
   
   <a href="">![ .NET](https://img.shields.io/badge/.NET-8-blue?style=flat)</a>
   <a href="">![Angular](https://img.shields.io/badge/Angular-18-red?style=flat)</a>
-
+  <a href="">![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker&logoColor=white)</a>
+  <a href="">![Ollama](https://img.shields.io/badge/Ollama-LLM-black?style=flat)</a>
 </div>
 
-## Purposes
-- Deliver in-time match updates: Keep users informed about the latest scores, goals, and match events.
-- Showcase league standings: Present a clear overview of the competition, highlighting top performers.
-- Provide detailed team information: Offer in-depth statistics, player profiles, and team history.
-- Highlight upcoming matches: Generate anticipation for future games with match previews and predictions.
-- Enhance user experience: Create an engaging and user-friendly platform for football enthusiasts.
+## Мета проєкту
+* **Автоматизація збору даних:** Отримання актуальної інформації про матчі, склади команд та результати через інтеграцію з публічним API.
+* **Відображення турнірної таблиці:** Зручний перегляд поточного стану ліги, статистики забитих/пропущених м'ячів та позицій команд.
+* **Інтелектуальне прогнозування (ШІ):** Використання локальних великих мовних моделей (Llama 3, Gemma) та архітектури RAG для генерації аналітичних прогнозів матчів.
+* **Детальна статистика:** Надання інформації про команди, їхню історію очних зустрічей (Head-to-Head) та поточну форму.
+* **Покращений користувацький досвід:** Створення сучасного, адаптивного та повністю україномовного вебзастосунку для зручної взаємодії.
+
+## Технологічний стек
+* **Frontend:** Angular 18, Tailwind CSS, Angular Material
+* **Backend:** ASP.NET Core Web API (Clean Architecture)
+* **Database:** Microsoft SQL Server, Entity Framework Core
+* **AI & Analytics:** Ollama (Llama 3 / Gemma), Prompt Engineering (Chain of Thought)
+* **DevOps:** Docker, Docker Compose
